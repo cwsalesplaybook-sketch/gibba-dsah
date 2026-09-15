@@ -9,7 +9,7 @@ export function Sidebar() {
   const [active, setActive] = useState("metas");
 
   const content = (
-    <div className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
+    <div className="flex h-full flex-col overflow-hidden bg-sidebar text-sidebar-foreground">
       <div className="flex items-center gap-3 border-b border-sidebar-border p-5">
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-primary text-primary-foreground shadow-glow">
           <Sparkles className="h-5 w-5" />
@@ -25,7 +25,7 @@ export function Sidebar() {
           <X className="h-5 w-5" />
         </button>
       </div>
-      <nav className="flex-1 space-y-1 p-3">
+      <nav className="flex-1 space-y-1 overflow-y-auto p-3">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = active === item.id;
@@ -62,8 +62,8 @@ export function Sidebar() {
         <Menu className="h-5 w-5" />
       </button>
 
-      <aside className="hidden w-64 shrink-0 border-r border-sidebar-border lg:block">
-        <div className="fixed h-screen w-64">{content}</div>
+      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 border-r border-sidebar-border bg-sidebar lg:block">
+        {content}
       </aside>
 
       {open && (
