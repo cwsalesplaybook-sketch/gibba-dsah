@@ -14,9 +14,10 @@ import { EditButton } from "@/components/ui/EditButton";
 import { Modal } from "@/components/ui/Modal";
 import { Field, Button } from "@/components/ui/Field";
 import { registrationsByMonth as initialData, targetLine } from "@/data/mockData";
+import { useLocalStorageState } from "@/lib/useLocalStorageState";
 
 export function RegistrationsChart() {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useLocalStorageState("gibba:registrationsByMonth", initialData);
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState(initialData);
 

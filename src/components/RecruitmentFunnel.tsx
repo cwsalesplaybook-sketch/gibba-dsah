@@ -5,9 +5,13 @@ import { Modal } from "@/components/ui/Modal";
 import { Field, Button } from "@/components/ui/Field";
 import { cn } from "@/lib/utils";
 import { funnel as initialFunnel } from "@/data/mockData";
+import { useLocalStorageState } from "@/lib/useLocalStorageState";
 
 export function RecruitmentFunnel() {
-  const [values, setValues] = useState(initialFunnel.map((stage) => stage.value));
+  const [values, setValues] = useLocalStorageState(
+    "gibba:funnel",
+    initialFunnel.map((stage) => stage.value)
+  );
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState(values);
 

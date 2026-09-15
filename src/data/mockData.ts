@@ -1,13 +1,10 @@
 export const goal = {
-  current: 87,
-  target: 120,
-  percent: 73,
-  remaining: 33,
-  daysLeft: 15,
-  paceNeeded: 3,
-  today: 4,
-  week: 19,
-  dailyAverage: 3.2,
+  current: 14,
+  tiers: [
+    { label: "Meta 1", target: 39 },
+    { label: "Meta 2", target: 42 },
+    { label: "Meta 3", target: 45 },
+  ],
 };
 
 export type Metric = {

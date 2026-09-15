@@ -5,9 +5,10 @@ import { EditButton } from "@/components/ui/EditButton";
 import { Modal } from "@/components/ui/Modal";
 import { Field, Button } from "@/components/ui/Field";
 import { channelAcquisition as initialData } from "@/data/mockData";
+import { useLocalStorageState } from "@/lib/useLocalStorageState";
 
 export function ChannelAcquisitionChart() {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useLocalStorageState("gibba:channelAcquisition", initialData);
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState(initialData);
 

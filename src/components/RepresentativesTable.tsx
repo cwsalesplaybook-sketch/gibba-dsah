@@ -5,13 +5,17 @@ import { EditButton } from "@/components/ui/EditButton";
 import { Modal } from "@/components/ui/Modal";
 import { Field, Button } from "@/components/ui/Field";
 import { representatives as initialRepresentatives } from "@/data/mockData";
+import { useLocalStorageState } from "@/lib/useLocalStorageState";
 
 type Representative = (typeof initialRepresentatives)[number];
 
 const emptyRow: Representative = { name: "", region: "", channel: "", date: "" };
 
 export function RepresentativesTable() {
-  const [representatives, setRepresentatives] = useState(initialRepresentatives);
+  const [representatives, setRepresentatives] = useLocalStorageState(
+    "gibba:representatives",
+    initialRepresentatives
+  );
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState<Representative[]>(initialRepresentatives);
 

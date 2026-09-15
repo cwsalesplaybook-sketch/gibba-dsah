@@ -6,6 +6,7 @@ import { EditButton } from "@/components/ui/EditButton";
 import { Modal } from "@/components/ui/Modal";
 import { Field, Button } from "@/components/ui/Field";
 import { metrics as initialMetrics } from "@/data/mockData";
+import { useLocalStorageState } from "@/lib/useLocalStorageState";
 
 const iconMap = {
   users: Users,
@@ -14,7 +15,7 @@ const iconMap = {
 };
 
 export function MetricCards() {
-  const [metrics, setMetrics] = useState(initialMetrics);
+  const [metrics, setMetrics] = useLocalStorageState("gibba:metrics", initialMetrics);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [draft, setDraft] = useState<(typeof initialMetrics)[number] | null>(null);
 
