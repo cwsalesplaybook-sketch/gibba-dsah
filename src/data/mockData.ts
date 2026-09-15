@@ -1,5 +1,4 @@
 export const goal = {
-  current: 14,
   tiers: [
     { label: "Meta 1", target: 39 },
     { label: "Meta 2", target: 42 },
