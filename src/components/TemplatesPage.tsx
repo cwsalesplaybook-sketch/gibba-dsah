@@ -99,7 +99,9 @@ export function TemplatesPage() {
                   <Star className={cn("h-4 w-4", isFavorite && "fill-current")} />
                 </button>
               </div>
-              <p className="mt-3 flex-1 text-sm text-muted-foreground">{template.text}</p>
+              <p className="mt-3 max-h-56 flex-1 overflow-y-auto whitespace-pre-line text-sm text-muted-foreground">
+                {template.text}
+              </p>
               <button
                 onClick={() => copyTemplate(template.id, template.text)}
                 className={cn(

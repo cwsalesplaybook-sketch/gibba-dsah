@@ -1,4 +1,4 @@
-export type TemplateCategory = "Follow-up" | "Pagamento" | "Cobrança";
+export type TemplateCategory = "Direcionamento" | "Cadastro" | "Boas-vindas" | "Agendamento";
 
 export type Template = {
   id: string;
@@ -7,43 +7,42 @@ export type Template = {
   text: string;
 };
 
-export const templateCategories: TemplateCategory[] = ["Follow-up", "Pagamento", "Cobrança"];
+export const templateCategories: TemplateCategory[] = [
+  "Direcionamento",
+  "Cadastro",
+  "Boas-vindas",
+  "Agendamento",
+];
 
 export const templates: Template[] = [
   {
-    id: "followup-padrao",
-    title: "Follow-up Padrão",
-    category: "Follow-up",
-    text: "Olá! Tudo bem? Estou passando para saber se conseguiu analisar nossa proposta. Fico à disposição para esclarecer qualquer dúvida!",
+    id: "direcionamento-afiliados",
+    title: "Direcionamento para Afiliados",
+    category: "Direcionamento",
+    text: "Hoje contamos com um Programa de Afiliados voltado principalmente para consultores, gestores de tráfego, profissionais de marketing e outros profissionais que trabalham com indicação de soluções para empresas.\n\nVou te encaminhar para a pessoa responsável por esse setor, está bem?",
   },
   {
-    id: "followup-quente",
-    title: "Follow-up Quente",
-    category: "Follow-up",
-    text: "Ei! Vi que você demonstrou bastante interesse. Que tal agendarmos uma call rápida para fecharmos?",
+    id: "solicitacao-dados",
+    title: "Solicitação de Dados Cadastrais",
+    category: "Cadastro",
+    text: "Vou precisar apenas de alguns dados para criar sua conta aqui no portal da Cardápio Web, certo?\n\nNome completo:\nTelefone:\nE-mail:\nCNPJ:\nChave pix:\nEndereço:\nCEP:\nInstagram:\n\nFico no aguardo do envio das informações. Obrigado!",
   },
   {
-    id: "ultima-tentativa",
-    title: "Última Tentativa",
-    category: "Follow-up",
-    text: "Olá! Essa é minha última tentativa de contato. Caso não tenha interesse, tudo bem! Mas se quiser aproveitar as condições especiais, me avise hoje.",
+    id: "boas-vindas-portal",
+    title: "Boas-vindas + Acesso ao Portal",
+    category: "Boas-vindas",
+    text: "Seja muito bem-vindo ao Programa de Representantes Cardápio Web!\n\nFoi um prazer realizar essa reunião com você e dar início a essa parceria.\n\nPara começar, segue o acesso ao nosso portal:\n\nPortal: https://parceiro.cardapioweb.com/users/sign_in\nE-mail: xxxxxxxx\nSenha: xxxxxxxxxxxxxxxxxxxxxx\n\nAgradecemos pela confiança! Vamos juntos construir uma parceria estratégica e de muito sucesso.\n\nPróximo passo: a especialista Beatriz Andrade entrará em contato com você para explicar tudo sobre o programa e dar continuidade ao nosso processo.\n\nSeja muito bem-vindo ao time!",
   },
   {
-    id: "link-pagamento",
-    title: "Link de Pagamento",
-    category: "Pagamento",
-    text: "Aqui está o link para finalizar sua assinatura: [LINK]. Qualquer dúvida, estou por aqui!",
+    id: "confirmacao-reuniao",
+    title: "Confirmação de Reunião + Perguntas",
+    category: "Agendamento",
+    text: "Perfeito! Ficou agendado.\n\nSó pra eu me organizar por aqui: posso contar com você?\n\nA reunião é bem objetiva e vai ser o momento de você conhecer o sistema, entender como funciona a operação e tirar todas as suas dúvidas sobre o programa.\n\nPerguntas obrigatórias, nesta ordem.\n\nHá quanto tempo você atua com vendas B2B? Sempre nesse segmento ou migrou de outro?\n\nVocê já trabalha ou já trabalhou com clientes do ramo alimentício? Quantos você possui hoje?\n\nVocê opera sozinho ou tem equipe (SDR, closer, suporte)?\n\nVocê tem CNPJ ativo?\n\nQual sua cidade?\n\nQuanto tempo por semana você consegue dedicar à prospecção nos primeiros 60 dias?\n\nComo você conheceu a Cardápio Web e o programa de representantes? (anúncio, indicação, busca no Google, chat do site)\n\nO que te fez buscar o programa de representantes agora?",
   },
   {
-    id: "cobranca-link-enviado",
-    title: "Cobrança Link Enviado",
-    category: "Cobrança",
-    text: "Oi! Vi que o link ainda está pendente. Posso ajudar com algo? O pagamento está travando em algum ponto?",
-  },
-  {
-    id: "cobranca-escassez",
-    title: "Cobrança com Escassez",
-    category: "Cobrança",
-    text: "Última chamada! O desconto especial expira hoje às 23:59. Depois disso, só conseguiremos o valor cheio. Posso garantir pra você?",
+    id: "perguntas-resumidas",
+    title: "Perguntas Resumidas (versão curta)",
+    category: "Agendamento",
+    text: "Me conta um pouco mais sobre você: quanto tempo você já tem de operação na área, se você já trabalhou com clientes do ramo alimentício, se tem experiência com tecnologia ou vendas, e qual é a sua cidade.",
   },
 ];
