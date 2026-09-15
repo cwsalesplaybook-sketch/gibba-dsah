@@ -12,7 +12,7 @@ export default function App() {
     <div className="flex min-h-screen bg-background">
       <Sidebar />
       <main className="min-w-0 flex-1 px-4 py-8 sm:px-8 lg:px-12">
-        <div className="mx-auto flex max-w-6xl flex-col gap-6">
+        <div className="flex w-full flex-col gap-6">
           <DashboardHeader />
           <GoalCard />
           <MetricCards />
