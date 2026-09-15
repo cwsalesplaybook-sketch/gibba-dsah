@@ -38,23 +38,3 @@ export const metrics: Metric[] = [
   },
 ];
 
-export const registrationsByMonth = [
-  { month: "Jan", value: 42 },
-  { month: "Fev", value: 55 },
-  { month: "Mar", value: 62 },
-  { month: "Abr", value: 58 },
-  { month: "Mai", value: 72 },
-  { month: "Jun", value: 68 },
-  { month: "Jul", value: 75 },
-  { month: "Ago", value: 94 },
-  { month: "Set", value: 87 },
-];
-
-export const targetLine = 87;
-
-export const funnel = [
-  { label: "Inscrições recebidas", value: 412, percent: 100, highlight: false },
-  { label: "Entrevistas realizadas", value: 196, percent: 48, highlight: false },
-  { label: "Representantes cadastrados", value: 87, percent: 44, highlight: true },
-];
-

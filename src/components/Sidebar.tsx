@@ -1,12 +1,22 @@
 import { useState } from "react";
-import { Menu, Sparkles, Target, X } from "lucide-react";
+import { Menu, MessageSquareText, Sparkles, Target, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const navItems = [{ id: "metas", label: "Metas", icon: Target }];
+export type PageId = "metas" | "templates";
 
-export function Sidebar() {
+const navItems: { id: PageId; label: string; icon: typeof Target }[] = [
+  { id: "metas", label: "Metas", icon: Target },
+  { id: "templates", label: "Templates", icon: MessageSquareText },
+];
+
+export function Sidebar({
+  active,
+  onChange,
+}: {
+  active: PageId;
+  onChange: (page: PageId) => void;
+}) {
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState("metas");
 
   const content = (
     <div className="flex h-full flex-col overflow-hidden bg-sidebar text-sidebar-foreground">
@@ -33,7 +43,7 @@ export function Sidebar() {
             <button
               key={item.id}
               onClick={() => {
-                setActive(item.id);
+                onChange(item.id);
                 setOpen(false);
               }}
               className={cn(

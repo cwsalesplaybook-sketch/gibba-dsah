@@ -4,6 +4,7 @@ type PipedriveStats = {
   count: number;
   month: string;
   updatedAt: string;
+  byMonth?: { month: string; value: number }[];
 };
 
 export function usePipedriveCount() {

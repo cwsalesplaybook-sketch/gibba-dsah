@@ -1,19 +1,21 @@
-// Vercel serverless function: conta representantes cadastrados no mês.
+// Vercel serverless function: conta representantes cadastrados no mês e a
+// evolução mês a mês no ano corrente.
 // Regra de negócio (confirmada com a Gabi): 1 representante cadastrado =
 // 1 negócio marcado como "ganho" (won) no funil "[REP] Funil de Reunião
-// Agendada" (pipeline_id 75) do Pipedrive, dentro do mês corrente.
+// Agendada" (pipeline_id 75) do Pipedrive.
 //
 // Nota: o endpoint /v1/deals ignora silenciosamente o filtro pipeline_id
 // na query string (não é um parâmetro suportado por ele). stage_id, por
 // outro lado, é suportado de verdade — por isso consultamos por estágio.
 const PIPELINE_ID = 75;
 const STAGE_IDS = [421, 424, 425, 429]; // estágios do pipeline 75
+const MONTH_LABELS = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 
-async function fetchWonDealsForStage(stageId, token, monthPrefix, monthStart) {
+async function fetchWonDealsForStage(stageId, token, yearStart) {
   const matches = [];
   let start = 0;
   const limit = 100;
-  const maxPages = 5; // trava de segurança por estágio
+  const maxPages = 20; // trava de segurança por estágio (cobre o ano inteiro)
 
   for (let page = 0; page < maxPages; page++) {
     const url =
@@ -30,11 +32,11 @@ async function fetchWonDealsForStage(stageId, token, monthPrefix, monthStart) {
     const deals = json.data ?? [];
     let shouldStop = false;
     for (const deal of deals) {
-      if (deal.update_time && new Date(deal.update_time) < monthStart) {
+      if (deal.update_time && new Date(deal.update_time) < yearStart) {
         shouldStop = true;
         break;
       }
-      if (deal.won_time && deal.won_time.startsWith(monthPrefix)) matches.push(deal);
+      if (deal.won_time) matches.push(deal);
     }
     if (shouldStop) break;
 
@@ -55,19 +57,39 @@ export default async function handler(req, res) {
   }
 
   const now = new Date();
-  const monthPrefix = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, "0")}`;
-  const monthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
+  const currentYear = now.getUTCFullYear();
+  const currentMonthIndex = now.getUTCMonth(); // 0-11
+  const monthPrefix = `${currentYear}-${String(currentMonthIndex + 1).padStart(2, "0")}`;
+  const yearStart = new Date(Date.UTC(currentYear, 0, 1));
 
   try {
     const results = await Promise.all(
-      STAGE_IDS.map((stageId) => fetchWonDealsForStage(stageId, token, monthPrefix, monthStart))
+      STAGE_IDS.map((stageId) => fetchWonDealsForStage(stageId, token, yearStart))
     );
-    const count = results.reduce((sum, deals) => sum + deals.length, 0);
+    const allWonDeals = results.flat();
+
+    const yearPrefix = `${currentYear}-`;
+    const monthlyCounts = new Array(currentMonthIndex + 1).fill(0);
+    for (const deal of allWonDeals) {
+      if (!deal.won_time || !deal.won_time.startsWith(yearPrefix)) continue;
+      const monthIndex = Number(deal.won_time.slice(5, 7)) - 1;
+      if (monthIndex >= 0 && monthIndex <= currentMonthIndex) {
+        monthlyCounts[monthIndex] += 1;
+      }
+    }
+
+    const byMonth = monthlyCounts.map((value, index) => ({
+      month: MONTH_LABELS[index],
+      value,
+    }));
+
+    const count = monthlyCounts[currentMonthIndex] ?? 0;
 
     res.status(200).json({
       count,
       month: monthPrefix,
       pipelineId: PIPELINE_ID,
+      byMonth,
       updatedAt: new Date().toISOString(),
     });
   } catch (error) {
