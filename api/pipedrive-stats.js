@@ -14,20 +14,21 @@ export default async function handler(req, res) {
 
   const now = new Date();
   const monthPrefix = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, "0")}`;
-  // Só busca negócios atualizados a partir do início do mês corrente — evita
-  // paginar anos de histórico "won" só pra filtrar em memória depois.
-  const sinceTimestamp = `${monthPrefix}-01 00:00:00`;
+  const monthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
 
   try {
-    const deals = [];
+    const dealsThisMonth = [];
     let start = 0;
     const limit = 100;
     const maxPages = 10; // trava de segurança: no máximo 1000 negócios por consulta
 
-    for (let page = 0; page < maxPages; page++) {
+    // Ordena por update_time desc e para assim que aparecer um negócio
+    // atualizado antes do início do mês — evita paginar todo o histórico
+    // "won" do funil (que pode ter anos) só pra filtrar em memória depois.
+    outer: for (let page = 0; page < maxPages; page++) {
       const url =
         `https://api.pipedrive.com/v1/deals?status=won&pipeline_id=${PIPELINE_ID}` +
-        `&since_timestamp=${encodeURIComponent(sinceTimestamp)}` +
+        `&sort=${encodeURIComponent("update_time DESC")}` +
         `&start=${start}&limit=${limit}&api_token=${token}`;
       const response = await fetch(url);
       const json = await response.json();
@@ -37,14 +38,18 @@ export default async function handler(req, res) {
         return;
       }
 
-      deals.push(...(json.data ?? []));
+      const deals = json.data ?? [];
+      for (const deal of deals) {
+        if (deal.update_time && new Date(deal.update_time) < monthStart) break outer;
+        if (deal.won_time && deal.won_time.startsWith(monthPrefix)) dealsThisMonth.push(deal);
+      }
 
       const pagination = json.additional_data?.pagination;
       if (!pagination?.more_items_in_collection) break;
       start = pagination.next_start;
     }
 
-    const count = deals.filter((deal) => deal.won_time && deal.won_time.startsWith(monthPrefix)).length;
+    const count = dealsThisMonth.length;
 
     res.status(200).json({
       count,
