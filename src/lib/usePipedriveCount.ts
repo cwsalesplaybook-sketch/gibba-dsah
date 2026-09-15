@@ -15,14 +15,21 @@ export function usePipedriveCount() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch("/api/pipedrive-stats");
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 15000);
+      const response = await fetch("/api/pipedrive-stats", { signal: controller.signal });
+      clearTimeout(timeout);
       const json = await response.json();
       if (!response.ok) {
         throw new Error(json.error ?? "Erro ao buscar dados do Pipedrive");
       }
       setData(json);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro ao buscar dados do Pipedrive");
+      if (err instanceof Error && err.name === "AbortError") {
+        setError("Pipedrive demorou demais pra responder (timeout)");
+      } else {
+        setError(err instanceof Error ? err.message : "Erro ao buscar dados do Pipedrive");
+      }
     } finally {
       setLoading(false);
     }

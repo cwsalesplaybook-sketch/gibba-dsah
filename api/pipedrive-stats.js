@@ -14,14 +14,21 @@ export default async function handler(req, res) {
 
   const now = new Date();
   const monthPrefix = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, "0")}`;
+  // Só busca negócios atualizados a partir do início do mês corrente — evita
+  // paginar anos de histórico "won" só pra filtrar em memória depois.
+  const sinceTimestamp = `${monthPrefix}-01 00:00:00`;
 
   try {
     const deals = [];
     let start = 0;
     const limit = 100;
+    const maxPages = 10; // trava de segurança: no máximo 1000 negócios por consulta
 
-    while (true) {
-      const url = `https://api.pipedrive.com/v1/deals?status=won&pipeline_id=${PIPELINE_ID}&start=${start}&limit=${limit}&api_token=${token}`;
+    for (let page = 0; page < maxPages; page++) {
+      const url =
+        `https://api.pipedrive.com/v1/deals?status=won&pipeline_id=${PIPELINE_ID}` +
+        `&since_timestamp=${encodeURIComponent(sinceTimestamp)}` +
+        `&start=${start}&limit=${limit}&api_token=${token}`;
       const response = await fetch(url);
       const json = await response.json();
 
