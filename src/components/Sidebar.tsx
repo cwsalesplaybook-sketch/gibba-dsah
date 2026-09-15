@@ -16,7 +16,6 @@ export function Sidebar() {
         </div>
         <div>
           <p className="text-lg font-bold leading-tight">Gibba</p>
-          <p className="text-xs text-sidebar-foreground/60">Programa de Representantes</p>
         </div>
         <button
           className="ml-auto rounded-lg p-1 text-sidebar-foreground/60 hover:text-sidebar-foreground lg:hidden"
