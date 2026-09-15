@@ -4,8 +4,6 @@ import { GoalCard } from "@/components/GoalCard";
 import { MetricCards } from "@/components/MetricCards";
 import { RegistrationsChart } from "@/components/RegistrationsChart";
 import { RecruitmentFunnel } from "@/components/RecruitmentFunnel";
-import { RepresentativesTable } from "@/components/RepresentativesTable";
-import { ChannelAcquisitionChart } from "@/components/ChannelAcquisitionChart";
 
 export default function App() {
   return (
@@ -19,10 +17,6 @@ export default function App() {
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             <RegistrationsChart />
             <RecruitmentFunnel />
-          </div>
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            <RepresentativesTable />
-            <ChannelAcquisitionChart />
           </div>
         </div>
       </main>
