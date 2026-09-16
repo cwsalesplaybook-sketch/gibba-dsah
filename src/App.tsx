@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Sidebar, type PageId } from "@/components/Sidebar";
 import { MetasPage } from "@/components/MetasPage";
 import { TemplatesPage } from "@/components/TemplatesPage";
+import { PlaybookPage } from "@/components/PlaybookPage";
 
 export default function App() {
   const [page, setPage] = useState<PageId>("metas");
@@ -10,7 +11,9 @@ export default function App() {
     <div className="flex min-h-screen bg-background">
       <Sidebar active={page} onChange={setPage} />
       <main className="min-w-0 flex-1 px-4 pb-8 pt-20 sm:px-8 lg:px-12 lg:pt-8">
-        {page === "metas" ? <MetasPage /> : <TemplatesPage />}
+        {page === "metas" && <MetasPage />}
+        {page === "templates" && <TemplatesPage />}
+        {page === "playbook" && <PlaybookPage />}
       </main>
     </div>
   );

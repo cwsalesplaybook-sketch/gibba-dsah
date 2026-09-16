@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { Menu, MessageSquareText, Sparkles, Target, X } from "lucide-react";
+import { BookOpen, Menu, MessageSquareText, Sparkles, Target, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export type PageId = "metas" | "templates";
+export type PageId = "metas" | "templates" | "playbook";
 
 const navItems: { id: PageId; label: string; icon: typeof Target }[] = [
   { id: "metas", label: "Metas", icon: Target },
   { id: "templates", label: "Templates", icon: MessageSquareText },
+  { id: "playbook", label: "Playbook", icon: BookOpen },
 ];
 
 export function Sidebar({
