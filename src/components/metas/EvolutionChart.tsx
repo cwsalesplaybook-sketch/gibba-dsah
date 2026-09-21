@@ -82,7 +82,7 @@ export function EvolutionChart({ data }: { data: MetasData }) {
         </div>
       </div>
 
-      <div className="mt-2 min-h-[210px] flex-1">
+      <div className="relative mt-2 min-h-[210px] flex-1">
         {error ? (
           <div className="flex h-full items-center justify-center text-center text-sm text-destructive">
             {error}
@@ -92,6 +92,7 @@ export function EvolutionChart({ data }: { data: MetasData }) {
             Carregando dados do Pipedrive...
           </div>
         ) : (
+          <div className="absolute inset-0">
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart data={chartData} margin={{ top: 14, right: 8, left: -18, bottom: 0 }}>
               <CartesianGrid stroke="var(--border)" vertical={false} />
@@ -139,6 +140,7 @@ export function EvolutionChart({ data }: { data: MetasData }) {
               />
             </ComposedChart>
           </ResponsiveContainer>
+          </div>
         )}
       </div>
     </Card>

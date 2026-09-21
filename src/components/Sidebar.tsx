@@ -3,7 +3,6 @@ import {
   BarChart3,
   Bot,
   BookOpen,
-  CalendarDays,
   FileText,
   Link2,
   Menu,
@@ -12,7 +11,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export type PageId = "metas" | "templates" | "playbook" | "links" | "dados" | "forecast" | "luzia";
+export type PageId = "metas" | "templates" | "playbook" | "links" | "dados" | "luzia";
 
 const navItems: { id: PageId; label: string; icon: typeof Target }[] = [
   { id: "metas", label: "Metas", icon: Target },
@@ -20,7 +19,6 @@ const navItems: { id: PageId; label: string; icon: typeof Target }[] = [
   { id: "playbook", label: "Playbook", icon: BookOpen },
   { id: "links", label: "Links Importantes", icon: Link2 },
   { id: "dados", label: "Dados", icon: BarChart3 },
-  { id: "forecast", label: "Forecast", icon: CalendarDays },
   { id: "luzia", label: "Luzia", icon: Bot },
 ];
 

@@ -8,7 +8,6 @@ import { EmConstrucaoPage } from "@/components/EmConstrucaoPage";
 const emConstrucao: Partial<Record<PageId, { title: string; description?: string }>> = {
   links: { title: "Links Importantes" },
   dados: { title: "Dados" },
-  forecast: { title: "Forecast" },
   luzia: {
     title: "Luzia",
     description: "Aqui vai morar a Luzia, o chatbot do Gibba. Em breve ela estará disponível.",
@@ -21,7 +20,7 @@ export default function App() {
   return (
     <div className="flex min-h-screen">
       <Sidebar active={page} onChange={setPage} />
-      <main className="min-w-0 flex-1 px-4 pb-8 pt-20 sm:px-8 lg:pr-[26px] lg:pt-5">
+      <main className="flex min-w-0 flex-1 flex-col px-4 pb-8 pt-20 sm:px-8 lg:pb-6 lg:pr-[26px] lg:pt-5">
         {page === "metas" && <MetasPage />}
         {page === "templates" && <TemplatesPage />}
         {page === "playbook" && <PlaybookPage />}
