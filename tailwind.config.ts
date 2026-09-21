@@ -1,20 +1,29 @@
 import type { Config } from "tailwindcss";
 
+// Cores vêm de variáveis CSS em OKLCH; sem isto o Tailwind não gera as classes
+// com opacidade (bg-primary/15, border-primary/30...). color-mix resolve.
+const alpha = (variable: string) =>
+  `color-mix(in oklab, var(${variable}) calc(<alpha-value> * 100%), transparent)`;
+
 export default {
   darkMode: ["class"],
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        logo: ["Poppins", "Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        hand: ['"Patrick Hand"', "Kalam", "cursive"],
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
-        background: "var(--background)",
+        background: alpha("--background"),
         foreground: "var(--foreground)",
         card: {
-          DEFAULT: "var(--card)",
+          DEFAULT: alpha("--card"),
           foreground: "var(--card-foreground)",
         },
         popover: {
@@ -22,9 +31,9 @@ export default {
           foreground: "var(--popover-foreground)",
         },
         primary: {
-          DEFAULT: "var(--primary)",
+          DEFAULT: alpha("--primary"),
           foreground: "var(--primary-foreground)",
-          glow: "var(--primary-glow)",
+          glow: alpha("--primary-glow"),
         },
         secondary: {
           DEFAULT: "var(--secondary)",
@@ -32,25 +41,25 @@ export default {
         },
         muted: {
           DEFAULT: "var(--muted)",
-          foreground: "var(--muted-foreground)",
+          foreground: alpha("--muted-foreground"),
         },
         accent: {
           DEFAULT: "var(--accent)",
           foreground: "var(--accent-foreground)",
         },
         destructive: {
-          DEFAULT: "var(--destructive)",
+          DEFAULT: alpha("--destructive"),
           foreground: "var(--destructive-foreground)",
         },
         success: {
-          DEFAULT: "var(--success)",
+          DEFAULT: alpha("--success"),
           foreground: "var(--success-foreground)",
         },
         warning: {
           DEFAULT: "var(--warning)",
           foreground: "var(--warning-foreground)",
         },
-        border: "var(--border)",
+        border: alpha("--border"),
         input: "var(--input)",
         ring: "var(--ring)",
         chart: {
@@ -62,7 +71,7 @@ export default {
         },
         sidebar: {
           DEFAULT: "var(--sidebar)",
-          foreground: "var(--sidebar-foreground)",
+          foreground: alpha("--sidebar-foreground"),
           primary: "var(--sidebar-primary)",
           "primary-foreground": "var(--sidebar-primary-foreground)",
           accent: "var(--sidebar-accent)",
