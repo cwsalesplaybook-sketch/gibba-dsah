@@ -1,7 +1,8 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocalStorageState } from "@/lib/useLocalStorageState";
 import { baseKnowledge } from "./baseKnowledge";
 import { chunkText } from "./chunk";
+import { DEFAULT_FALLBACK, scriptToItems, useScript } from "./script";
 import { buildIndex, confidenceOf, search, type Feedback, type Hit, type KnowledgeItem } from "./search";
 import { normalize, tokenize } from "./text";
 
@@ -25,8 +26,10 @@ export type HitView = {
   source: KnowledgeItem["source"];
   sectionId?: string;
   excerpt: string;
-  full: string;
 };
+
+/** Pergunta que a Gabi pode escolher com um clique. */
+export type Choice = { label: string; itemId: string };
 
 export type Message = {
   id: string;
@@ -37,14 +40,20 @@ export type Message = {
   query?: string;
   confidence?: "alta" | "media" | "baixa";
   hits?: HitView[];
+  /** Outras perguntas sugeridas depois da resposta (botões do script). */
+  options?: Choice[];
   rating?: "up" | "down";
   /** Preenchido quando a Gabi ensinou a resposta a partir desta mensagem. */
   taughtId?: string;
 };
 
+export type CatalogGroup = { category: string; choices: Choice[] };
+
 const EMPTY_STORE: Store = { taught: [], feedback: { good: {}, bad: {} } };
 const MAX_MESSAGES = 40;
 const MAX_FEEDBACK_PER_ITEM = 8;
+// A Luzia "pensa" um pouco antes de responder.
+const THINK_MS = { answer: [2000, 3200], smalltalk: [1200, 1800] } as const;
 
 const uid = () =>
   typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -53,6 +62,8 @@ const uid = () =>
 
 const GREETINGS = new Set(["oi", "ola", "opa", "bom", "boa", "dia", "tarde", "noite", "e", "ai", "tudo", "bem", "luzia", "eai", "salve"]);
 const THANKS = new Set(["obrigado", "obrigada", "valeu", "brigado", "brigada", "thanks", "show", "top", "perfeito", "ok", "certo", "otimo"]);
+// Perguntas que aparecem quando ela não entende e não há nada parecido no script.
+const STARTER_IDS = ["sc:023", "sc:022", "sc:032", "sc:034"];
 
 function toHitView(hit: Hit): HitView {
   return {
@@ -62,7 +73,6 @@ function toHitView(hit: Hit): HitView {
     source: hit.item.source,
     sectionId: hit.item.sectionId,
     excerpt: hit.excerpt,
-    full: hit.item.text,
   };
 }
 
@@ -89,13 +99,22 @@ function normalizeStore(raw: unknown): Store {
   };
 }
 
+const randomBetween = ([min, max]: readonly [number, number]) => min + Math.random() * (max - min);
+
 export function useLuzia() {
   const [rawStore, setStore] = useLocalStorageState<Store>("puma:luzia", EMPTY_STORE);
   const [messages, setMessages] = useLocalStorageState<Message[]>("puma:luzia:chat", []);
+  const [thinking, setThinking] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout>>();
   const store = useMemo(() => normalizeStore(rawStore), [rawStore]);
+  const script = useScript();
 
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  const scriptItems = useMemo(() => scriptToItems(script.entries), [script.entries]);
   const items = useMemo<KnowledgeItem[]>(
     () => [
+      ...scriptItems,
       ...baseKnowledge,
       ...store.taught.map<KnowledgeItem>((t) => ({
         id: `t:${t.id}`,
@@ -106,9 +125,20 @@ export function useLuzia() {
         aliases: t.aliases,
       })),
     ],
-    [store.taught]
+    [scriptItems, store.taught]
   );
   const index = useMemo(() => buildIndex(items, store.feedback), [items, store.feedback]);
+  const byId = useMemo(() => new Map(items.map((item) => [item.id, item])), [items]);
+
+  const catalog = useMemo<CatalogGroup[]>(() => {
+    const groups = new Map<string, Choice[]>();
+    for (const item of items) {
+      if (item.source !== "script" && item.source !== "ensinado") continue;
+      const category = item.group ?? "Outros";
+      groups.set(category, [...(groups.get(category) ?? []), { label: item.title, itemId: item.id }]);
+    }
+    return [...groups].map(([category, choices]) => ({ category, choices }));
+  }, [items]);
 
   const push = (...added: Message[]) =>
     setMessages((prev) => [...prev, ...added].slice(-MAX_MESSAGES));
@@ -121,39 +151,91 @@ export function useLuzia() {
     ...extra,
   });
 
+  /** Mostra a pergunta na hora e entrega a resposta depois de alguns segundos de "pensamento". */
+  function deliver(userText: string, answer: Message, kind: keyof typeof THINK_MS = "answer") {
+    clearTimeout(timer.current);
+    push({ id: uid(), role: "user", text: userText, at: new Date().toISOString() });
+    setThinking(true);
+    timer.current = setTimeout(() => {
+      push(answer);
+      setThinking(false);
+    }, randomBetween(THINK_MS[kind]));
+  }
+
+  const choicesFor = (item: KnowledgeItem): Choice[] =>
+    (item.options ?? []).filter((option) => byId.has(option.itemId));
+
+  // Sugestões quando a pergunta cai fora do script: o que mais se parece, ou as perguntas mais comuns.
+  function suggestionsFor(query: string): Choice[] {
+    const similar = search(index, query, store.feedback, 12)
+      .filter((hit) => (hit.item.source === "script" || hit.item.source === "ensinado") && hit.coverage >= 0.45)
+      .slice(0, 4)
+      .map((hit) => ({ label: hit.item.title, itemId: hit.item.id }));
+    if (similar.length >= 3) return similar;
+    const starters = STARTER_IDS.map((id) => byId.get(id)).filter((item): item is KnowledgeItem => Boolean(item));
+    const seen = new Set(similar.map((choice) => choice.itemId));
+    return [...similar, ...starters.filter((item) => !seen.has(item.id)).map((item) => ({ label: item.title, itemId: item.id }))].slice(0, 4);
+  }
+
   function ask(question: string) {
+    if (thinking) return;
     const query = question.trim();
     if (!query) return;
-    const userMessage: Message = { id: uid(), role: "user", text: query, at: new Date().toISOString() };
     const words = normalize(query).split(/[^a-z0-9]+/).filter(Boolean);
 
     if (words.length && words.every((w) => GREETINGS.has(w))) {
-      push(userMessage, luzia("Oi! Eu sou a Luzia. Pergunte sobre o programa, os scripts, as comissões ou os templates, ou me ensine algo novo na aba Conhecimento."));
+      deliver(query, luzia("Oi! Eu sou a Luzia. Pergunte sobre o programa, os scripts, as comissões ou os templates, ou escolha uma das perguntas abaixo.", { options: suggestionsFor("") }), "smalltalk");
       return;
     }
     if (words.length && words.every((w) => THANKS.has(w))) {
-      push(userMessage, luzia("Por nada! Se surgir outra dúvida, é só perguntar."));
+      deliver(query, luzia("Por nada! Se surgir outra dúvida, é só perguntar."), "smalltalk");
       return;
     }
     if (tokenize(query).length === 0) {
-      push(userMessage, luzia("Não consegui entender a pergunta. Pode escrever com outras palavras, por exemplo: “Como funciona a comissão?”"));
+      deliver(query, luzia("Não consegui entender a pergunta. Pode escrever com outras palavras, por exemplo: “Como funciona a comissão?”", { options: suggestionsFor("") }), "smalltalk");
       return;
     }
 
     const hits = search(index, query, store.feedback, 4);
     const confidence = confidenceOf(hits);
-    const text =
-      hits.length === 0
-        ? "Ainda não sei responder isso. Se você me explicar, eu guardo e passo a responder."
-        : confidence === "alta"
-          ? "Encontrei isto sobre o que você perguntou:"
-          : confidence === "media"
-            ? "Acho que é isto, mas confira se responde:"
-            : "Não encontrei nada muito certeiro. O mais parecido que eu tenho é:";
-    push(
-      userMessage,
-      luzia(text, { query, confidence: hits.length ? confidence : "baixa", hits: hits.map(toHitView) })
-    );
+
+    if (confidence === "baixa") {
+      const fallback = scriptItems.find((item) => item.fallback)?.fallback ?? DEFAULT_FALLBACK;
+      deliver(query, luzia(fallback, { query, confidence, hits: [], options: suggestionsFor(query) }));
+      return;
+    }
+
+    const [primary, ...others] = hits;
+    // Depois da resposta, vêm as perguntas relacionadas do script; sem elas, o que mais se parece.
+    let options = choicesFor(primary.item);
+    if (options.length === 0) {
+      options = others
+        .filter((hit) => hit.item.source === "script" || hit.item.source === "ensinado")
+        .slice(0, 3)
+        .map((hit) => ({ label: hit.item.title, itemId: hit.item.id }));
+    }
+    const text = confidence === "alta" ? "Encontrei isto sobre o que você perguntou:" : "Acho que é isto, mas confira se responde:";
+    deliver(query, luzia(text, { query, confidence, hits: [toHitView(primary), ...others.slice(0, 2).map(toHitView)], options }));
+  }
+
+  /** Responde direto uma pergunta escolhida na lista (botões do script ou seletor). */
+  function askChoice(itemId: string) {
+    const item = byId.get(itemId);
+    if (!item || thinking) return;
+    const hit: HitView = {
+      itemId: item.id,
+      title: item.title,
+      group: item.group,
+      source: item.source,
+      sectionId: item.sectionId,
+      excerpt: item.text,
+    };
+    deliver(item.title, luzia("Aqui está:", { query: item.title, confidence: "alta", hits: [hit], options: choicesFor(item) }));
+  }
+
+  /** Texto completo de um trecho (as mensagens guardam só o resumo). */
+  function fullText(itemId: string, fallback: string) {
+    return byId.get(itemId)?.text ?? fallback;
   }
 
   function rate(messageId: string, rating: "up" | "down") {
@@ -297,6 +379,12 @@ export function useLuzia() {
     messages,
     taught: store.taught,
     baseCount: baseKnowledge.length,
+    scriptCount: script.entries.length,
+    scriptLive: script.live,
+    thinking,
+    catalog,
+    askChoice,
+    fullText,
     ratedCount,
     ask,
     rate,

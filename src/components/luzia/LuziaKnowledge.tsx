@@ -115,7 +115,12 @@ export function LuziaKnowledge({ luzia }: { luzia: LuziaApi }) {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <Stat
+          label="Script da planilha"
+          value={luzia.scriptCount}
+          hint={luzia.scriptLive ? "Perguntas, sincronizadas com a planilha SCRIPT" : "Perguntas (cópia salva, planilha indisponível agora)"}
+        />
         <Stat label="Base do PUMA" value={luzia.baseCount} hint="Trechos do Playbook e dos Templates" />
         <Stat label="Ensinado por você" value={luzia.taught.length} hint="Itens que você adicionou" />
         <Stat label="Respostas avaliadas" value={luzia.ratedCount} hint="Vezes que você marcou Ajudou ou Não era isso" />
@@ -127,7 +132,8 @@ export function LuziaKnowledge({ luzia }: { luzia: LuziaApi }) {
           Como a Luzia aprende
         </div>
         <ul className="list-disc space-y-1 pl-5 text-sm leading-relaxed text-muted-foreground">
-          <li>Ela já lê todo o Playbook e os Templates. Você adiciona o que falta aqui, ou direto na conversa com “Ensinar a Luzia”.</li>
+          <li>Ela segue o script da planilha SCRIPT: as respostas, as palavras-chave e as perguntas relacionadas vêm de lá, e mudanças na planilha aparecem em poucos minutos.</li>
+          <li>Ela também lê todo o Playbook e os Templates. Você adiciona o que falta aqui, ou direto na conversa com “Ensinar a Luzia”.</li>
           <li>Quando você marca “Ajudou”, ela lembra que aquela resposta serve para perguntas parecidas. Com “Não era isso”, ela para de sugerir aquela resposta.</li>
           <li>Não usa nenhuma IA externa: tudo roda no seu navegador e nada do que você ensina sai daqui.</li>
         </ul>

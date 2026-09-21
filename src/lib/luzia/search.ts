@@ -2,7 +2,7 @@
 // tolerante a erros de digitação e que aprende com o que a Gabi ensina e com o feedback.
 import { commonPrefix, editDistance, jaccard, normalize, tokenize } from "./text";
 
-export type KnowledgeSource = "playbook" | "template" | "ensinado";
+export type KnowledgeSource = "script" | "playbook" | "template" | "ensinado";
 
 export type KnowledgeItem = {
   id: string;
@@ -15,6 +15,10 @@ export type KnowledgeItem = {
   aliases?: string[];
   /** Para o atalho "Ver no Playbook". */
   sectionId?: string;
+  /** Perguntas relacionadas (botões do script). */
+  options?: { label: string; itemId: string }[];
+  /** Mensagem do script para quando ela não entende a pergunta. */
+  fallback?: string;
 };
 
 /** Perguntas que já ajudaram (good) ou não ajudaram (bad), por item. */
@@ -191,6 +195,7 @@ export function search(
     }
     if (queryNorm.length > 3 && doc.titleNorm.includes(queryNorm)) score *= 1.5;
     if (doc.item.source === "ensinado") score *= 1.2; // o que a Gabi ensinou vale mais
+    if (doc.item.source === "script") score *= 1.3; // a Luzia segue o script antes de tudo
     if (wantsTemplate && doc.item.source === "template") score *= 2.5; // "mensagem de..." pede um template
 
     // Feedback negativo: a mesma pergunta (ou muito parecida) já foi marcada como "não era isso".
@@ -204,7 +209,10 @@ export function search(
 
   hits.sort((a, b) => b.score - a.score);
   const top = hits.slice(0, limit);
-  for (const hit of top) hit.excerpt = pickExcerpt(hit.item.text, queryTerms);
+  // Respostas do script e do que a Gabi ensinou aparecem inteiras; o resto vem em trecho.
+  for (const hit of top) {
+    hit.excerpt = hit.item.source === "script" ? hit.item.text : pickExcerpt(hit.item.text, queryTerms);
+  }
   return top;
 }
 
