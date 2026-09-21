@@ -6,7 +6,9 @@ export type TagColor = "green" | "red" | "amber" | "blue" | "gray" | "rose";
 
 export type Tag = { id: string; name: string; color: TagColor };
 export type Comment = { id: string; text: string; at: string };
-type Entry = { tagIds: string[]; comments: Comment[] };
+// name/phone/email são digitados à mão pela usuária (não vêm do Pipedrive); o nome digitado
+// tem prioridade sobre o nome do negócio no Pipedrive.
+type Entry = { tagIds: string[]; comments: Comment[]; name?: string; phone?: string; email?: string };
 type Store = { tags: Tag[]; byDeal: Record<string, Entry> };
 
 // Tags que já vêm prontas (não podem ser apagadas).
@@ -61,6 +63,19 @@ export function useContractNotes() {
     }));
   }
 
+  // Nome, telefone e e-mail do lead, digitados à mão (ficam só neste navegador).
+  function setContact(dealId: number, data: { name: string; phone: string; email: string }) {
+    update(dealId, (entry) => ({
+      ...entry,
+      name: data.name.trim(),
+      phone: data.phone.trim(),
+      email: data.email.trim(),
+    }));
+  }
+
+  // Nome para exibir: o digitado à mão, senão o do Pipedrive.
+  const displayName = (dealId: number, fallback: string) => store.byDeal[String(dealId)]?.name?.trim() || fallback;
+
   function addComment(dealId: number, text: string) {
     const clean = text.trim();
     if (!clean) return;
@@ -104,7 +119,17 @@ export function useContractNotes() {
     });
   }
 
-  return { tags: store.tags, entryOf, toggleTag, addComment, deleteComment, createTag, deleteTag };
+  return {
+    tags: store.tags,
+    entryOf,
+    displayName,
+    toggleTag,
+    setContact,
+    addComment,
+    deleteComment,
+    createTag,
+    deleteTag,
+  };
 }
 
 export type ContractNotesApi = ReturnType<typeof useContractNotes>;

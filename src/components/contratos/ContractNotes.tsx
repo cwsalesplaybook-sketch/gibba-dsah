@@ -1,6 +1,6 @@
 import { useRef, useState, type FormEvent } from "react";
 import { createPortal } from "react-dom";
-import { Check, MessageSquare, Plus, Tag as TagIcon, Trash2, X } from "lucide-react";
+import { Check, Copy, MessageSquare, Pencil, Phone, Plus, Tag as TagIcon, Trash2, X } from "lucide-react";
 import {
   DEFAULT_TAGS,
   tagColorOptions,
@@ -183,6 +183,165 @@ export function TagsCell({ notes, row }: { notes: ContractNotesApi; row: Contrac
   );
 }
 
+// Link do WhatsApp a partir de um telefone brasileiro em qualquer formato.
+export function whatsappLink(phone: string) {
+  const digits = phone.replace(/\D/g, "");
+  if (digits.length < 10) return null;
+  const full = digits.startsWith("55") && digits.length >= 12 ? digits : `55${digits}`;
+  return `https://wa.me/${full}`;
+}
+
+// Telefone e e-mail do lead, digitados à mão (ficam salvos neste navegador).
+// O telefone abre o WhatsApp; há botão de copiar e de editar.
+export function ContactCell({ notes, row }: { notes: ContractNotesApi; row: ContractRow }) {
+  const entry = notes.entryOf(row.id);
+  const phone = entry.phone ?? "";
+  const email = entry.email ?? "";
+  const [editing, setEditing] = useState(false);
+  const [nameDraft, setNameDraft] = useState("");
+  const [phoneDraft, setPhoneDraft] = useState(phone);
+  const [emailDraft, setEmailDraft] = useState(email);
+  const [copied, setCopied] = useState(false);
+  const wa = phone ? whatsappLink(phone) : null;
+
+  function startEdit() {
+    // Começa com o nome que já aparece (o digitado ou o do Pipedrive), pra só completar.
+    setNameDraft(notes.displayName(row.id, row.name));
+    setPhoneDraft(phone);
+    setEmailDraft(email);
+    setEditing(true);
+  }
+
+  function save(event?: FormEvent) {
+    event?.preventDefault();
+    notes.setContact(row.id, { name: nameDraft, phone: phoneDraft, email: emailDraft });
+    setEditing(false);
+  }
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(phone);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // clipboard indisponível — nada a fazer
+    }
+  }
+
+  if (editing) {
+    return (
+      <form
+        onSubmit={save}
+        onKeyDown={(event) => {
+          if (event.key === "Escape") setEditing(false);
+        }}
+        className="w-[230px] space-y-1.5"
+      >
+        <input
+          autoFocus
+          value={nameDraft}
+          onChange={(event) => setNameDraft(event.target.value)}
+          placeholder="Nome completo"
+          maxLength={80}
+          className="w-full rounded-lg border border-input bg-background px-2.5 py-1.5 text-[13px] outline-none focus:border-primary"
+        />
+        <input
+          inputMode="tel"
+          value={phoneDraft}
+          onChange={(event) => setPhoneDraft(event.target.value)}
+          placeholder="Telefone, ex.: (11) 99999-9999"
+          maxLength={30}
+          className="w-full rounded-lg border border-input bg-background px-2.5 py-1.5 text-[13px] outline-none focus:border-primary"
+        />
+        <input
+          type="email"
+          value={emailDraft}
+          onChange={(event) => setEmailDraft(event.target.value)}
+          placeholder="E-mail (opcional)"
+          maxLength={80}
+          className="w-full rounded-lg border border-input bg-background px-2.5 py-1.5 text-[13px] outline-none focus:border-primary"
+        />
+        <div className="flex gap-1.5">
+          <button
+            type="submit"
+            className="rounded-lg bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground hover:opacity-90"
+          >
+            Salvar
+          </button>
+          <button
+            type="button"
+            onClick={() => setEditing(false)}
+            className="rounded-lg border border-border px-3 py-1 text-xs font-medium text-muted-foreground hover:bg-muted"
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    );
+  }
+
+  if (!phone && !email) {
+    return (
+      <button
+        type="button"
+        onClick={startEdit}
+        className="inline-flex items-center gap-1.5 rounded-md border border-dashed border-input px-2 py-0.5 text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+      >
+        <Phone className="h-3 w-3" /> Adicionar dados
+      </button>
+    );
+  }
+
+  return (
+    <div className="min-w-0 space-y-0.5">
+      <div className="flex items-center gap-0.5">
+        {phone &&
+          (wa ? (
+            <a
+              href={wa}
+              target="_blank"
+              rel="noreferrer"
+              title="Abrir no WhatsApp"
+              className="whitespace-nowrap font-medium text-primary-deep hover:underline"
+            >
+              {phone}
+            </a>
+          ) : (
+            <span className="whitespace-nowrap font-medium">{phone}</span>
+          ))}
+        {phone && (
+          <button
+            type="button"
+            onClick={copy}
+            aria-label="Copiar telefone"
+            title="Copiar telefone"
+            className="ml-1 rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          >
+            {copied ? <Check className="h-3.5 w-3.5 text-success" /> : <Copy className="h-3.5 w-3.5" />}
+          </button>
+        )}
+        <button
+          type="button"
+          onClick={startEdit}
+          aria-label="Editar dados do lead"
+          title="Editar nome, telefone e e-mail"
+          className="rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        >
+          <Pencil className="h-3.5 w-3.5" />
+        </button>
+      </div>
+      {email && (
+        <a
+          href={`mailto:${email}`}
+          className="block max-w-[220px] truncate text-xs text-muted-foreground hover:text-foreground"
+        >
+          {email}
+        </a>
+      )}
+    </div>
+  );
+}
+
 export function CommentsButton({
   notes,
   row,
@@ -236,7 +395,7 @@ export function ContractDrawer({
         <div className="flex items-start gap-3 border-b border-border px-5 py-4">
           <div className="min-w-0 flex-1 leading-tight">
             <p className="text-xs text-muted-foreground">Contrato</p>
-            <h3 className="truncate text-lg font-semibold">{row.name}</h3>
+            <h3 className="truncate text-lg font-semibold">{notes.displayName(row.id, row.name)}</h3>
             {row.sentAt && (
               <p className="mt-0.5 text-xs text-muted-foreground">Enviado em {formatDateTime(row.sentAt)}</p>
             )}

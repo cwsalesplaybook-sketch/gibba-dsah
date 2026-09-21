@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { IconBox } from "@/components/metas/parts";
-import { CommentsButton, ContractDrawer, TagsCell } from "@/components/contratos/ContractNotes";
+import { CommentsButton, ContactCell, ContractDrawer, TagsCell } from "@/components/contratos/ContractNotes";
 import {
   dayKey,
   daysBetween,
@@ -58,6 +58,17 @@ function Kpi({
 
 const th = "px-5 py-2.5 text-left text-xs font-medium text-muted-foreground";
 const td = "px-5 py-3 align-middle";
+
+// Nome do lead: o digitado à mão tem prioridade; se for diferente, mostra o do Pipedrive embaixo.
+function NameCell({ notes, row }: { notes: ContractNotesApi; row: ContractRow }) {
+  const name = notes.displayName(row.id, row.name);
+  return (
+    <div className="min-w-0">
+      <p className="font-medium">{name}</p>
+      {name !== row.name && <p className="text-[11px] text-muted-foreground">Pipedrive: {row.name}</p>}
+    </div>
+  );
+}
 
 // Cor de fundo da linha = cor da primeira tag do contrato (ex.: verde = assinado, vermelho = pendente).
 function rowTint(notes: ContractNotesApi, row: ContractRow) {
@@ -217,10 +228,11 @@ export function ContratosPage() {
           )}
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[820px] text-[13px]">
+          <table className="w-full min-w-[1000px] text-[13px]">
             <thead className="border-y border-border bg-muted/50">
               <tr>
                 <th className={th}>Representante</th>
+                <th className={th}>Contato</th>
                 <th className={th}>Contrato enviado em</th>
                 <th className={th}>Aguardando há</th>
                 <th className={th}>Prazo</th>
@@ -234,7 +246,12 @@ export function ContratosPage() {
                 const isLate = days >= LATE_AFTER_DAYS;
                 return (
                   <tr key={row.id} className={rowTint(notes, row)}>
-                    <td className={cn(td, "font-medium")}>{row.name}</td>
+                    <td className={td}>
+                      <NameCell notes={notes} row={row} />
+                    </td>
+                    <td className={td}>
+                      <ContactCell notes={notes} row={row} />
+                    </td>
                     <td className={td}>{row.sentAt ? formatDateTime(row.sentAt) : "—"}</td>
                     <td className={cn(td, "font-medium")}>{formatWaiting(days)}</td>
                     <td className={td}>
@@ -258,21 +275,21 @@ export function ContratosPage() {
               })}
               {data && pending.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-5 py-10 text-center text-muted-foreground">
+                  <td colSpan={7} className="px-5 py-10 text-center text-muted-foreground">
                     Nenhum contrato aguardando assinatura.
                   </td>
                 </tr>
               )}
               {data && pending.length > 0 && visiblePending.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-5 py-10 text-center text-muted-foreground">
+                  <td colSpan={7} className="px-5 py-10 text-center text-muted-foreground">
                     Nenhum contrato com esse filtro.
                   </td>
                 </tr>
               )}
               {!data && (
                 <tr>
-                  <td colSpan={6} className="px-5 py-10 text-center text-muted-foreground">
+                  <td colSpan={7} className="px-5 py-10 text-center text-muted-foreground">
                     {loading ? "Carregando dados do Pipedrive..." : "Sem dados no momento."}
                   </td>
                 </tr>
@@ -297,10 +314,11 @@ export function ContratosPage() {
             </div>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[820px] text-[13px]">
+            <table className="w-full min-w-[1000px] text-[13px]">
               <thead className="border-y border-border bg-muted/50">
                 <tr>
                   <th className={th}>Representante</th>
+                  <th className={th}>Contato</th>
                   <th className={th}>Assinado em</th>
                   <th className={th}>Tempo até assinar</th>
                   <th className={th}>Tags</th>
@@ -312,7 +330,12 @@ export function ContratosPage() {
                   const lag = row.sentAt && row.signedAt ? daysBetween(row.sentAt, row.signedAt) : null;
                   return (
                     <tr key={row.id} className={rowTint(notes, row)}>
-                      <td className={cn(td, "font-medium")}>{row.name}</td>
+                      <td className={td}>
+                        <NameCell notes={notes} row={row} />
+                      </td>
+                      <td className={td}>
+                        <ContactCell notes={notes} row={row} />
+                      </td>
                       <td className={td}>{row.signedAt ? formatDateTime(row.signedAt) : "—"}</td>
                       <td className={cn(td, "text-muted-foreground")}>
                         {lag === null ? "—" : lag <= 0 ? "No mesmo dia" : formatWaiting(lag)}
@@ -334,7 +357,7 @@ export function ContratosPage() {
 
       <p className="text-xs text-muted-foreground">
         Fonte: Pipedrive · funil [REP] Reunião Agendada · etapa "Assinatura de Contrato". Assinado = negócio dessa
-        etapa marcado como ganho. Tags e comentários ficam salvos neste navegador. Atualiza sozinho a cada 5 minutos.
+        etapa marcado como ganho. Nome, telefone, e-mail, tags e comentários são preenchidos por você e ficam salvos neste navegador. Atualiza sozinho a cada 5 minutos.
         {data && data.hidden.pending + data.hidden.signed > 0
           ? ` Não aparecem ${data.hidden.pending} pendente(s) e ${data.hidden.signed} assinado(s) de outros responsáveis.`
           : ""}
