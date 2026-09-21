@@ -4,8 +4,6 @@ export type ContractRow = {
   id: number;
   name: string;
   owner: string | null;
-  phone: string | null;
-  stageId: number;
   sentAt: string | null;
   signedAt: string | null;
 };

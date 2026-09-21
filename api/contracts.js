@@ -1,14 +1,16 @@
 // Vercel serverless function: controle diário da assinatura de contratos.
-// Fonte: Pipedrive, funil "[REP] Funil de Reunião Agendada" (pipeline 75).
-//  - Aguardando assinatura = negócios ABERTOS na etapa "Assinatura de Contrato" (id 425);
-//    a data de envio é quando o negócio entrou nessa etapa (stage_change_time).
-//  - Assinado = negócio marcado como GANHO (mesma regra que já define "representante
-//    cadastrado" no dashboard) nos últimos 30 dias.
+// Fonte: Pipedrive, funil "[REP] Funil de Reunião Agendada" (pipeline 75), etapa
+// "Assinatura de Contrato" (id 425).
+//  - Aguardando assinatura = negócios ABERTOS nessa etapa; a data de envio é quando o
+//    negócio entrou nela (stage_change_time).
+//  - Assinado = negócio que estava nessa etapa e foi marcado como GANHO, nos últimos
+//    dias. Negócios ganhos direto de outras etapas (ex.: "Reunião Agendada") são só
+//    cadastros e NÃO entram aqui.
+// Só aparecem os negócios cuja responsável é a usuária configurada em OWNER_NAME.
+// Não devolvemos telefone/e-mail: esta rota é aberta e não deve expor contatos.
 const API = "https://api.pipedrive.com/v1";
 const STAGE_CONTRATO = 425;
-const WON_STAGE_IDS = [421, 422, 423, 424, 425, 429]; // etapas do pipeline 75
-const WON_WINDOW_DAYS = 30;
-// Só contratos sob responsabilidade dessa usuária do Pipedrive (comparação sem acento/caixa).
+const SIGNED_WINDOW_DAYS = 7;
 const OWNER_NAME = "Gabrielly Oliveira";
 
 // O Pipedrive v1 devolve "2026-09-21 18:44:32" (UTC, sem fuso). Vira ISO com Z.
@@ -65,8 +67,6 @@ function toRow(deal) {
     id: deal.id,
     name: deal.person_name || deal.title,
     owner: deal.owner_name || deal.user_id?.name || null,
-    phone: deal.person_id?.phone?.find((item) => item.value)?.value ?? null,
-    stageId: deal.stage_id,
     sentAt: toIso(deal.stage_change_time),
     signedAt: toIso(deal.won_time),
   };
@@ -80,24 +80,21 @@ export default async function handler(req, res) {
     return;
   }
 
-  const cutoff = new Date(Date.now() - WON_WINDOW_DAYS * 24 * 60 * 60 * 1000);
+  const cutoff = new Date(Date.now() - SIGNED_WINDOW_DAYS * 24 * 60 * 60 * 1000);
 
   try {
-    const [pendingDeals, ...wonByStage] = await Promise.all([
+    const [pendingDeals, wonDeals] = await Promise.all([
       fetchDeals({ status: "open", stage_id: String(STAGE_CONTRATO) }, token),
-      ...WON_STAGE_IDS.map((stageId) =>
-        fetchDeals(
-          { status: "won", stage_id: String(stageId), sort: "update_time DESC" },
-          token,
-          // ordenado por update_time desc: dá pra parar quando passar da janela
-          (deal) => deal.update_time && new Date(toIso(deal.update_time)) < cutoff
-        )
+      fetchDeals(
+        { status: "won", stage_id: String(STAGE_CONTRATO), sort: "update_time DESC" },
+        token,
+        // ordenado por update_time desc: dá pra parar quando passar da janela
+        (deal) => deal.update_time && new Date(toIso(deal.update_time)) < cutoff
       ),
     ]);
 
     const allPending = pendingDeals.map(toRow);
-    const allSigned = wonByStage
-      .flat()
+    const allSigned = wonDeals
       .filter((deal) => deal.won_time && new Date(toIso(deal.won_time)) >= cutoff)
       .map(toRow);
 
@@ -107,7 +104,7 @@ export default async function handler(req, res) {
     res.setHeader("Cache-Control", "s-maxage=30, stale-while-revalidate=60");
     res.status(200).json({
       stageId: STAGE_CONTRATO,
-      windowDays: WON_WINDOW_DAYS,
+      windowDays: SIGNED_WINDOW_DAYS,
       owner: OWNER_NAME,
       // quantos contratos de outros responsáveis foram deixados de fora
       hidden: { pending: allPending.length - pending.length, signed: allSigned.length - signed.length },
