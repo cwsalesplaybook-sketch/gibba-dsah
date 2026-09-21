@@ -4,15 +4,12 @@ import { MetasPage } from "@/components/metas/MetasPage";
 import { ContratosPage } from "@/components/contratos/ContratosPage";
 import { TemplatesPage } from "@/components/TemplatesPage";
 import { PlaybookPage } from "@/components/PlaybookPage";
+import { LuziaPage } from "@/components/luzia/LuziaPage";
 import { EmConstrucaoPage } from "@/components/EmConstrucaoPage";
 
 const emConstrucao: Partial<Record<PageId, { title: string; description?: string }>> = {
   links: { title: "Links Importantes" },
   dados: { title: "Dados" },
-  luzia: {
-    title: "Luzia",
-    description: "Aqui vai morar a Luzia, o chatbot do PUMA. Em breve ela estará disponível.",
-  },
 };
 
 export default function App() {
@@ -26,6 +23,7 @@ export default function App() {
         {page === "contratos" && <ContratosPage />}
         {page === "templates" && <TemplatesPage />}
         {page === "playbook" && <PlaybookPage />}
+        {page === "luzia" && <LuziaPage onNavigate={setPage} />}
         {emConstrucao[page] && <EmConstrucaoPage {...emConstrucao[page]!} />}
       </main>
     </div>
