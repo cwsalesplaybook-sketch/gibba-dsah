@@ -27,16 +27,10 @@ const navItems: { id: PageId; label: string; icon: typeof Target }[] = [
 function Logo() {
   return (
     <div className="flex items-center gap-3">
-      <img
-        src="/logo.png"
-        alt="Ícone do Gibba"
-        width={36}
-        height={36}
-        className="h-9 w-9 rounded-[10px] object-cover ring-1 ring-border"
-      />
+      <img src="/logo.png?v=3" alt="Pantera do PUMA" width={40} height={40} className="h-10 w-10 object-contain" />
       <div className="leading-tight">
-        <p className="text-[15px] font-semibold tracking-tight">Cardápio Web</p>
-        <p className="text-[11px] text-muted-foreground">Portal do Representante</p>
+        <p className="text-[17px] font-bold tracking-wide">PUMA</p>
+        <p className="text-[11px] text-muted-foreground">Insights &amp; Resultados</p>
       </div>
     </div>
   );
@@ -85,7 +79,7 @@ export function Sidebar({
       </nav>
 
       <div className="mt-auto border-t border-sidebar-border px-5 py-4">
-        <p className="text-[11px] text-muted-foreground">Cardápio Web · v1.0.0</p>
+        <p className="text-[11px] text-muted-foreground">PUMA · v1.0.0</p>
       </div>
     </div>
   );

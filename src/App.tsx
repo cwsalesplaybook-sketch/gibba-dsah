@@ -11,7 +11,7 @@ const emConstrucao: Partial<Record<PageId, { title: string; description?: string
   dados: { title: "Dados" },
   luzia: {
     title: "Luzia",
-    description: "Aqui vai morar a Luzia, o chatbot do Gibba. Em breve ela estará disponível.",
+    description: "Aqui vai morar a Luzia, o chatbot do PUMA. Em breve ela estará disponível.",
   },
 };
 
