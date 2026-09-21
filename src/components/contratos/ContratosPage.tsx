@@ -1,15 +1,23 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import {
   AlertTriangle,
   CheckCircle2,
   Clock,
   FileSignature,
+  Plus,
   RefreshCw,
   Send,
+  Trash2,
 } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { IconBox } from "@/components/metas/parts";
-import { CommentsButton, ContactCell, ContractDrawer, TagsCell } from "@/components/contratos/ContractNotes";
+import {
+  AddLeadModal,
+  CommentsButton,
+  ContactCell,
+  ContractDrawer,
+  TagsCell,
+} from "@/components/contratos/ContractNotes";
 import {
   dayKey,
   daysBetween,
@@ -19,13 +27,21 @@ import {
   useContracts,
   type ContractRow,
 } from "@/lib/useContracts";
-import { tagStyles, useContractNotes, type ContractNotesApi } from "@/lib/useContractNotes";
+import {
+  PENDING_TAG_ID,
+  SIGNED_TAG_ID,
+  tagStyles,
+  useContractNotes,
+  type ContractNotesApi,
+} from "@/lib/useContractNotes";
 import { cn } from "@/lib/utils";
 
 // Pipedrive marca como "parado" (rotten) o negócio com 2+ dias na etapa.
 const LATE_AFTER_DAYS = 2;
 
 type Filter = "all" | "none" | string; // string = id de uma tag
+type Source = "pipedrive-pending" | "pipedrive-signed" | "manual";
+type Section = "pending" | "signed";
 
 function Kpi({
   label,
@@ -64,8 +80,17 @@ function NameCell({ notes, row }: { notes: ContractNotesApi; row: ContractRow })
   const name = notes.displayName(row.id, row.name);
   return (
     <div className="min-w-0">
-      <p className="font-medium">{name}</p>
-      {name !== row.name && <p className="text-[11px] text-muted-foreground">Pipedrive: {row.name}</p>}
+      <p className="flex items-center gap-2 font-medium">
+        {name}
+        {row.manual && (
+          <span className="rounded-md bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+            Manual
+          </span>
+        )}
+      </p>
+      {!row.manual && name !== row.name && (
+        <p className="text-[11px] text-muted-foreground">Pipedrive: {row.name}</p>
+      )}
     </div>
   );
 }
@@ -102,25 +127,92 @@ function FilterChip({
   );
 }
 
+// Comentários + (para leads manuais) botão de remover.
+function ActionsCell({
+  notes,
+  row,
+  onComment,
+}: {
+  notes: ContractNotesApi;
+  row: ContractRow;
+  onComment: () => void;
+}) {
+  return (
+    <div className="flex items-center gap-1.5">
+      <CommentsButton notes={notes} row={row} onOpen={onComment} />
+      {row.manual && (
+        <button
+          type="button"
+          onClick={() => {
+            if (window.confirm(`Remover o lead "${notes.displayName(row.id, row.name)}" da lista?`)) {
+              notes.deleteManualLead(row.id);
+            }
+          }}
+          aria-label="Remover lead"
+          title="Remover lead"
+          className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-destructive"
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+        </button>
+      )}
+    </div>
+  );
+}
+
 export function ContratosPage() {
   const { data, loading, error, refresh } = useContracts();
   const notes = useContractNotes();
   const [filter, setFilter] = useState<Filter>("all");
   const [drawerId, setDrawerId] = useState<number | null>(null);
+  const [adding, setAdding] = useState(false);
 
-  const today = new Date();
-  const pending = data?.pending ?? [];
-  const signed = data?.signed ?? [];
-  const drawerRow = drawerId === null ? null : [...pending, ...signed].find((row) => row.id === drawerId) ?? null;
+  // Todos os contratos numa lista só: Pipedrive (aguardando e assinados) + leads manuais.
+  const all: { row: ContractRow; source: Source }[] = [
+    ...(data?.pending ?? []).map((row) => ({ row, source: "pipedrive-pending" as const })),
+    ...(data?.signed ?? []).map((row) => ({ row, source: "pipedrive-signed" as const })),
+    ...notes.manualLeads.map((lead) => ({
+      row: { id: lead.id, name: lead.name, owner: null, sentAt: lead.sentAt, signedAt: null, manual: true },
+      source: "manual" as const,
+    })),
+  ];
 
-  const stats = useMemo(() => {
-    const now = new Date();
-    const todayKey = dayKey(now);
-    const late = pending.filter((row) => row.sentAt && daysBetween(row.sentAt, now) >= LATE_AFTER_DAYS);
-    const sentToday = [...pending, ...signed].filter((row) => row.sentAt && dayKey(row.sentAt) === todayKey);
-    const signedToday = signed.filter((row) => row.signedAt && dayKey(row.signedAt) === todayKey);
-    return { late: late.length, sentToday: sentToday.length, signedToday: signedToday.length };
-  }, [pending, signed]);
+  // As tags mandam: "Contrato assinado" vai para Assinados; "Assinatura pendente" para Aguardando.
+  // Sem tag, vale o que o Pipedrive diz (e lead manual começa em Aguardando).
+  function sectionOf(row: ContractRow, source: Source): Section {
+    const ids = notes.entryOf(row.id).tagIds;
+    if (ids.includes(SIGNED_TAG_ID)) return "signed";
+    if (ids.includes(PENDING_TAG_ID)) return "pending";
+    return source === "pipedrive-signed" ? "signed" : "pending";
+  }
+  const signedAtOf = (row: ContractRow) => row.signedAt ?? notes.entryOf(row.id).signedAt ?? null;
+
+  const time = (iso: string | null, fallback: number) => (iso ? new Date(iso).getTime() : fallback);
+  const pending = all
+    .filter(({ row, source }) => sectionOf(row, source) === "pending")
+    .map(({ row }) => row)
+    .sort((a, b) => time(a.sentAt, Infinity) - time(b.sentAt, Infinity));
+  const signed = all
+    .filter(({ row, source }) => sectionOf(row, source) === "signed")
+    .map(({ row }) => row)
+    .filter((row) => {
+      const at = signedAtOf(row);
+      return !at || daysBetween(at) <= 6; // "recentemente" = últimos 7 dias
+    })
+    .sort((a, b) => time(signedAtOf(b), 0) - time(signedAtOf(a), 0));
+
+  const drawerRow = drawerId === null ? null : all.find(({ row }) => row.id === drawerId)?.row ?? null;
+
+  const now = new Date();
+  const todayKey = dayKey(now);
+  const stats = {
+    late: pending.filter((row) => row.sentAt && daysBetween(row.sentAt, now) >= LATE_AFTER_DAYS).length,
+    sentToday: [...pending, ...signed].filter((row) => row.sentAt && dayKey(row.sentAt) === todayKey).length,
+    signedToday: signed.filter((row) => {
+      const at = signedAtOf(row);
+      return at && dayKey(at) === todayKey;
+    }).length,
+  };
+  const ready = data !== null || notes.manualLeads.length > 0;
 
   // Contagem por tag (e sem tag) para os filtros da tabela de pendentes.
   const counts = { byTag: {} as Record<string, number>, none: 0 };
@@ -136,6 +228,8 @@ export function ContratosPage() {
     if (filter === "none") return !ids.some((id) => notes.tags.some((tag) => tag.id === id));
     return ids.includes(filter);
   });
+
+  const value = (n: number) => (ready ? n : "...");
 
   return (
     <div className="flex w-full flex-col gap-[18px]">
@@ -168,27 +262,27 @@ export function ContratosPage() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Kpi
           label="Aguardando assinatura"
-          value={data ? pending.length : "—"}
+          value={value(pending.length)}
           hint="Contratos enviados e ainda não assinados"
           icon={Clock}
         />
         <Kpi
           label="Atrasados"
-          value={data ? stats.late : "—"}
+          value={value(stats.late)}
           hint={`Sem assinatura há ${LATE_AFTER_DAYS}+ dias`}
           icon={AlertTriangle}
           alert={stats.late > 0}
         />
         <Kpi
           label="Enviados hoje"
-          value={data ? stats.sentToday : "—"}
-          hint={today.toLocaleDateString("pt-BR", { day: "numeric", month: "long", timeZone: "America/Sao_Paulo" })}
+          value={value(stats.sentToday)}
+          hint={now.toLocaleDateString("pt-BR", { day: "numeric", month: "long", timeZone: "America/Sao_Paulo" })}
           icon={Send}
         />
         <Kpi
           label="Assinados hoje"
-          value={data ? stats.signedToday : "—"}
-          hint={data ? `${signed.length} nos últimos ${data.windowDays} dias` : "Últimos 7 dias"}
+          value={value(stats.signedToday)}
+          hint={`${signed.length} nos últimos 7 dias`}
           icon={CheckCircle2}
         />
       </div>
@@ -202,30 +296,40 @@ export function ContratosPage() {
             <div className="leading-tight">
               <h2 className="text-base font-semibold">Aguardando assinatura</h2>
               <p className="mt-0.5 text-xs text-muted-foreground">
-                Mais antigos primeiro — cobre quem está parado há mais tempo.
+                Mais antigos primeiro, cobre quem está parado há mais tempo.
               </p>
             </div>
           </div>
-          {pending.length > 0 && (
-            <div className="flex flex-wrap items-center gap-1.5">
-              <FilterChip active={filter === "all"} onClick={() => setFilter("all")}>
-                Todos ({pending.length})
-              </FilterChip>
-              {notes.tags
-                .filter((tag) => (counts.byTag[tag.id] ?? 0) > 0)
-                .map((tag) => (
-                  <FilterChip key={tag.id} active={filter === tag.id} onClick={() => setFilter(tag.id)}>
-                    <span className={cn("h-2 w-2 rounded-full", tagStyles[tag.color].dot)} />
-                    {tag.name} ({counts.byTag[tag.id]})
-                  </FilterChip>
-                ))}
-              {counts.none > 0 && counts.none !== pending.length && (
-                <FilterChip active={filter === "none"} onClick={() => setFilter("none")}>
-                  Sem tag ({counts.none})
+          <div className="flex flex-wrap items-center gap-1.5">
+            {pending.length > 0 && (
+              <>
+                <FilterChip active={filter === "all"} onClick={() => setFilter("all")}>
+                  Todos ({pending.length})
                 </FilterChip>
-              )}
-            </div>
-          )}
+                {notes.tags
+                  .filter((tag) => (counts.byTag[tag.id] ?? 0) > 0)
+                  .map((tag) => (
+                    <FilterChip key={tag.id} active={filter === tag.id} onClick={() => setFilter(tag.id)}>
+                      <span className={cn("h-2 w-2 rounded-full", tagStyles[tag.color].dot)} />
+                      {tag.name} ({counts.byTag[tag.id]})
+                    </FilterChip>
+                  ))}
+                {counts.none > 0 && counts.none !== pending.length && (
+                  <FilterChip active={filter === "none"} onClick={() => setFilter("none")}>
+                    Sem tag ({counts.none})
+                  </FilterChip>
+                )}
+              </>
+            )}
+            <button
+              type="button"
+              onClick={() => setAdding(true)}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              Adicionar lead
+            </button>
+          </div>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[1000px] text-[13px]">
@@ -252,8 +356,8 @@ export function ContratosPage() {
                     <td className={td}>
                       <ContactCell notes={notes} row={row} />
                     </td>
-                    <td className={td}>{row.sentAt ? formatDateTime(row.sentAt) : "—"}</td>
-                    <td className={cn(td, "font-medium")}>{formatWaiting(days)}</td>
+                    <td className={td}>{row.sentAt ? formatDateTime(row.sentAt) : "Sem data"}</td>
+                    <td className={cn(td, "font-medium")}>{row.sentAt ? formatWaiting(days) : "Sem data"}</td>
                     <td className={td}>
                       <span
                         className={cn(
@@ -268,26 +372,26 @@ export function ContratosPage() {
                       <TagsCell notes={notes} row={row} />
                     </td>
                     <td className={td}>
-                      <CommentsButton notes={notes} row={row} onOpen={() => setDrawerId(row.id)} />
+                      <ActionsCell notes={notes} row={row} onComment={() => setDrawerId(row.id)} />
                     </td>
                   </tr>
                 );
               })}
-              {data && pending.length === 0 && (
+              {ready && pending.length === 0 && (
                 <tr>
                   <td colSpan={7} className="px-5 py-10 text-center text-muted-foreground">
                     Nenhum contrato aguardando assinatura.
                   </td>
                 </tr>
               )}
-              {data && pending.length > 0 && visiblePending.length === 0 && (
+              {ready && pending.length > 0 && visiblePending.length === 0 && (
                 <tr>
                   <td colSpan={7} className="px-5 py-10 text-center text-muted-foreground">
                     Nenhum contrato com esse filtro.
                   </td>
                 </tr>
               )}
-              {!data && (
+              {!ready && (
                 <tr>
                   <td colSpan={7} className="px-5 py-10 text-center text-muted-foreground">
                     {loading ? "Carregando dados do Pipedrive..." : "Sem dados no momento."}
@@ -309,7 +413,7 @@ export function ContratosPage() {
             <div className="leading-tight">
               <h2 className="text-base font-semibold">Assinados recentemente</h2>
               <p className="mt-0.5 text-xs text-muted-foreground">
-                Últimos {data?.windowDays ?? 7} dias — mais recentes primeiro.
+                Últimos {data?.windowDays ?? 7} dias, mais recentes primeiro.
               </p>
             </div>
           </div>
@@ -327,7 +431,8 @@ export function ContratosPage() {
               </thead>
               <tbody className="divide-y divide-border">
                 {signed.map((row) => {
-                  const lag = row.sentAt && row.signedAt ? daysBetween(row.sentAt, row.signedAt) : null;
+                  const at = signedAtOf(row);
+                  const lag = row.sentAt && at ? daysBetween(row.sentAt, at) : null;
                   return (
                     <tr key={row.id} className={rowTint(notes, row)}>
                       <td className={td}>
@@ -336,15 +441,15 @@ export function ContratosPage() {
                       <td className={td}>
                         <ContactCell notes={notes} row={row} />
                       </td>
-                      <td className={td}>{row.signedAt ? formatDateTime(row.signedAt) : "—"}</td>
+                      <td className={td}>{at ? formatDateTime(at) : "Sem data"}</td>
                       <td className={cn(td, "text-muted-foreground")}>
-                        {lag === null ? "—" : lag <= 0 ? "No mesmo dia" : formatWaiting(lag)}
+                        {lag === null ? "Sem data" : lag <= 0 ? "No mesmo dia" : formatWaiting(lag)}
                       </td>
                       <td className={td}>
                         <TagsCell notes={notes} row={row} />
                       </td>
                       <td className={td}>
-                        <CommentsButton notes={notes} row={row} onOpen={() => setDrawerId(row.id)} />
+                        <ActionsCell notes={notes} row={row} onComment={() => setDrawerId(row.id)} />
                       </td>
                     </tr>
                   );
@@ -356,13 +461,16 @@ export function ContratosPage() {
       )}
 
       <p className="text-xs text-muted-foreground">
-        Fonte: Pipedrive · funil [REP] Reunião Agendada · etapa "Assinatura de Contrato". Assinado = negócio dessa
-        etapa marcado como ganho. Nome, telefone, e-mail, tags e comentários são preenchidos por você e ficam salvos neste navegador. Atualiza sozinho a cada 5 minutos.
+        Fonte: Pipedrive (funil [REP] Reunião Agendada, etapa "Assinatura de Contrato"). Assinado é o negócio dessa
+        etapa marcado como ganho. As tags "Assinatura pendente" e "Contrato assinado" definem em qual lista o contrato
+        aparece. Nome, telefone, e-mail, tags, comentários e leads adicionados por você ficam salvos neste navegador.
+        Atualiza sozinho a cada 5 minutos.
         {data && data.hidden.pending + data.hidden.signed > 0
           ? ` Não aparecem ${data.hidden.pending} pendente(s) e ${data.hidden.signed} assinado(s) de outros responsáveis.`
           : ""}
       </p>
 
+      {adding && <AddLeadModal notes={notes} onClose={() => setAdding(false)} />}
       {drawerRow && <ContractDrawer notes={notes} row={drawerRow} onClose={() => setDrawerId(null)} />}
     </div>
   );

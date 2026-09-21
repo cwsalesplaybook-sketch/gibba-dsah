@@ -24,12 +24,12 @@ export const inicioMetaInfo = [
 ] as const;
 
 export const inicioSeed = {
-  sistema: 8, // Meta 2 — cadastros no sistema
-  ativacoes: 24, // Meta 3 — ativações
+  sistema: 8, // Meta 2, cadastros no sistema
+  ativacoes: 24, // Meta 3, ativações
   cadastrosMes: 17, // card "Cadastros no mês"
   cadastrosMesDelta: 8.2, // % vs. mês anterior desse card
 };
 
-// Meta mensal de cadastros (linha tracejada do gráfico) de jan a ago — o mês
+// Meta mensal de cadastros (linha tracejada do gráfico) de jan a ago, o mês
 // atual e os seguintes usam a Meta 1 configurada no card.
 export const monthlyGoals = [14, 18, 23, 27, 32, 29, 35, 42];

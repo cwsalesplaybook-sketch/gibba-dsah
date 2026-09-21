@@ -20,7 +20,7 @@ export const playbookSections: PlaybookSection[] = [
     blocks: [
       {
         type: "subheading",
-        text: "Ligação / Vídeo chamada — BANT adaptado",
+        text: "Ligação / Vídeo chamada, BANT adaptado",
       },
       {
         type: "steps",
@@ -42,7 +42,7 @@ export const playbookSections: PlaybookSection[] = [
           { label: "Agradecimento", text: "NOME_DO_LEAD, muito obrigada pela sua disponibilidade, foi um prazer falar com você! Fico na torcida aqui pra que dê tudo certo, e no que precisar, é só me chamar por aqui também." },
         ],
       },
-      { type: "subheading", text: "WhatsApp — mensagem de abertura automática (BANT)" },
+      { type: "subheading", text: "WhatsApp, mensagem de abertura automática (BANT)" },
       {
         type: "paragraph",
         text: "A abertura é automática; a partir da resposta do lead, as mensagens seguintes são enviadas manualmente.",
@@ -66,7 +66,7 @@ export const playbookSections: PlaybookSection[] = [
           { label: "Agradecimento", text: "NOME_DO_LEAD, muito obrigada pela sua disponibilidade, foi um prazer falar com você! Fico na torcida aqui pra que dê tudo certo, e no que precisar, é só me chamar por aqui também." },
         ],
       },
-      { type: "subheading", text: "WhatsApp — Prospecção (AIDA)" },
+      { type: "subheading", text: "WhatsApp, Prospecção (AIDA)" },
       {
         type: "steps",
         items: [
@@ -83,7 +83,7 @@ export const playbookSections: PlaybookSection[] = [
           { label: "Atenção", text: "Olá, Carlos! Tudo certo? Aqui é o Hyorranes da Cardápio Web. Vi que você preencheu o formulário e demonstrou interesse em conhecer melhor o programa de representantes, tá lembrado? Você tá com um minutinho pra gente conversar?" },
           { label: "Interesse", text: "Show de bola! Antes da gente seguir, me conta, como você conheceu a Cardápio Web? Perfeito. E hoje você já tem uma carteira de clientes do ramo alimentício?" },
           { label: "Desejo", text: "Deixa eu te explicar como funciona o programa. Você entra como representante e prospecta donos de restaurante, bar ou delivery pra vender a Cardápio Web. Pra isso, você tem um sistema próprio com CRM, mapa de oportunidades por região e calculadora de proposta com link de pagamento automático. A comissão é recorrente. Além disso, você conta com um onboarding estruturado, acompanhado pelos especialistas da Cardápio Web. Isso atende o que você procura?" },
-          { label: "Ação — Agendamento", text: "Você tem mais disponibilidade pela manhã ou pela tarde? Perfeito, que tal às X horas no horário de Brasília?" },
+          { label: "Ação, Agendamento", text: "Você tem mais disponibilidade pela manhã ou pela tarde? Perfeito, que tal às X horas no horário de Brasília?" },
           { label: "Gatilho de compromisso", text: "Combinado, Carlos! Nossa reunião está marcada pra DIA E HORA no horário de Brasília. Posso contar com seu compromisso nessa vídeo chamada? Perfeito, sei que imprevistos acontecem. Se algo te impedir de participar, você consegue me avisar com antecedência pra eu reorganizar a agenda?" },
           { label: "Agradecimento", text: "Carlos, muito obrigada pela sua disponibilidade, foi um prazer falar com você! Fico na torcida aqui pra que dê tudo certo, e no que precisar, é só me chamar por aqui também." },
         ],
@@ -93,7 +93,7 @@ export const playbookSections: PlaybookSection[] = [
   {
     id: "cw-store",
     title: "CW Store",
-    summary: "Marketplace de apps integrado ao portal — como funciona e como vender.",
+    summary: "Marketplace de apps integrado ao portal, como funciona e como vender.",
     blocks: [
       {
         type: "paragraph",
@@ -107,7 +107,7 @@ export const playbookSections: PlaybookSection[] = [
       {
         type: "list",
         items: [
-          "CW App Store (o marketplace): ponto de entrada para o estabelecimento — onde o restaurante descobre, instala e gerencia os apps parceiros, sem suporte técnico ou configuração manual.",
+          "CW App Store (o marketplace): ponto de entrada para o estabelecimento, onde o restaurante descobre, instala e gerencia os apps parceiros, sem suporte técnico ou configuração manual.",
           "OAuth (a autorização): momento em que o Proprietário do estabelecimento concede as permissões que o app poderá usar, de forma parecida com um login social, dentro do próprio portal.",
           "API aberta (a integração de fato): por onde o app lê e escreve dados reais do estabelecimento (cardápio, pedidos, configurações de loja), depois que a instalação foi autorizada e o token foi emitido.",
         ],
@@ -117,7 +117,7 @@ export const playbookSections: PlaybookSection[] = [
         type: "list",
         items: [
           "Cadastro do app: a integradora envia ao suporte as informações do app (nome, categoria, descrição, imagens, URLs técnicas e permissões necessárias).",
-          "Aprovação: análise em Sandbox e depois em Produção — pode levar até 7 dias corridos.",
+          "Aprovação: análise em Sandbox e depois em Produção, pode levar até 7 dias corridos.",
           "Publicação: app disponível no marketplace, podendo ser público (catálogo) ou privado (link direto).",
           "Instalação: o Proprietário encontra o app na CW Store e clica em instalar.",
           "Autorização (OAuth): o Proprietário escolhe a loja e confirma as permissões solicitadas.",
@@ -137,7 +137,7 @@ export const playbookSections: PlaybookSection[] = [
       },
       {
         type: "paragraph",
-        text: "A Cardápio Web mantém dois ambientes isolados — Sandbox (testes) e Produção (uso real) — cada um com seu próprio cadastro, credenciais e instalações. Cada loja que instala um app gera uma instalação própria com tokens específicos; se o restaurante desinstalar, o acesso daquela loja é revogado na hora, sem afetar outras lojas ou apps. Reinstalar repete o fluxo de autorização do zero.",
+        text: "A Cardápio Web mantém dois ambientes isolados, Sandbox (testes) e Produção (uso real), cada um com seu próprio cadastro, credenciais e instalações. Cada loja que instala um app gera uma instalação própria com tokens específicos; se o restaurante desinstalar, o acesso daquela loja é revogado na hora, sem afetar outras lojas ou apps. Reinstalar repete o fluxo de autorização do zero.",
       },
       { type: "subheading", text: "Valor para o restaurante" },
       {
@@ -165,14 +165,14 @@ export const playbookSections: PlaybookSection[] = [
         items: [
           "Fazer parte de um ecossistema já validado por restaurantes, em vez de vender uma integração isolada.",
           "Redução do tempo de implementação comparado a integrações manuais ou personalizadas.",
-          "Quanto mais parceiros no ecossistema, mais valor agregado pra todos os restaurantes — um argumento de crescimento conjunto.",
+          "Quanto mais parceiros no ecossistema, mais valor agregado pra todos os restaurantes, um argumento de crescimento conjunto.",
         ],
       },
       { type: "subheading", text: "Pontos de atenção para o time comercial" },
       {
         type: "list",
         items: [
-          "A aprovação de um novo app pode levar até 7 dias corridos — alinhar esse prazo com clientes e parceiros.",
+          "A aprovação de um novo app pode levar até 7 dias corridos, alinhar esse prazo com clientes e parceiros.",
           "Permissões solicitadas no cadastro não podem ser removidas depois; adicionar novas exige que clientes já instalados reinstalem o app.",
           "Dúvidas técnicas ou comerciais: integracao@cardapioweb.com.",
         ],
@@ -186,7 +186,7 @@ export const playbookSections: PlaybookSection[] = [
   {
     id: "cw-club",
     title: "CW Club",
-    summary: "Programa de parcerias para agências e gestores de tráfego — o que aproveitar no programa de representantes.",
+    summary: "Programa de parcerias para agências e gestores de tráfego, o que aproveitar no programa de representantes.",
     blocks: [
       {
         type: "paragraph",
@@ -207,7 +207,7 @@ export const playbookSections: PlaybookSection[] = [
       {
         type: "list",
         items: [
-          "Criar uma comunidade entre representantes — hoje existem só mentorias semanais e central de ajuda, sem espaço de troca entre pares.",
+          "Criar uma comunidade entre representantes, hoje existem só mentorias semanais e central de ajuda, sem espaço de troca entre pares.",
           "Expandir a documentação atual (central de ajuda e matriz de concorrentes) pra uma biblioteca mais completa, com templates de propostas e roteiros de abordagem.",
           "Implementar um canal formal de novidades do setor e lançamentos de funcionalidades.",
           "Criar um canal de feedback ativo pra representantes sugerirem melhorias no programa.",
@@ -217,9 +217,9 @@ export const playbookSections: PlaybookSection[] = [
       {
         type: "list",
         items: [
-          "Público diferente: o CW Club fala com agências/consultorias; os representantes prospectam donos de restaurante direto — o conteúdo precisa mudar de branding/tráfego pago pra prospecção, fechamento e retenção.",
-          "O CW Club não tem modelo de comissão; o programa de representantes é estruturado em comissionamento recorrente — networking e autoridade de marca só complementam, não substituem o incentivo financeiro.",
-          "Formato de entrega muda: CW Club é conteúdo assíncrono; representantes usam ferramentas ativas (CRM próprio, calculadora de propostas) — qualquer nova biblioteca precisa se integrar a essas ferramentas.",
+          "Público diferente: o CW Club fala com agências/consultorias; os representantes prospectam donos de restaurante direto, o conteúdo precisa mudar de branding/tráfego pago pra prospecção, fechamento e retenção.",
+          "O CW Club não tem modelo de comissão; o programa de representantes é estruturado em comissionamento recorrente, networking e autoridade de marca só complementam, não substituem o incentivo financeiro.",
+          "Formato de entrega muda: CW Club é conteúdo assíncrono; representantes usam ferramentas ativas (CRM próprio, calculadora de propostas), qualquer nova biblioteca precisa se integrar a essas ferramentas.",
         ],
       },
     ],
@@ -236,7 +236,7 @@ export const playbookSections: PlaybookSection[] = [
       {
         type: "steps",
         items: [
-          { label: "1. Boas-vindas e imersão institucional (dias 1-2)", text: "Apresentação da Cardápio Web (propósito, números, planos e módulos) e do papel do representante — modelo autônomo, sem vínculo empregatício, expectativas e ferramentas disponíveis." },
+          { label: "1. Boas-vindas e imersão institucional (dias 1-2)", text: "Apresentação da Cardápio Web (propósito, números, planos e módulos) e do papel do representante, modelo autônomo, sem vínculo empregatício, expectativas e ferramentas disponíveis." },
           { label: "2. Domínio do produto e do comissionamento (dias 3-5)", text: "Treinamento sobre os planos comercializados (Mesas, Delivery, Premium) e módulos opcionais, explicação do modelo de comissão (base de 10% recorrente, adicionais por implementação e suporte, bônus de performance por churn baixo, teto de 40%) e apresentação do CRM próprio." },
           { label: "3. Capacitação comercial e de prospecção (dias 6-8)", text: "Técnicas de prospecção de donos de restaurantes, bares e deliveries, simulações de pitch e tratamento de objeções, e conhecimento das integrações oferecidas (iFood, 99Food, Forkit e Quase Pra Fome)." },
           { label: "4. Acompanhamento prático / shadowing (dias 9-12)", text: "O novo representante acompanha um representante experiente em reuniões reais de prospecção e observa de perto um onboarding assistido ou híbrido com um cliente real." },
@@ -277,7 +277,7 @@ export const playbookSections: PlaybookSection[] = [
           "Retenção: cuidar da saúde do parceiro pra não perder ele.",
         ],
       },
-      { type: "subheading", text: "KPIs — Ativação e engajamento" },
+      { type: "subheading", text: "KPIs, Ativação e engajamento" },
       {
         type: "list",
         items: [
@@ -288,7 +288,7 @@ export const playbookSections: PlaybookSection[] = [
           "Ações de co-marketing feitas",
         ],
       },
-      { type: "subheading", text: "KPIs — Performance comercial" },
+      { type: "subheading", text: "KPIs, Performance comercial" },
       {
         type: "list",
         items: [
@@ -299,7 +299,7 @@ export const playbookSections: PlaybookSection[] = [
           "Ciclo de vendas no canal",
         ],
       },
-      { type: "subheading", text: "KPIs — Financeiro e retenção" },
+      { type: "subheading", text: "KPIs, Financeiro e retenção" },
       {
         type: "list",
         items: [
@@ -447,7 +447,7 @@ export const playbookSections: PlaybookSection[] = [
     blocks: [
       {
         type: "list",
-        items: ["Ep. 01 — O desafio da IA que está transformando os ecossistemas"],
+        items: ["Ep. 01, O desafio da IA que está transformando os ecossistemas"],
       },
     ],
   },
@@ -519,16 +519,16 @@ export const playbookSections: PlaybookSection[] = [
       {
         type: "list",
         items: [
-          "Diagnóstico — mapear a carteira atual de parceiros: quem gera oportunidades recorrentes, quem está inativo e quais processos dependem de planilhas manuais.",
-          "Metas e estratégia — definir se o canal vai focar em aquisição, retenção ou cross-sell, e se o modelo será de volume (afiliados) ou nicho (parceiros estratégicos).",
-          "Valores, premissas e benefícios — deixar claro o que a empresa oferece (comissões, treinamento, materiais) e o que espera em troca.",
-          "Modelo de comissionamento — desenhar regras de setup, recorrência, clawback (cancelamentos/churn) e OTE (potencial de ganho anual).",
-          "Onboarding — estruturar a jornada inicial com trilhas de treinamento, gamificação e acesso rápido a materiais.",
-          "KPIs — acompanhar tempo até a primeira venda, taxa de ativação, ticket médio por canal e churn de parceiros.",
-          "Automação de comissionamento — eliminar planilhas para dar transparência ao parceiro e evitar erros financeiros.",
-          "Governança de dados — documentar processos e definir hierarquia de permissões para dados sensíveis (comissões, carteira de leads).",
-          "Comunicação e feedback — criar rituais como boletins, webinars e canais de feedback acessíveis.",
-          "Ativação e retenção — manter o parceiro engajado com campanhas de incentivo, gamificação e mentorias, não apenas treiná-lo uma vez.",
+          "Diagnóstico, mapear a carteira atual de parceiros: quem gera oportunidades recorrentes, quem está inativo e quais processos dependem de planilhas manuais.",
+          "Metas e estratégia, definir se o canal vai focar em aquisição, retenção ou cross-sell, e se o modelo será de volume (afiliados) ou nicho (parceiros estratégicos).",
+          "Valores, premissas e benefícios, deixar claro o que a empresa oferece (comissões, treinamento, materiais) e o que espera em troca.",
+          "Modelo de comissionamento, desenhar regras de setup, recorrência, clawback (cancelamentos/churn) e OTE (potencial de ganho anual).",
+          "Onboarding, estruturar a jornada inicial com trilhas de treinamento, gamificação e acesso rápido a materiais.",
+          "KPIs, acompanhar tempo até a primeira venda, taxa de ativação, ticket médio por canal e churn de parceiros.",
+          "Automação de comissionamento, eliminar planilhas para dar transparência ao parceiro e evitar erros financeiros.",
+          "Governança de dados, documentar processos e definir hierarquia de permissões para dados sensíveis (comissões, carteira de leads).",
+          "Comunicação e feedback, criar rituais como boletins, webinars e canais de feedback acessíveis.",
+          "Ativação e retenção, manter o parceiro engajado com campanhas de incentivo, gamificação e mentorias, não apenas treiná-lo uma vez.",
         ],
       },
     ],
@@ -555,10 +555,10 @@ export const playbookSections: PlaybookSection[] = [
       {
         type: "list",
         items: [
-          "Recrutamento — ir além de aceitar qualquer parceiro; definir personas e critérios de fit.",
-          "Onboarding — etapa que define o tom do relacionamento futuro.",
-          "Engajamento — programas de incentivo, comunicação constante, materiais de suporte.",
-          "Retenção — acompanhar NPS do canal, taxas de churn e agir rápido diante de sinais de desmotivação.",
+          "Recrutamento, ir além de aceitar qualquer parceiro; definir personas e critérios de fit.",
+          "Onboarding, etapa que define o tom do relacionamento futuro.",
+          "Engajamento, programas de incentivo, comunicação constante, materiais de suporte.",
+          "Retenção, acompanhar NPS do canal, taxas de churn e agir rápido diante de sinais de desmotivação.",
         ],
       },
       { type: "subheading", text: "Estratégias e métricas citadas" },
@@ -575,7 +575,7 @@ export const playbookSections: PlaybookSection[] = [
         items: [
           "Onboarding define o relacionamento futuro: revisar se o processo atual de entrada é claro o suficiente pra reduzir atrito e acelerar o ramp-up, com materiais padronizados, FAQ e reuniões estruturadas logo no início.",
           "Retenção é mais barata e estratégica do que captar novos representantes: acompanhar de perto indicadores de engajamento e satisfação, identificando sinais de desmotivação antes que o representante fique inativo.",
-          "Faturamento não é tudo: o maior parceiro em vendas nem sempre é o que mais contribui pro crescimento consistente — vale considerar engajamento e recorrência no ranqueamento, não só volume bruto.",
+          "Faturamento não é tudo: o maior parceiro em vendas nem sempre é o que mais contribui pro crescimento consistente, vale considerar engajamento e recorrência no ranqueamento, não só volume bruto.",
           "Diferenciação por perfil: considerar metas conjuntas, comissionamento específico e níveis de suporte diferentes conforme o potencial e o estágio de cada representante.",
           "Engajamento contínuo e centralização: programas de incentivo (gamificação, rankings, comunidades) e centralizar informações, leads e comissionamento num único ambiente reduzem fricção e aumentam a sensação de suporte constante.",
         ],
@@ -595,7 +595,7 @@ export const playbookSections: PlaybookSection[] = [
         type: "paragraph",
         text: "A Plural Sales propõe uma metodologia de 9 passos para estruturar programas de canais indiretos, organizada em formato de Flywheel (roda de inércia) em vez do funil linear tradicional. A lógica: primeiro a empresa ganha tração interna (modelo de canal, recrutamento, proposta de valor e estrutura), depois transfere essa energia pro canal (onboarding, engajamento e indicadores) e, por fim, direciona tudo pro cliente final (validação e resultados). O tempo médio pra uma operação de canais indiretos atingir maturidade é de doze a dezoito meses.",
       },
-      { type: "subheading", text: "Tração Inicial — Empresa" },
+      { type: "subheading", text: "Tração Inicial, Empresa" },
       {
         type: "steps",
         items: [
@@ -605,7 +605,7 @@ export const playbookSections: PlaybookSection[] = [
           { label: "4. Estrutura", text: "Organizar pessoas, processos, tecnologia e contrato de parceria (incluindo regras de registro de oportunidade) antes de escalar o programa." },
         ],
       },
-      { type: "subheading", text: "Tração Secundária — Canal" },
+      { type: "subheading", text: "Tração Secundária, Canal" },
       {
         type: "steps",
         items: [
@@ -614,7 +614,7 @@ export const playbookSections: PlaybookSection[] = [
           { label: "7. Indicadores", text: "Acompanhar KPIs específicos da operação de canais (CAC, MRR, Churn, LTV e engajamento dos parceiros), sempre separados das métricas de vendas diretas." },
         ],
       },
-      { type: "subheading", text: "Tração Final — Cliente" },
+      { type: "subheading", text: "Tração Final, Cliente" },
       {
         type: "steps",
         items: [
@@ -650,21 +650,21 @@ export const playbookSections: PlaybookSection[] = [
       },
       {
         type: "paragraph",
-        text: "Vale aplicar um diagnóstico rápido logo no início, com poucas perguntas sobre experiência anterior no setor, preferência de treinamento e expectativa de faturamento — isso permite personalizar o fluxo de integração em vez de entregar o mesmo material genérico para todos.",
+        text: "Vale aplicar um diagnóstico rápido logo no início, com poucas perguntas sobre experiência anterior no setor, preferência de treinamento e expectativa de faturamento, isso permite personalizar o fluxo de integração em vez de entregar o mesmo material genérico para todos.",
       },
       { type: "subheading", text: "Roteiro de onboarding passo a passo" },
       {
         type: "steps",
         items: [
-          { label: "Semana 1 — criação de vínculo", text: "Finalização do cadastro, envio do kit de boas-vindas com materiais e FAQs, reunião inicial de alinhamento com apresentação do programa e definição conjunta de metas, além da liberação de acesso ao portal do parceiro." },
-          { label: "Semanas 2 a 4 — treinamento e primeiros passos", text: "Sessões de treinamento sobre produto e processo comercial, simulações práticas de propostas, registro dos primeiros leads e coleta dos primeiros feedbacks para ajustar a abordagem." },
-          { label: "Meses 2 e 3 — acompanhamento e metas", text: "Acompanhamento periódico das atividades, envio de leads reais, revisão de comissionamento, avaliação da facilidade de uso das ferramentas e definição de metas de médio prazo." },
-          { label: "Final dos 90 dias — avaliação e replanejamento", text: "Reunião de fechamento sobre a clareza dos processos e materiais, revisão do checklist de integração e ajustes para os próximos parceiros." },
+          { label: "Semana 1, criação de vínculo", text: "Finalização do cadastro, envio do kit de boas-vindas com materiais e FAQs, reunião inicial de alinhamento com apresentação do programa e definição conjunta de metas, além da liberação de acesso ao portal do parceiro." },
+          { label: "Semanas 2 a 4, treinamento e primeiros passos", text: "Sessões de treinamento sobre produto e processo comercial, simulações práticas de propostas, registro dos primeiros leads e coleta dos primeiros feedbacks para ajustar a abordagem." },
+          { label: "Meses 2 e 3, acompanhamento e metas", text: "Acompanhamento periódico das atividades, envio de leads reais, revisão de comissionamento, avaliação da facilidade de uso das ferramentas e definição de metas de médio prazo." },
+          { label: "Final dos 90 dias, avaliação e replanejamento", text: "Reunião de fechamento sobre a clareza dos processos e materiais, revisão do checklist de integração e ajustes para os próximos parceiros." },
         ],
       },
       {
         type: "paragraph",
-        text: "O trabalho não termina depois do treinamento inicial. Check-ins semanais ou quinzenais, relatórios automáticos de andamento e revisões coletivas dos negócios já realizados ajudam a identificar dúvidas antes que se tornem motivo de abandono — ferramentas como um portal ou sistema de gestão de parceiros tornam isso mais confiável do que depender só de e-mails e planilhas.",
+        text: "O trabalho não termina depois do treinamento inicial. Check-ins semanais ou quinzenais, relatórios automáticos de andamento e revisões coletivas dos negócios já realizados ajudam a identificar dúvidas antes que se tornem motivo de abandono, ferramentas como um portal ou sistema de gestão de parceiros tornam isso mais confiável do que depender só de e-mails e planilhas.",
       },
       {
         type: "paragraph",
@@ -702,16 +702,16 @@ export const playbookSections: PlaybookSection[] = [
       {
         type: "list",
         items: [
-          "Prospecção — abordar um lead novo pela primeira vez.",
-          "Qualificação — perguntas que ajudam a saber se vale investir tempo naquele cliente.",
-          "Follow-up — reengajar quem ficou em silêncio depois de um primeiro contato.",
-          "Demonstração — apresentar o produto de forma direcionada à necessidade de quem assiste.",
-          "Fechamento — técnicas para lidar com as últimas objeções e destravar a decisão.",
+          "Prospecção, abordar um lead novo pela primeira vez.",
+          "Qualificação, perguntas que ajudam a saber se vale investir tempo naquele cliente.",
+          "Follow-up, reengajar quem ficou em silêncio depois de um primeiro contato.",
+          "Demonstração, apresentar o produto de forma direcionada à necessidade de quem assiste.",
+          "Fechamento, técnicas para lidar com as últimas objeções e destravar a decisão.",
         ],
       },
       {
         type: "paragraph",
-        text: "Pra montar: reunir quem vive o dia a dia da venda (líderes e linha de frente), definir objetivos e metas do time, mapear e segmentar público/personas, documentar cada etapa do processo comercial, criar roteiros e modelos de mensagem, escolher ferramentas de apoio e treinar todo o time antes de colocar o playbook em uso. É um documento vivo — vale acompanhar se o time consulta o material, coletar feedback e revisar a cada mudança relevante de produto, preço ou posicionamento.",
+        text: "Pra montar: reunir quem vive o dia a dia da venda (líderes e linha de frente), definir objetivos e metas do time, mapear e segmentar público/personas, documentar cada etapa do processo comercial, criar roteiros e modelos de mensagem, escolher ferramentas de apoio e treinar todo o time antes de colocar o playbook em uso. É um documento vivo, vale acompanhar se o time consulta o material, coletar feedback e revisar a cada mudança relevante de produto, preço ou posicionamento.",
       },
       { type: "subheading", text: "Como aplicar no setor de Representantes" },
       {
@@ -737,12 +737,12 @@ export const playbookSections: PlaybookSection[] = [
       { type: "subheading", text: "Como responder quando a objeção aparece" },
       {
         type: "paragraph",
-        text: "Agradecer o prospect por trazer o ponto, demonstrar empatia genuína e fazer perguntas abertas pra entender a causa raiz. Depois, pedir pro próprio prospect relembrar o que mais chamou atenção dele na solução ajuda a reconectar a conversa com os pontos de valor que fizeram sentido até ali. Por fim, comprovar os argumentos com provas concretas — cases de outros clientes ou referências — dá mais segurança pra decisão.",
+        text: "Agradecer o prospect por trazer o ponto, demonstrar empatia genuína e fazer perguntas abertas pra entender a causa raiz. Depois, pedir pro próprio prospect relembrar o que mais chamou atenção dele na solução ajuda a reconectar a conversa com os pontos de valor que fizeram sentido até ali. Por fim, comprovar os argumentos com provas concretas, cases de outros clientes ou referências, dá mais segurança pra decisão.",
       },
       { type: "subheading", text: "Como aplicar no setor de Representantes" },
       {
         type: "paragraph",
-        text: "Objeções recorrentes: falta de tempo pra uma call, desconfiança sobre o modelo de comissão ou a sensação de já ter uma solução parecida com outro parceiro. Vale entender a real preocupação do lead com perguntas abertas, reconectar com os benefícios do programa que despertaram o interesse dele no primeiro contato e usar números concretos — como o volume de estabelecimentos e o faturamento já movimentado na plataforma — como prova social.",
+        text: "Objeções recorrentes: falta de tempo pra uma call, desconfiança sobre o modelo de comissão ou a sensação de já ter uma solução parecida com outro parceiro. Vale entender a real preocupação do lead com perguntas abertas, reconectar com os benefícios do programa que despertaram o interesse dele no primeiro contato e usar números concretos, como o volume de estabelecimentos e o faturamento já movimentado na plataforma, como prova social.",
       },
     ],
   },
@@ -753,7 +753,7 @@ export const playbookSections: PlaybookSection[] = [
     blocks: [
       {
         type: "paragraph",
-        text: "Partner enablement é o processo de equipar parceiros — revendedores, afiliados e representantes — com as ferramentas, materiais e treinamentos necessários pra vender e representar bem uma marca. Um programa bem estruturado amplia o alcance da empresa e aumenta a satisfação dos clientes atendidos pelos parceiros.",
+        text: "Partner enablement é o processo de equipar parceiros, revendedores, afiliados e representantes, com as ferramentas, materiais e treinamentos necessários pra vender e representar bem uma marca. Um programa bem estruturado amplia o alcance da empresa e aumenta a satisfação dos clientes atendidos pelos parceiros.",
       },
       { type: "subheading", text: "Como montar a estratégia" },
       {
@@ -801,7 +801,7 @@ export const playbookSections: PlaybookSection[] = [
       },
       {
         type: "paragraph",
-        text: "Destaque: a TOTVS separa claramente quem só indica (ANT Finder), quem vende e entrega (CNT) e um modelo híbrido (CPT) — uma referência direta para comparar com o papel do representante da Cardápio Web hoje.",
+        text: "Destaque: a TOTVS separa claramente quem só indica (ANT Finder), quem vende e entrega (CNT) e um modelo híbrido (CPT), uma referência direta para comparar com o papel do representante da Cardápio Web hoje.",
       },
       { type: "subheading", text: "Cenários comuns de parceria (visão ampla do ecossistema)" },
       {
@@ -818,7 +818,7 @@ export const playbookSections: PlaybookSection[] = [
       },
       {
         type: "paragraph",
-        text: "Detalhe interessante: a Cardápio Web já aparece como uma das \"Super Integradoras\" do iFood — o modelo de certificação sem comissão (só selo + visibilidade) já é vivido na prática, e pode ser um ponto de partida pra comparar com outros modelos que a empresa poderia oferecer aos seus representantes.",
+        text: "Detalhe interessante: a Cardápio Web já aparece como uma das \"Super Integradoras\" do iFood, o modelo de certificação sem comissão (só selo + visibilidade) já é vivido na prática, e pode ser um ponto de partida pra comparar com outros modelos que a empresa poderia oferecer aos seus representantes.",
       },
     ],
   },
@@ -841,12 +841,12 @@ export const playbookSections: PlaybookSection[] = [
       {
         type: "steps",
         items: [
-          { label: "1. Autoritária", text: "\"Faz porque eu mandei.\" Não delega, não explica muito. Usar só em emergência ou crise rápida — uso errado desmotiva geral." },
+          { label: "1. Autoritária", text: "\"Faz porque eu mandei.\" Não delega, não explica muito. Usar só em emergência ou crise rápida, uso errado desmotiva geral." },
           { label: "2. Timoneiro", text: "Busca perfeição, lidera pelo exemplo, padrão alto. Problema: não explica bem o que quer, sobrecarrega o time. Combina bem com visionário ou afiliativo." },
           { label: "3. Afiliativa", text: "Foco nas pessoas e no clima, não na tarefa. Ótima em época de conflito ou moral baixa. Risco: não cobra desempenho ruim." },
           { label: "4. Democrática", text: "Ouve todo mundo, busca consenso. Boa quando falta clareza do caminho certo. Risco: reunião infinita, decisão trava." },
           { label: "5. Coach", text: "Foco no desenvolvimento de longo prazo de cada um. Frase-chave: \"eu acredito em você.\" Risco: virar microgerenciamento." },
-          { label: "6. Visionária", text: "Visão clara de futuro, mobiliza o time. Reduz saída de bons funcionários. Não funciona com time mais expert que o líder. Variante: laissez-faire (deixa o time trabalhar sozinho) — só funciona com time muito experiente." },
+          { label: "6. Visionária", text: "Visão clara de futuro, mobiliza o time. Reduz saída de bons funcionários. Não funciona com time mais expert que o líder. Variante: laissez-faire (deixa o time trabalhar sozinho), só funciona com time muito experiente." },
           { label: "7. Baseada em valores", text: "Criada por Simon Dolan. Usa 3 eixos: econômico-pragmático / evolutivo-emocional / ético-social. Ideia central: liderar com autenticidade dá resultado." },
         ],
       },
@@ -881,8 +881,8 @@ export const playbookSections: PlaybookSection[] = [
       {
         type: "steps",
         items: [
-          { label: "1. Autoconhecimento", text: "Pontos fortes/fracos, valores — 1 mês." },
-          { label: "2. Comunicação", text: "Clareza, escuta — contínuo." },
+          { label: "1. Autoconhecimento", text: "Pontos fortes/fracos, valores, 1 mês." },
+          { label: "2. Comunicação", text: "Clareza, escuta, contínuo." },
           { label: "3. Inspirar e motivar o time", text: "Contínuo." },
           { label: "4. Melhorar tomada de decisão", text: "Contínuo." },
           { label: "5. Desenvolver talento da equipe", text: "Contínuo." },

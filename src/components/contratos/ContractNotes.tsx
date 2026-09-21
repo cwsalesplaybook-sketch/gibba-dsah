@@ -9,6 +9,8 @@ import {
   type Tag,
   type TagColor,
 } from "@/lib/useContractNotes";
+import { Modal } from "@/components/ui/Modal";
+import { Field, Button } from "@/components/ui/Field";
 import { formatDateTime, type ContractRow } from "@/lib/useContracts";
 import { cn } from "@/lib/utils";
 
@@ -224,7 +226,7 @@ export function ContactCell({ notes, row }: { notes: ContractNotesApi; row: Cont
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     } catch {
-      // clipboard indisponível — nada a fazer
+      // clipboard indisponível, nada a fazer
     }
   }
 
@@ -466,5 +468,52 @@ export function ContractDrawer({
       </aside>
     </div>,
     document.body
+  );
+}
+
+const todayValue = () => new Date().toLocaleDateString("en-CA", { timeZone: "America/Sao_Paulo" });
+
+// Formulário do botão "+": lead que não veio do Pipedrive entra em "Aguardando assinatura".
+export function AddLeadModal({ notes, onClose }: { notes: ContractNotesApi; onClose: () => void }) {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [date, setDate] = useState(todayValue());
+
+  function save() {
+    if (!name.trim()) return;
+    // Hoje = agora; outro dia = meio-dia (horário de Brasília).
+    const sentAt = date === todayValue() ? new Date().toISOString() : new Date(`${date}T12:00:00-03:00`).toISOString();
+    notes.addManualLead({ name, phone, email, sentAt });
+    onClose();
+  }
+
+  const onEnter = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter") save();
+  };
+
+  return (
+    <Modal
+      title="Adicionar lead"
+      onClose={onClose}
+      footer={
+        <>
+          <Button variant="ghost" onClick={onClose}>
+            Cancelar
+          </Button>
+          <Button onClick={save} disabled={!name.trim()} className="disabled:opacity-40">
+            Adicionar
+          </Button>
+        </>
+      }
+    >
+      <Field label="Nome completo" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={onEnter} autoFocus maxLength={80} />
+      <Field label="Telefone" value={phone} onChange={(e) => setPhone(e.target.value)} onKeyDown={onEnter} inputMode="tel" placeholder="(11) 99999-9999" maxLength={30} />
+      <Field label="E-mail (opcional)" type="email" value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={onEnter} maxLength={80} />
+      <Field label="Contrato enviado em" type="date" value={date} onChange={(e) => setDate(e.target.value)} max={todayValue()} />
+      <p className="text-xs text-muted-foreground">
+        O lead entra na lista de Aguardando assinatura. Os dados ficam salvos só neste navegador.
+      </p>
+    </Modal>
   );
 }

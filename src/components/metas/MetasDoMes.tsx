@@ -134,7 +134,7 @@ function EditModal({ data, onClose }: { data: MetasData; onClose: () => void }) 
       {targets.map((target, i) => (
         <Field
           key={i}
-          label={`${inicioMetaInfo[i].title} — ${inicioMetaInfo[i].subtitle} (objetivo)`}
+          label={`${inicioMetaInfo[i].title}, ${inicioMetaInfo[i].subtitle} (objetivo)`}
           type="number"
           value={target}
           onChange={(e) =>
@@ -205,7 +205,7 @@ export function MetasDoMes({ data }: { data: MetasData }) {
 
       {error && (
         <p className="mt-4 rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs text-destructive">
-          {error} — mostrando só o ajuste manual até reconectar.
+          {error}, mostrando só o ajuste manual até reconectar.
         </p>
       )}
 

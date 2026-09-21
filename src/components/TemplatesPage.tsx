@@ -30,7 +30,7 @@ export function TemplatesPage() {
       setCopiedId(id);
       setTimeout(() => setCopiedId((current) => (current === id ? null : current)), 1800);
     } catch {
-      // clipboard indisponível — nada a fazer
+      // clipboard indisponível, nada a fazer
     }
   }
 

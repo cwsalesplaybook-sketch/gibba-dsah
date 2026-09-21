@@ -1,4 +1,4 @@
-# PUMA — Insights & Resultados
+# PUMA, Insights & Resultados
 
 Dashboard do Programa de Representantes: metas do mês e forecast, evolução de cadastros (Pipedrive), controle diário da assinatura de contratos, templates de mensagens e playbook.
 

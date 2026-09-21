@@ -1,23 +1,36 @@
 import { useLocalStorageState } from "@/lib/useLocalStorageState";
 
-// Tags e comentários por contrato. Ficam salvos neste navegador (localStorage),
-// indexados pelo id do negócio no Pipedrive.
+// Tags, comentários, dados do lead e leads manuais. Tudo fica salvo neste navegador
+// (localStorage), indexado pelo id do negócio no Pipedrive (ou por um id negativo, no caso
+// de leads adicionados à mão).
 export type TagColor = "green" | "red" | "amber" | "blue" | "gray" | "rose";
 
 export type Tag = { id: string; name: string; color: TagColor };
 export type Comment = { id: string; text: string; at: string };
 // name/phone/email são digitados à mão pela usuária (não vêm do Pipedrive); o nome digitado
-// tem prioridade sobre o nome do negócio no Pipedrive.
-type Entry = { tagIds: string[]; comments: Comment[]; name?: string; phone?: string; email?: string };
-type Store = { tags: Tag[]; byDeal: Record<string, Entry> };
+// tem prioridade sobre o nome do negócio. signedAt = quando ela marcou "Contrato assinado".
+type Entry = {
+  tagIds: string[];
+  comments: Comment[];
+  name?: string;
+  phone?: string;
+  email?: string;
+  signedAt?: string;
+};
+// Lead adicionado à mão (não existe no Pipedrive).
+export type ManualLead = { id: number; name: string; sentAt: string };
+type Store = { tags: Tag[]; byDeal: Record<string, Entry>; manual: ManualLead[] };
 
-// Tags que já vêm prontas (não podem ser apagadas).
+// Tags que já vêm prontas (não podem ser apagadas). Elas também decidem em que lista o
+// contrato aparece: "Contrato assinado" vai para Assinados, "Assinatura pendente" para Aguardando.
+export const SIGNED_TAG_ID = "assinado";
+export const PENDING_TAG_ID = "pendente";
 export const DEFAULT_TAGS: Tag[] = [
-  { id: "assinado", name: "Contrato assinado", color: "green" },
-  { id: "pendente", name: "Assinatura pendente", color: "red" },
+  { id: SIGNED_TAG_ID, name: "Contrato assinado", color: "green" },
+  { id: PENDING_TAG_ID, name: "Assinatura pendente", color: "red" },
 ];
 
-const DEFAULT_STORE: Store = { tags: DEFAULT_TAGS, byDeal: {} };
+const DEFAULT_STORE: Store = { tags: DEFAULT_TAGS, byDeal: {}, manual: [] };
 const EMPTY: Entry = { tagIds: [], comments: [] };
 
 // Estilos de cada cor (formais): chip, bolinha e leve tinta na linha da tabela.
@@ -34,14 +47,15 @@ export const tagColorOptions = Object.keys(tagStyles) as TagColor[];
 
 const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
 
+// Garante o formato mesmo se algo antigo/incompleto estiver salvo.
+const normalize = (value: Store | undefined | null): Store => ({
+  tags: Array.isArray(value?.tags) && value.tags.length > 0 ? value.tags : DEFAULT_TAGS,
+  byDeal: value?.byDeal ?? {},
+  manual: Array.isArray(value?.manual) ? value.manual : [],
+});
+
 export function useContractNotes() {
   const [stored, setStore] = useLocalStorageState<Store>("gibba:contratos", DEFAULT_STORE);
-
-  // Garante o formato mesmo se algo antigo/incompleto estiver salvo.
-  const normalize = (value: Store | undefined | null): Store => ({
-    tags: Array.isArray(value?.tags) && value.tags.length > 0 ? value.tags : DEFAULT_TAGS,
-    byDeal: value?.byDeal ?? {},
-  });
   const store = normalize(stored);
 
   const entryOf = (dealId: number): Entry => store.byDeal[String(dealId)] ?? EMPTY;
@@ -55,12 +69,19 @@ export function useContractNotes() {
   }
 
   function toggleTag(dealId: number, tagId: string) {
-    update(dealId, (entry) => ({
-      ...entry,
-      tagIds: entry.tagIds.includes(tagId)
-        ? entry.tagIds.filter((id) => id !== tagId)
-        : [...entry.tagIds, tagId],
-    }));
+    update(dealId, (entry) => {
+      const turningOn = !entry.tagIds.includes(tagId);
+      const next: Entry = {
+        ...entry,
+        tagIds: turningOn ? [...entry.tagIds, tagId] : entry.tagIds.filter((id) => id !== tagId),
+      };
+      if (tagId === SIGNED_TAG_ID) {
+        // guarda quando ela marcou como assinado (aparece em "Assinado em")
+        if (turningOn) next.signedAt = new Date().toISOString();
+        else delete next.signedAt;
+      }
+      return next;
+    });
   }
 
   // Nome, telefone e e-mail do lead, digitados à mão (ficam só neste navegador).
@@ -75,6 +96,34 @@ export function useContractNotes() {
 
   // Nome para exibir: o digitado à mão, senão o do Pipedrive.
   const displayName = (dealId: number, fallback: string) => store.byDeal[String(dealId)]?.name?.trim() || fallback;
+
+  // Lead que não veio do Pipedrive: entra na lista de aguardando assinatura.
+  function addManualLead(data: { name: string; phone: string; email: string; sentAt: string }): ManualLead | null {
+    const name = data.name.trim();
+    if (!name) return null;
+    const lead: ManualLead = { id: -Math.floor(Date.now() + Math.random() * 1000), name, sentAt: data.sentAt };
+    setStore((prevRaw) => {
+      const prev = normalize(prevRaw);
+      return {
+        ...prev,
+        manual: [...prev.manual, lead],
+        byDeal: {
+          ...prev.byDeal,
+          [String(lead.id)]: { ...EMPTY, name, phone: data.phone.trim(), email: data.email.trim() },
+        },
+      };
+    });
+    return lead;
+  }
+
+  function deleteManualLead(dealId: number) {
+    setStore((prevRaw) => {
+      const prev = normalize(prevRaw);
+      const byDeal = { ...prev.byDeal };
+      delete byDeal[String(dealId)];
+      return { ...prev, manual: prev.manual.filter((lead) => lead.id !== dealId), byDeal };
+    });
+  }
 
   function addComment(dealId: number, text: string) {
     const clean = text.trim();
@@ -115,16 +164,19 @@ export function useContractNotes() {
       for (const [key, entry] of Object.entries(prev.byDeal)) {
         byDeal[key] = { ...entry, tagIds: entry.tagIds.filter((id) => id !== tagId) };
       }
-      return { tags: prev.tags.filter((tag) => tag.id !== tagId), byDeal };
+      return { ...prev, tags: prev.tags.filter((tag) => tag.id !== tagId), byDeal };
     });
   }
 
   return {
     tags: store.tags,
+    manualLeads: store.manual,
     entryOf,
     displayName,
     toggleTag,
     setContact,
+    addManualLead,
+    deleteManualLead,
     addComment,
     deleteComment,
     createTag,

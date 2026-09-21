@@ -16,7 +16,7 @@ export function useLocalStorageState<T>(key: string, initial: T) {
       try {
         window.localStorage.setItem(key, JSON.stringify(next));
       } catch {
-        // localStorage indisponível (modo privado, etc.) — segue só em memória
+        // localStorage indisponível (modo privado, etc.), segue só em memória
       }
       return next;
     });

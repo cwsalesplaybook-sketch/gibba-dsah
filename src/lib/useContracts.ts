@@ -6,6 +6,7 @@ export type ContractRow = {
   owner: string | null;
   sentAt: string | null;
   signedAt: string | null;
+  manual?: boolean; // lead adicionado à mão (não vem do Pipedrive)
 };
 
 type ContractsResponse = {
