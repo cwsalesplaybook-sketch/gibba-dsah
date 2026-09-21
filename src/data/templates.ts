@@ -40,6 +40,12 @@ export const templates: Template[] = [
     text: "Para começar, segue o acesso ao nosso portal:\n\nPortal: https://parceiro.cardapioweb.com/users/sign_in\nE-mail: xxxxxxxx\nSenha: xxxxxxxxxxxxxxxxxxxxxx",
   },
   {
+    id: "condicoes-especiais",
+    title: "Condições Especiais do Programa",
+    category: "Boas-vindas",
+    text: "Consegui algumas condições especiais para você entrar no nosso programa:\n\n* *Taxa de ativação isenta:* você não precisa realizar nenhum pagamento para entrar no programa.\n* *Implementação e suporte por 90 dias:* durante esse período, você contará com o acompanhamento da Cardápio Web para se capacitar e entender todo o processo.\n* *Comissionamento inicial de 40%:* durante os primeiros 90 dias, você já começa com essa condição especial.\n\nApós os 90 dias, a implementação e o suporte passam a ser de sua responsabilidade, e o comissionamento retorna para *30%*.\n\nPara manter essa condição de comissionamento, será necessário ter *30 leads ativos na carteira*.\n\nConseguiu entender tudo certinho? Se ficou alguma dúvida, pode me falar que te explico.",
+  },
+  {
     id: "confirmacao-reuniao",
     title: "Confirmação de Reunião",
     category: "Agendamento",
