@@ -27,17 +27,13 @@ const navItems: { id: PageId; label: string; icon: typeof Target }[] = [
 function Logo() {
   return (
     <div className="flex items-center gap-3">
-      <span className="flex h-9 w-9 items-center justify-center rounded-[10px] bg-primary">
-        <svg width="22" height="22" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-          <path
-            d="M31 9.5A15 15 0 1 0 31 30.5"
-            stroke="white"
-            strokeWidth="6"
-            strokeLinecap="round"
-          />
-          <rect x="19.5" y="16" width="11" height="8" rx="4" fill="white" />
-        </svg>
-      </span>
+      <img
+        src="/logo.png"
+        alt="Ícone do Gibba"
+        width={36}
+        height={36}
+        className="h-9 w-9 rounded-[10px] object-cover ring-1 ring-border"
+      />
       <div className="leading-tight">
         <p className="text-[15px] font-semibold tracking-tight">Cardápio Web</p>
         <p className="text-[11px] text-muted-foreground">Portal do Representante</p>
