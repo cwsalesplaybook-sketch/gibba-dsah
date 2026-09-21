@@ -3,119 +3,89 @@ import {
   BarChart3,
   Bot,
   BookOpen,
-  Calculator,
+  CalendarDays,
   FileText,
   Heart,
-  Home,
   Link2,
-  Megaphone,
   Menu,
   Target,
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export type PageId =
-  | "inicio"
-  | "metas"
-  | "templates"
-  | "playbook"
-  | "links"
-  | "dados"
-  | "forecast"
-  | "avisos"
-  | "luzia";
+export type PageId = "metas" | "templates" | "playbook" | "links" | "dados" | "forecast" | "luzia";
 
 const navItems: { id: PageId; label: string; icon: typeof Target }[] = [
-  { id: "inicio", label: "Início", icon: Home },
   { id: "metas", label: "Metas", icon: Target },
   { id: "templates", label: "Templates", icon: FileText },
   { id: "playbook", label: "Playbook", icon: BookOpen },
   { id: "links", label: "Links Importantes", icon: Link2 },
   { id: "dados", label: "Dados", icon: BarChart3 },
-  { id: "forecast", label: "Forecast", icon: Calculator },
-  { id: "avisos", label: "Mural de Avisos", icon: Megaphone },
+  { id: "forecast", label: "Forecast", icon: CalendarDays },
   { id: "luzia", label: "Luzia", icon: Bot },
 ];
 
 function Logo() {
   return (
     <div className="flex items-center gap-3">
-      <svg width="38" height="38" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-        <path
-          d="M31 9.5A15 15 0 1 0 31 30.5"
-          stroke="var(--primary)"
-          strokeWidth="8"
-          strokeLinecap="round"
-        />
-        <rect x="19" y="15" width="12" height="10" rx="5" fill="var(--primary)" />
-        <circle cx="23.2" cy="19.6" r="1.1" fill="var(--sidebar)" />
-        <circle cx="27.4" cy="19.6" r="1.1" fill="var(--sidebar)" />
-      </svg>
-      <div className="font-logo leading-[0.95]">
-        <p className="text-[17.5px] font-semibold tracking-tight text-white">cardápio</p>
-        <p className="text-[17.5px] font-normal tracking-tight text-white/95">web</p>
+      <span className="tile3d tile-pink h-11 w-11 rounded-full">
+        <svg width="26" height="26" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+          <path
+            d="M31 9.5A15 15 0 1 0 31 30.5"
+            stroke="white"
+            strokeWidth="7"
+            strokeLinecap="round"
+          />
+          <rect x="19" y="15" width="12" height="10" rx="5" fill="white" />
+          <circle cx="23.2" cy="19.6" r="1.1" fill="oklch(64% 0.22 352)" />
+          <circle cx="27.4" cy="19.6" r="1.1" fill="oklch(64% 0.22 352)" />
+        </svg>
+      </span>
+      <div className="font-logo text-[20px] font-semibold leading-[1.05] tracking-tight text-foreground">
+        <p>Cardápio</p>
+        <p>Web</p>
       </div>
     </div>
   );
 }
 
-// Pássaro de boné (mascote) desenhado em SVG, no estilo "linha + preenchimento
-// translúcido" da referência.
+// Passarinho mascote (SVG), no estilo rosa/roxo da referência.
 function Bird() {
-  const line = "oklch(50% 0.13 330)";
-  const fill = "oklch(38% 0.12 328)";
   return (
-    <svg width="96" height="104" viewBox="0 0 96 104" fill="none" aria-hidden="true" className="shrink-0">
-      {/* asa esquerda, aberta */}
-      <path
-        d="M30 50C18 42 6 44 3 52c-2 6 2 10 6 12-3 3-3 8 2 11 4 2 9 1 12-1 6 2 12-1 15-5"
-        stroke={line}
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path d="M9 64c5 1 9-1 12-4M14 74c4 0 8-2 10-5" stroke={line} strokeWidth="1.3" strokeLinecap="round" />
-      {/* corpo */}
-      <path
-        d="M34 42c-8 6-11 19-7 30 3 8 11 13 21 12 11-1 18-9 18-20 0-9-4-18-11-23-6-4-15-3-21 1Z"
-        fill={fill}
-        stroke={line}
-        strokeWidth="1.4"
-      />
-      {/* asa direita, acenando */}
-      <path
-        d="M66 56c7-1 11-4 16-7 3-2 6 0 4 3-2 3-7 8-12 11-4 2-8 2-11-1"
-        fill={fill}
-        stroke={line}
-        strokeWidth="1.4"
-        strokeLinecap="round"
-      />
+    <svg width="92" height="104" viewBox="0 0 92 104" fill="none" aria-hidden="true" className="shrink-0">
+      <defs>
+        <radialGradient id="birdBody" cx="40%" cy="35%" r="75%">
+          <stop offset="0%" stopColor="oklch(78% 0.16 345)" />
+          <stop offset="100%" stopColor="oklch(56% 0.22 325)" />
+        </radialGradient>
+        <linearGradient id="birdCap" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="oklch(56% 0.2 300)" />
+          <stop offset="100%" stopColor="oklch(40% 0.19 296)" />
+        </linearGradient>
+      </defs>
+      <ellipse cx="46" cy="98" rx="26" ry="4" fill="oklch(60% 0.15 350 / 0.25)" />
+      {/* asas */}
+      <ellipse cx="20" cy="66" rx="9" ry="14" transform="rotate(18 20 66)" fill="oklch(58% 0.21 328)" />
+      <ellipse cx="72" cy="66" rx="9" ry="14" transform="rotate(-18 72 66)" fill="oklch(58% 0.21 328)" />
+      {/* corpo e barriguinha */}
+      <ellipse cx="46" cy="62" rx="27" ry="30" fill="url(#birdBody)" />
+      <ellipse cx="46" cy="72" rx="16" ry="17" fill="oklch(90% 0.06 345)" />
       {/* boné */}
-      <path
-        d="M29 36c-1-12 8-21 21-21 10 0 17 6 18 14"
-        fill="oklch(24% 0.06 335)"
-        stroke={line}
-        strokeWidth="1.6"
-        strokeLinecap="round"
-      />
-      <path
-        d="M27 37c6 3 15 4 26 3 9-1 16-4 21-8-2-4-8-6-13-6"
-        fill="oklch(28% 0.07 332)"
-        stroke={line}
-        strokeWidth="1.6"
-        strokeLinecap="round"
-      />
-      <path d="M47 25c1-3 5-3 6 0s-1 5-3 4M53 25c1-3 5-3 6 0" stroke="oklch(62% 0.14 335)" strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M22 44C22 26 33 17 46 17s24 9 24 27Z" fill="url(#birdCap)" />
+      <path d="M20 45c8 4 24 5 40 1 6-1 10-4 12-8-6-1-14 1-24 3-10 2-20 2-28 4Z" fill="oklch(48% 0.2 298)" />
+      <text x="46" y="36" textAnchor="middle" fontSize="10" fontWeight="800" fill="white" fontFamily="Poppins, sans-serif">
+        CW
+      </text>
       {/* olhos e bico */}
-      <circle cx="41" cy="46" r="2.6" fill="oklch(14% 0.04 340)" />
-      <circle cx="58" cy="46" r="2.6" fill="oklch(14% 0.04 340)" />
-      <path d="M46 50c2-2 8-2 9 1 0 4-4 6-7 5-4-1-4-4-2-6Z" fill="var(--primary)" opacity="0.8" />
-      {/* lenço */}
-      <path d="M38 62c6 8 18 8 24 0-3 12-21 12-24 0Z" fill="oklch(20% 0.05 338)" stroke={line} strokeWidth="1" />
+      <circle cx="37" cy="54" r="6" fill="white" />
+      <circle cx="55" cy="54" r="6" fill="white" />
+      <circle cx="38" cy="55" r="3" fill="oklch(20% 0.06 290)" />
+      <circle cx="54" cy="55" r="3" fill="oklch(20% 0.06 290)" />
+      <circle cx="39" cy="53.6" r="1" fill="white" />
+      <circle cx="55" cy="53.6" r="1" fill="white" />
+      <path d="M41 61c3-3 7-3 10 0-1 5-9 5-10 0Z" fill="oklch(82% 0.15 80)" />
       {/* pés */}
-      <path d="M42 84l-5 9h10l-1-9" stroke={line} strokeWidth="1.4" strokeLinejoin="round" />
-      <path d="M58 84l-1 9h10l-3-9" stroke={line} strokeWidth="1.4" strokeLinejoin="round" />
+      <path d="M38 91v6M54 91v6" stroke="oklch(75% 0.15 70)" strokeWidth="3" strokeLinecap="round" />
     </svg>
   );
 }
@@ -123,15 +93,15 @@ function Bird() {
 function Mascot() {
   return (
     <div className="flex items-center gap-1 px-4">
-      <Bird />
-      <div className="font-hand text-primary-glow/55 [color:oklch(79%_0.064_324)]">
-        <p className="w-[88px] text-[16px] leading-[17px]">Juntos levamos mais restaurantes para o digital!</p>
-        <div className="mt-2 flex items-end gap-0.5 opacity-80">
-          <svg width="46" height="18" viewBox="0 0 46 18" fill="none" aria-hidden="true">
-            <path d="M2 2c4 10 14 14 24 12 6-1 10-2 14-4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
-          </svg>
-          <Heart className="mb-0.5 h-4 w-4" />
-        </div>
+      <div className="relative">
+        <Bird />
+        <Heart className="absolute -top-1 right-0 h-4 w-4 text-primary" />
+      </div>
+      <div>
+        <p className="w-[76px] text-[11.5px] leading-[15px] text-foreground/80">
+          Juntos levamos mais restaurantes para o digital!
+        </p>
+        <Heart className="ml-auto mr-1 mt-2 h-4 w-4 text-primary/80" />
       </div>
     </div>
   );
@@ -147,7 +117,7 @@ export function Sidebar({
   const [open, setOpen] = useState(false);
 
   const content = (
-    <div className="flex h-full flex-col overflow-y-auto bg-sidebar text-sidebar-foreground">
+    <div className="flex h-full flex-col overflow-y-auto bg-gradient-to-b from-sidebar to-[oklch(94.6%_0.03_342)] text-sidebar-foreground">
       <div className="flex items-center px-5 pb-5 pt-6">
         <Logo />
         <button
@@ -181,14 +151,14 @@ export function Sidebar({
         })}
       </nav>
 
-      <div className="mt-auto pb-[min(105px,11vh)] pt-4">
+      <div className="mt-auto pb-[min(70px,8vh)] pt-4">
         <Mascot />
       </div>
 
       <div className="border-t border-sidebar-border px-5 pb-4 pt-[22px]">
-        <p className="text-[11.5px] font-medium text-sidebar-foreground">Cardápio Web</p>
-        <p className="mt-1 text-[10px] text-sidebar-foreground/55">Portal do Representante</p>
-        <p className="mt-1.5 text-[10px] text-sidebar-foreground/40">v1.0.0</p>
+        <p className="text-[11.5px] font-semibold text-sidebar-foreground">Cardápio Web</p>
+        <p className="mt-1 text-[10.5px] text-muted-foreground">Portal do Representante</p>
+        <p className="mt-1.5 text-[10.5px] text-muted-foreground/80">v1.0.0</p>
       </div>
     </div>
   );
@@ -209,7 +179,7 @@ export function Sidebar({
 
       {open && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="absolute inset-0 bg-black/60" onClick={() => setOpen(false)} />
+          <div className="absolute inset-0 bg-black/40" onClick={() => setOpen(false)} />
           <aside className="absolute left-0 top-0 h-full w-60">{content}</aside>
         </div>
       )}

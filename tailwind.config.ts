@@ -34,6 +34,7 @@ export default {
           DEFAULT: alpha("--primary"),
           foreground: "var(--primary-foreground)",
           glow: alpha("--primary-glow"),
+          deep: alpha("--primary-deep"),
         },
         secondary: {
           DEFAULT: "var(--secondary)",

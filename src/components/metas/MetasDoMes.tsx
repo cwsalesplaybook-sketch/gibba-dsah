@@ -1,25 +1,26 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import {
-  ArrowRight,
-  CalendarDays,
   Calendar,
+  CalendarDays,
   Pencil,
   RefreshCw,
+  Rocket,
   Target,
-  TrendingUp,
   Users,
 } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { Modal } from "@/components/ui/Modal";
 import { Field, Button } from "@/components/ui/Field";
-import { IconBox, DeltaBadge, StatusPill } from "@/components/inicio/parts";
+import { IconBox, DeltaBadge, StatusPill } from "@/components/metas/parts";
 import { inicioMetaInfo } from "@/data/mockData";
-import type { InicioData } from "@/lib/useInicioData";
+import type { MetasData } from "@/lib/useMetasData";
 import { cn } from "@/lib/utils";
 
 const metaIcons = { users: Users, calendar: CalendarDays, target: Target };
+const metaTones = ["pink", "coral", "pink"] as const;
 
-function Ring({ percent, size = 116 }: { percent: number; size?: number }) {
+function Ring({ percent, size = 112 }: { percent: number; size?: number }) {
+  const id = useId();
   const stroke = 10;
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -28,12 +29,18 @@ function Ring({ percent, size = 116 }: { percent: number; size?: number }) {
   return (
     <div className="relative shrink-0" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90 overflow-visible">
+        <defs>
+          <linearGradient id={id} x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="oklch(72% 0.2 350)" />
+            <stop offset="100%" stopColor="oklch(62% 0.23 8)" />
+          </linearGradient>
+        </defs>
         <circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="oklch(32% 0.058 320)"
+          stroke="var(--ring-track)"
           strokeWidth={stroke}
         />
         <circle
@@ -41,15 +48,15 @@ function Ring({ percent, size = 116 }: { percent: number; size?: number }) {
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="var(--primary)"
+          stroke={`url(#${id})`}
           strokeWidth={stroke}
           strokeLinecap="round"
           strokeDasharray={circumference}
           strokeDashoffset={circumference * (1 - clamped / 100)}
-          style={{ filter: "drop-shadow(0 0 8px var(--primary))" }}
+          style={{ filter: "drop-shadow(0 4px 6px oklch(62% 0.22 355 / 0.35))" }}
         />
       </svg>
-      <span className="absolute inset-0 flex items-center justify-center text-xl font-medium text-[oklch(96.7%_0.029_326)]">
+      <span className="absolute inset-0 flex items-center justify-center text-[22px] font-bold">
         {percent}%
       </span>
     </div>
@@ -71,31 +78,31 @@ function MetaCard({
   const remaining = Math.max(0, target - count);
 
   return (
-    <div className="rounded-2xl border border-border/80 bg-background/35 px-5 pb-3 pt-[13px]">
-      <div className="flex h-10 items-center gap-[18px]">
-        <IconBox>
+    <div className="rounded-[20px] border border-border/80 bg-[oklch(97.8%_0.011_339)] px-5 pb-3.5 pt-3.5 shadow-card">
+      <div className="flex items-center gap-4">
+        <IconBox tone={metaTones[index]}>
           <Icon className="h-[22px] w-[22px]" />
         </IconBox>
         <div className="leading-tight">
           <p className="text-[15px] font-semibold">{info.title}</p>
-          <p className="mt-0.5 text-xs text-muted-foreground">{info.subtitle}</p>
+          <p className="mt-0.5 text-[13px] text-muted-foreground">{info.subtitle}</p>
         </div>
       </div>
 
-      <div className="mt-4 flex items-center gap-6 xl:gap-10">
+      <div className="mt-3 flex items-center gap-6 xl:gap-9">
         <Ring percent={percent} />
         <div className="flex min-w-0 flex-1 flex-col justify-between gap-3 self-stretch py-1">
           <div>
-            <p className="text-[11px] text-muted-foreground">Alcançados</p>
-            <p className="mt-1.5 text-[13px] text-foreground/90">
-              <span className="text-base font-bold text-foreground">{count}</span> de{" "}
-              <span className="text-base font-bold text-foreground">{target}</span>
+            <p className="text-xs text-muted-foreground">Alcançados</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              <span className="text-lg font-bold text-foreground">{count}</span> de{" "}
+              <span className="text-lg font-bold text-foreground">{target}</span>
             </p>
           </div>
           <div className="flex flex-wrap items-end justify-between gap-x-2 gap-y-1.5">
             <div>
-              <p className="text-[11px] text-muted-foreground">Faltam</p>
-              <p className="mt-1.5 text-base font-bold">{remaining}</p>
+              <p className="text-xs text-muted-foreground">Faltam</p>
+              <p className="mt-1 text-lg font-bold">{remaining}</p>
             </div>
             <StatusPill>{remaining === 0 ? "Atingida" : "Em andamento"}</StatusPill>
           </div>
@@ -105,7 +112,7 @@ function MetaCard({
   );
 }
 
-function EditModal({ data, onClose }: { data: InicioData; onClose: () => void }) {
+function EditModal({ data, onClose }: { data: MetasData; onClose: () => void }) {
   const [targets, setTargets] = useState(data.targets);
   const [manual, setManual] = useState(data.manualAdjustment);
   const [extra, setExtra] = useState(data.extra);
@@ -179,13 +186,7 @@ function EditModal({ data, onClose }: { data: InicioData; onClose: () => void })
   );
 }
 
-export function MetasDoMes({
-  data,
-  onOpenMetas,
-}: {
-  data: InicioData;
-  onOpenMetas: () => void;
-}) {
+export function MetasDoMes({ data }: { data: MetasData }) {
   const [editing, setEditing] = useState(false);
   const { loading, error, refresh } = data.pipedrive;
   const allReached = data.counts.every((count, i) => count >= data.targets[i]);
@@ -196,26 +197,18 @@ export function MetasDoMes({
     "flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground opacity-0 transition hover:text-primary focus-visible:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100";
 
   return (
-    <Card className="group border-primary/30 px-[23px] pb-1.5 pt-3.5 shadow-[0_0_44px_-24px_var(--primary)]">
-      <div className="flex min-h-9 flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <IconBox size="sm">
-            <Target className="h-4 w-4" />
-          </IconBox>
-          <h2 className="whitespace-nowrap text-lg font-semibold">Metas do mês</h2>
-          <StatusPill tone="green">{allReached ? "Concluídas" : "Em andamento"}</StatusPill>
-          <button onClick={refresh} aria-label="Atualizar dados do Pipedrive" className={hoverBtn}>
-            <RefreshCw className={cn("h-3.5 w-3.5", loading && "animate-spin")} />
-          </button>
-          <button onClick={() => setEditing(true)} aria-label="Editar metas" className={hoverBtn}>
-            <Pencil className="h-3.5 w-3.5" />
-          </button>
-        </div>
-        <button
-          onClick={onOpenMetas}
-          className="flex items-center gap-1.5 text-[13px] font-semibold text-primary-glow hover:text-primary"
-        >
-          Ver todas as metas <ArrowRight className="h-3.5 w-3.5" />
+    <Card className="group border-primary/10 bg-[oklch(99.2%_0.005_320)] px-5 pb-4 pt-3.5">
+      <div className="flex min-h-10 flex-wrap items-center gap-3">
+        <IconBox size="md">
+          <Target className="h-5 w-5" />
+        </IconBox>
+        <h2 className="whitespace-nowrap text-lg font-semibold">Metas do mês</h2>
+        <StatusPill variant="soft">{allReached ? "Concluídas" : "Em andamento"}</StatusPill>
+        <button onClick={refresh} aria-label="Atualizar dados do Pipedrive" className={hoverBtn}>
+          <RefreshCw className={cn("h-3.5 w-3.5", loading && "animate-spin")} />
+        </button>
+        <button onClick={() => setEditing(true)} aria-label="Editar metas" className={hoverBtn}>
+          <Pencil className="h-3.5 w-3.5" />
         </button>
       </div>
 
@@ -225,51 +218,47 @@ export function MetasDoMes({
         </p>
       )}
 
-      <div className="mt-3.5 grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <div className="mt-3 grid grid-cols-1 gap-5 lg:grid-cols-3">
         {data.targets.map((target, i) => (
           <MetaCard key={i} index={i} target={target} count={data.counts[i]} />
         ))}
       </div>
 
-      <div className="mt-[19px] flex flex-col rounded-2xl border border-border/80 bg-background/35 md:flex-row">
-        <div className="flex flex-1 flex-wrap items-center gap-x-4 gap-y-2 px-5 py-[13.5px]">
+      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-[20px] border border-border/80 bg-[oklch(97.2%_0.011_339)] px-5 py-3 shadow-card">
           <IconBox>
-            <TrendingUp className="h-[22px] w-[22px]" />
+            <Rocket className="h-[22px] w-[22px]" />
           </IconBox>
           <div>
-            <p className="text-[11px] leading-4 text-muted-foreground">Projeção final</p>
+            <p className="text-xs leading-4 text-muted-foreground">Projeção final</p>
             <p className="mt-0.5 text-lg font-semibold leading-6">{data.projection} cadastros</p>
           </div>
           {data.projectionDelta !== null && (
-            <div className="flex items-center gap-2.5 pl-1">
+            <div className="flex items-center gap-3">
               <DeltaBadge value={data.projectionDelta} />
-              <span className="text-[11px] text-muted-foreground">vs. mês anterior</span>
+              <span className="text-xs text-muted-foreground">vs. mês anterior</span>
             </div>
           )}
         </div>
 
-        <div className="border-t border-border/80 md:border-l md:border-t-0" />
-
-        <div className="flex flex-1 items-center gap-4 px-5 py-[13.5px]">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-[20px] border border-border/80 bg-[oklch(97.2%_0.011_339)] px-5 py-3 shadow-card">
           <IconBox>
             <Calendar className="h-[22px] w-[22px]" />
           </IconBox>
           <div>
-            <p className="text-[11px] leading-4 text-muted-foreground">Dias restantes</p>
+            <p className="text-xs leading-4 text-muted-foreground">Dias restantes</p>
             <p className="mt-0.5 text-lg font-semibold leading-6">{date.daysLeft} dias</p>
           </div>
-          <div className="min-w-24 flex-1">
-            <p className="mb-2 flex items-center justify-end gap-1.5 text-[10px] text-muted-foreground">
-              <Calendar className="h-3 w-3" />
-              Hoje é {date.day} de {date.monthName}
-            </p>
-            <div className="h-2 overflow-hidden rounded-full bg-[oklch(30.6%_0.071_321)]">
-              <div
-                className="h-full rounded-full bg-primary shadow-[0_0_10px_var(--primary)]"
-                style={{ width: `${Math.round((date.daysLeft / date.daysInMonth) * 100)}%` }}
-              />
-            </div>
+          <div className="h-2.5 min-w-20 flex-1 overflow-hidden rounded-full bg-[oklch(95%_0.025_330)]">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-[oklch(72%_0.2_350)] to-[oklch(62%_0.23_340)]"
+              style={{ width: `${Math.round((date.daysLeft / date.daysInMonth) * 100)}%` }}
+            />
           </div>
+          <p className="flex items-center gap-1.5 whitespace-nowrap text-xs">
+            <Calendar className="h-3.5 w-3.5 text-primary-deep" />
+            Hoje é {date.day} de {date.monthName}
+          </p>
         </div>
       </div>
 

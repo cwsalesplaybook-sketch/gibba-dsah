@@ -25,7 +25,7 @@ export function formatPct(value: number) {
   return Math.abs(value).toFixed(1).replace(".", ",") + "%";
 }
 
-export function useInicioData() {
+export function useMetasData() {
   // Mesmas chaves da página Metas: mexeu numa, reflete na outra.
   const [goal, setGoal] = useLocalStorageState("gibba:goal", initialGoal);
   const [manualAdjustment, setManualAdjustment] = useLocalStorageState("gibba:manualAdjustment", 0);
@@ -93,4 +93,4 @@ export function useInicioData() {
   };
 }
 
-export type InicioData = ReturnType<typeof useInicioData>;
+export type MetasData = ReturnType<typeof useMetasData>;
