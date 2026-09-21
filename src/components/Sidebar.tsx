@@ -5,7 +5,6 @@ import {
   BookOpen,
   CalendarDays,
   FileText,
-  Heart,
   Link2,
   Menu,
   Target,
@@ -28,80 +27,20 @@ const navItems: { id: PageId; label: string; icon: typeof Target }[] = [
 function Logo() {
   return (
     <div className="flex items-center gap-3">
-      <span className="tile3d tile-pink h-11 w-11 rounded-full">
-        <svg width="26" height="26" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+      <span className="flex h-9 w-9 items-center justify-center rounded-[10px] bg-primary">
+        <svg width="22" height="22" viewBox="0 0 40 40" fill="none" aria-hidden="true">
           <path
             d="M31 9.5A15 15 0 1 0 31 30.5"
             stroke="white"
-            strokeWidth="7"
+            strokeWidth="6"
             strokeLinecap="round"
           />
-          <rect x="19" y="15" width="12" height="10" rx="5" fill="white" />
-          <circle cx="23.2" cy="19.6" r="1.1" fill="oklch(64% 0.22 352)" />
-          <circle cx="27.4" cy="19.6" r="1.1" fill="oklch(64% 0.22 352)" />
+          <rect x="19.5" y="16" width="11" height="8" rx="4" fill="white" />
         </svg>
       </span>
-      <div className="font-logo text-[20px] font-semibold leading-[1.05] tracking-tight text-foreground">
-        <p>Cardápio</p>
-        <p>Web</p>
-      </div>
-    </div>
-  );
-}
-
-// Passarinho mascote (SVG), no estilo rosa/roxo da referência.
-function Bird() {
-  return (
-    <svg width="92" height="104" viewBox="0 0 92 104" fill="none" aria-hidden="true" className="shrink-0">
-      <defs>
-        <radialGradient id="birdBody" cx="40%" cy="35%" r="75%">
-          <stop offset="0%" stopColor="oklch(78% 0.16 345)" />
-          <stop offset="100%" stopColor="oklch(56% 0.22 325)" />
-        </radialGradient>
-        <linearGradient id="birdCap" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="oklch(56% 0.2 300)" />
-          <stop offset="100%" stopColor="oklch(40% 0.19 296)" />
-        </linearGradient>
-      </defs>
-      <ellipse cx="46" cy="98" rx="26" ry="4" fill="oklch(60% 0.15 350 / 0.25)" />
-      {/* asas */}
-      <ellipse cx="20" cy="66" rx="9" ry="14" transform="rotate(18 20 66)" fill="oklch(58% 0.21 328)" />
-      <ellipse cx="72" cy="66" rx="9" ry="14" transform="rotate(-18 72 66)" fill="oklch(58% 0.21 328)" />
-      {/* corpo e barriguinha */}
-      <ellipse cx="46" cy="62" rx="27" ry="30" fill="url(#birdBody)" />
-      <ellipse cx="46" cy="72" rx="16" ry="17" fill="oklch(90% 0.06 345)" />
-      {/* boné */}
-      <path d="M22 44C22 26 33 17 46 17s24 9 24 27Z" fill="url(#birdCap)" />
-      <path d="M20 45c8 4 24 5 40 1 6-1 10-4 12-8-6-1-14 1-24 3-10 2-20 2-28 4Z" fill="oklch(48% 0.2 298)" />
-      <text x="46" y="36" textAnchor="middle" fontSize="10" fontWeight="800" fill="white" fontFamily="Poppins, sans-serif">
-        CW
-      </text>
-      {/* olhos e bico */}
-      <circle cx="37" cy="54" r="6" fill="white" />
-      <circle cx="55" cy="54" r="6" fill="white" />
-      <circle cx="38" cy="55" r="3" fill="oklch(20% 0.06 290)" />
-      <circle cx="54" cy="55" r="3" fill="oklch(20% 0.06 290)" />
-      <circle cx="39" cy="53.6" r="1" fill="white" />
-      <circle cx="55" cy="53.6" r="1" fill="white" />
-      <path d="M41 61c3-3 7-3 10 0-1 5-9 5-10 0Z" fill="oklch(82% 0.15 80)" />
-      {/* pés */}
-      <path d="M38 91v6M54 91v6" stroke="oklch(75% 0.15 70)" strokeWidth="3" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function Mascot() {
-  return (
-    <div className="flex items-center gap-1 px-4">
-      <div className="relative">
-        <Bird />
-        <Heart className="absolute -top-1 right-0 h-4 w-4 text-primary" />
-      </div>
-      <div>
-        <p className="w-[76px] text-[11.5px] leading-[15px] text-foreground/80">
-          Juntos levamos mais restaurantes para o digital!
-        </p>
-        <Heart className="ml-auto mr-1 mt-2 h-4 w-4 text-primary/80" />
+      <div className="leading-tight">
+        <p className="text-[15px] font-semibold tracking-tight">Cardápio Web</p>
+        <p className="text-[11px] text-muted-foreground">Portal do Representante</p>
       </div>
     </div>
   );
@@ -117,8 +56,8 @@ export function Sidebar({
   const [open, setOpen] = useState(false);
 
   const content = (
-    <div className="flex h-full flex-col overflow-y-auto bg-gradient-to-b from-sidebar to-[oklch(94.6%_0.03_342)] text-sidebar-foreground">
-      <div className="flex items-center px-5 pb-5 pt-6">
+    <div className="flex h-full flex-col overflow-y-auto bg-sidebar text-sidebar-foreground">
+      <div className="flex items-center border-b border-sidebar-border px-5 py-5">
         <Logo />
         <button
           className="ml-auto rounded-lg p-1 text-sidebar-foreground/60 hover:text-sidebar-foreground lg:hidden"
@@ -128,7 +67,7 @@ export function Sidebar({
           <X className="h-5 w-5" />
         </button>
       </div>
-      <nav className="space-y-1 px-4 pt-3">
+      <nav className="space-y-1 px-3 pt-4">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = active === item.id;
@@ -140,25 +79,17 @@ export function Sidebar({
                 setOpen(false);
               }}
               aria-current={isActive ? "page" : undefined}
-              className={cn("nav3d", isActive && "nav3d-active")}
+              className={cn("nav-item", isActive && "nav-item-active")}
             >
-              <span className="nav3d-icon">
-                <Icon className="h-4 w-4" strokeWidth={2.25} />
-              </span>
+              <Icon className="h-[18px] w-[18px]" strokeWidth={1.75} />
               {item.label}
             </button>
           );
         })}
       </nav>
 
-      <div className="mt-auto pb-[min(70px,8vh)] pt-4">
-        <Mascot />
-      </div>
-
-      <div className="border-t border-sidebar-border px-5 pb-4 pt-[22px]">
-        <p className="text-[11.5px] font-semibold text-sidebar-foreground">Cardápio Web</p>
-        <p className="mt-1 text-[10.5px] text-muted-foreground">Portal do Representante</p>
-        <p className="mt-1.5 text-[10.5px] text-muted-foreground/80">v1.0.0</p>
+      <div className="mt-auto border-t border-sidebar-border px-5 py-4">
+        <p className="text-[11px] text-muted-foreground">Cardápio Web · v1.0.0</p>
       </div>
     </div>
   );
@@ -166,7 +97,7 @@ export function Sidebar({
   return (
     <>
       <button
-        className="fixed left-4 top-4 z-40 flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-card lg:hidden"
+        className="fixed left-4 top-4 z-40 flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-card text-foreground shadow-card lg:hidden"
         onClick={() => setOpen(true)}
         aria-label="Abrir menu"
       >

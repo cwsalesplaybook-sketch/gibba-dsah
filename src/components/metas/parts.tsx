@@ -3,27 +3,23 @@ import { ArrowDownRight, ArrowUpRight, ChevronRight } from "lucide-react";
 import { formatPct } from "@/lib/useMetasData";
 import { cn } from "@/lib/utils";
 
-type Tone = "pink" | "coral" | "mint" | "violet";
-
 const sizes = {
-  lg: "h-11 w-11 rounded-[14px]",
-  md: "h-[38px] w-[38px] rounded-xl",
-  sm: "h-8 w-8 rounded-[10px]",
+  lg: "h-10 w-10 rounded-[10px]",
+  md: "h-9 w-9 rounded-[10px]",
+  sm: "h-8 w-8 rounded-lg",
 };
 
-// Azulejo de ícone com aparência 3D (gradiente + brilho + sombra colorida).
+// Quadradinho discreto que abriga o ícone de cada card.
 export function IconBox({
   children,
   size = "lg",
-  tone = "pink",
   className,
 }: {
   children: ReactNode;
   size?: keyof typeof sizes;
-  tone?: Tone;
   className?: string;
 }) {
-  return <span className={cn("tile3d", `tile-${tone}`, sizes[size], className)}>{children}</span>;
+  return <span className={cn("tile", sizes[size], className)}>{children}</span>;
 }
 
 // "↘ 12,8%": em pílula (painel de projeção) ou só texto (cards de KPI).
@@ -33,8 +29,8 @@ export function DeltaBadge({ value, plain = false }: { value: number; plain?: bo
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 font-semibold",
-        plain ? "text-[13px]" : "rounded-full px-2.5 py-1 text-xs",
+        "inline-flex items-center gap-1 font-medium",
+        plain ? "text-[13px]" : "rounded-md px-2 py-0.5 text-xs",
         up ? "text-success" : "text-destructive",
         !plain && (up ? "bg-success/10" : "bg-destructive/10")
       )}
@@ -45,7 +41,7 @@ export function DeltaBadge({ value, plain = false }: { value: number; plain?: bo
   );
 }
 
-// "soft": pílula rosa clara do título. "chip": pílula branca com seta, dentro dos cards.
+// "soft": etiqueta rosada do título. "chip": etiqueta neutra com seta, dentro dos cards.
 export function StatusPill({
   children,
   variant = "chip",
@@ -58,15 +54,15 @@ export function StatusPill({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 whitespace-nowrap rounded-full px-3 py-1 text-xs font-medium text-primary-deep",
+        "inline-flex items-center gap-1 whitespace-nowrap rounded-md px-2.5 py-1 text-xs font-medium",
         variant === "soft"
-          ? "bg-accent"
-          : "border border-primary/15 bg-white/80 shadow-[0_6px_14px_-8px_var(--primary)]",
+          ? "bg-accent text-accent-foreground"
+          : "border border-border bg-card text-foreground/80",
         className
       )}
     >
       {children}
-      {variant === "chip" && <ChevronRight className="h-3 w-3" />}
+      {variant === "chip" && <ChevronRight className="h-3 w-3 text-muted-foreground" />}
     </span>
   );
 }

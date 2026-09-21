@@ -10,10 +10,6 @@ export default {
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
-      fontFamily: {
-        logo: ["Poppins", "Inter", "ui-sans-serif", "system-ui", "sans-serif"],
-        hand: ['"Patrick Hand"', "Kalam", "cursive"],
-      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
@@ -32,7 +28,7 @@ export default {
         },
         primary: {
           DEFAULT: alpha("--primary"),
-          foreground: "var(--primary-foreground)",
+          foreground: alpha("--primary-foreground"),
           glow: alpha("--primary-glow"),
           deep: alpha("--primary-deep"),
         },
