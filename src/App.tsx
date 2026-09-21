@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Sidebar, type PageId } from "@/components/Sidebar";
 import { MetasPage } from "@/components/metas/MetasPage";
+import { ContratosPage } from "@/components/contratos/ContratosPage";
 import { TemplatesPage } from "@/components/TemplatesPage";
 import { PlaybookPage } from "@/components/PlaybookPage";
 import { EmConstrucaoPage } from "@/components/EmConstrucaoPage";
@@ -22,6 +23,7 @@ export default function App() {
       <Sidebar active={page} onChange={setPage} />
       <main className="flex min-w-0 flex-1 flex-col px-4 pb-8 pt-20 sm:px-8 lg:pb-6 lg:pr-[26px] lg:pt-5">
         {page === "metas" && <MetasPage />}
+        {page === "contratos" && <ContratosPage />}
         {page === "templates" && <TemplatesPage />}
         {page === "playbook" && <PlaybookPage />}
         {emConstrucao[page] && <EmConstrucaoPage {...emConstrucao[page]!} />}

@@ -3,6 +3,7 @@ import {
   BarChart3,
   Bot,
   BookOpen,
+  FileSignature,
   FileText,
   Link2,
   Menu,
@@ -11,10 +12,11 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export type PageId = "metas" | "templates" | "playbook" | "links" | "dados" | "luzia";
+export type PageId = "metas" | "contratos" | "templates" | "playbook" | "links" | "dados" | "luzia";
 
 const navItems: { id: PageId; label: string; icon: typeof Target }[] = [
   { id: "metas", label: "Metas", icon: Target },
+  { id: "contratos", label: "Assinatura de Contrato", icon: FileSignature },
   { id: "templates", label: "Templates", icon: FileText },
   { id: "playbook", label: "Playbook", icon: BookOpen },
   { id: "links", label: "Links Importantes", icon: Link2 },
