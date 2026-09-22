@@ -14,13 +14,14 @@ import { resetSite } from "@/lib/resetSite";
 
 export type PageId = "metas" | "contratos" | "templates" | "playbook" | "links" | "luzia";
 
+// Ordem pedida por ela: por tamanho do nome, do menor pro maior.
 const navItems: { id: PageId; label: string; icon: typeof Target }[] = [
-  { id: "metas", label: "Metas", icon: Target },
-  { id: "contratos", label: "Assinatura de Contrato", icon: FileSignature },
-  { id: "templates", label: "Templates", icon: FileText },
-  { id: "playbook", label: "Playbook", icon: BookOpen },
-  { id: "links", label: "Links Importantes", icon: Link2 },
   { id: "luzia", label: "Pedro", icon: Bot },
+  { id: "metas", label: "Metas", icon: Target },
+  { id: "playbook", label: "Playbook", icon: BookOpen },
+  { id: "templates", label: "Templates", icon: FileText },
+  { id: "links", label: "Links Importantes", icon: Link2 },
+  { id: "contratos", label: "Assinatura de Contrato", icon: FileSignature },
 ];
 
 function Logo() {
