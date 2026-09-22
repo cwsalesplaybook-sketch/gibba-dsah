@@ -8,7 +8,7 @@ export const textareaClass =
 
 // Formulário para ensinar (ou corrigir) uma informação da Luzia.
 export function TeachModal({
-  title = "Ensinar a Luzia",
+  title = "Ensinar o Pedro",
   initial,
   onSave,
   onClose,
@@ -63,7 +63,7 @@ export function TeachModal({
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
           rows={7}
-          placeholder="Escreva a resposta como a Luzia deve dizer."
+          placeholder="Escreva a resposta como o Pedro deve dizer."
           className={textareaClass}
           maxLength={4000}
         />
@@ -76,7 +76,7 @@ export function TeachModal({
         maxLength={300}
       />
       <p className="text-xs text-muted-foreground">
-        Quanto mais jeitos de perguntar você incluir, mais fácil a Luzia encontrar esta resposta.
+        Quanto mais jeitos de perguntar você incluir, mais fácil o Pedro encontrar esta resposta.
       </p>
     </Modal>
   );

@@ -65,7 +65,7 @@ function ImportModal({ luzia, onClose, onDone }: { luzia: LuziaApi; onClose: () 
       <Field label="Nome do assunto" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Ex.: Política de comissionamento 2026" maxLength={120} autoFocus />
       <label className="block text-sm">
         <span className="mb-1 block text-muted-foreground">Texto</span>
-        <textarea value={text} onChange={(e) => setText(e.target.value)} rows={9} placeholder="Cole aqui o texto que a Luzia deve aprender." className={textareaClass} />
+        <textarea value={text} onChange={(e) => setText(e.target.value)} rows={9} placeholder="Cole aqui o texto que o Pedro deve aprender." className={textareaClass} />
       </label>
       <label className="flex cursor-pointer items-center gap-2 text-sm text-muted-foreground">
         <FileText className="h-4 w-4" />
@@ -74,7 +74,7 @@ function ImportModal({ luzia, onClose, onDone }: { luzia: LuziaApi; onClose: () 
       </label>
       {error && <p className="text-xs text-destructive">{error}</p>}
       <p className="text-xs text-muted-foreground">
-        Textos longos são divididos em pedaços menores, assim a Luzia responde com o trecho certo e não com o documento inteiro.
+        Textos longos são divididos em pedaços menores, assim o Pedro responde com o trecho certo e não com o documento inteiro.
       </p>
     </Modal>
   );
@@ -108,7 +108,7 @@ export function LuziaKnowledge({ luzia }: { luzia: LuziaApi }) {
       const added = luzia.importBackup(await file.text());
       setNotice(added === 1 ? "Backup importado: 1 item novo." : `Backup importado: ${added} itens novos.`);
     } catch {
-      setNotice("Não consegui importar: esse arquivo não é um backup da Luzia.");
+      setNotice("Não consegui importar: esse arquivo não é um backup do Pedro.");
     }
     if (backupInput.current) backupInput.current.value = "";
   }
@@ -129,12 +129,12 @@ export function LuziaKnowledge({ luzia }: { luzia: LuziaApi }) {
       <Card className="flex flex-col gap-3 p-5">
         <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
           <GraduationCap className="h-4 w-4 text-primary" />
-          Como a Luzia aprende
+          Como o Pedro aprende
         </div>
         <ul className="list-disc space-y-1 pl-5 text-sm leading-relaxed text-muted-foreground">
-          <li>Ela segue o script da planilha SCRIPT: as respostas, as palavras-chave e as perguntas relacionadas vêm de lá, e mudanças na planilha aparecem em poucos minutos.</li>
-          <li>Ela também lê todo o Playbook e os Templates. Você adiciona o que falta aqui, ou direto na conversa com “Ensinar a Luzia”.</li>
-          <li>Quando você marca “Ajudou”, ela lembra que aquela resposta serve para perguntas parecidas. Com “Não era isso”, ela para de sugerir aquela resposta.</li>
+          <li>Ele segue o script da planilha SCRIPT: as respostas, as palavras-chave e as perguntas relacionadas vêm de lá, e mudanças na planilha aparecem em poucos minutos.</li>
+          <li>Ele também lê todo o Playbook e os Templates. Você adiciona o que falta aqui, ou direto na conversa com “Ensinar o Pedro”.</li>
+          <li>Quando você marca “Ajudou”, ele lembra que aquela resposta serve para perguntas parecidas. Com “Não era isso”, ele para de sugerir aquela resposta.</li>
           <li>Não usa nenhuma IA externa: tudo roda no seu navegador e nada do que você ensina sai daqui.</li>
         </ul>
       </Card>
@@ -167,7 +167,7 @@ export function LuziaKnowledge({ luzia }: { luzia: LuziaApi }) {
           <span className="tile h-11 w-11 rounded-xl">
             <GraduationCap className="h-5 w-5" />
           </span>
-          <p className="font-semibold text-foreground">Ainda não ensinou nada à Luzia</p>
+          <p className="font-semibold text-foreground">Ainda não ensinou nada ao Pedro</p>
           <p className="max-w-sm text-sm text-muted-foreground">
             Adicione respostas, regras e informações do dia a dia. Elas passam a aparecer nas respostas dela logo em seguida.
           </p>
@@ -205,7 +205,7 @@ export function LuziaKnowledge({ luzia }: { luzia: LuziaApi }) {
                   </button>
                   <button
                     onClick={() => {
-                      if (window.confirm("Apagar este item? A Luzia vai esquecer essa informação.")) luzia.deleteTaught(item.id);
+                      if (window.confirm("Apagar este item? O Pedro vai esquecer essa informação.")) luzia.deleteTaught(item.id);
                     }}
                     aria-label="Apagar"
                     className="rounded-lg p-2 text-muted-foreground hover:bg-secondary hover:text-destructive"
@@ -227,7 +227,7 @@ export function LuziaKnowledge({ luzia }: { luzia: LuziaApi }) {
       {modal === "import" && <ImportModal luzia={luzia} onClose={() => setModal(null)} onDone={setNotice} />}
       {modal && typeof modal === "object" && (
         <TeachModal
-          title="Editar o que a Luzia sabe"
+          title="Editar o que o Pedro sabe"
           initial={{ title: modal.edit.title, text: modal.edit.text, aliases: modal.edit.aliases }}
           onSave={(input) => luzia.updateTaught(modal.edit.id, input)}
           onClose={() => setModal(null)}

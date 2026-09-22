@@ -14,7 +14,7 @@ export function LuziaPage({ onNavigate }: { onNavigate: (page: PageId) => void }
   return (
     <div className="flex w-full flex-col gap-5">
       <div>
-        <h1 className="text-2xl font-extrabold text-foreground">Luzia</h1>
+        <h1 className="text-2xl font-extrabold text-foreground">Pedro</h1>
         <p className="text-sm text-muted-foreground">
           Assistente do PUMA. Segue o script do time e aprende com o Playbook, os Templates e tudo que você ensinar, sem depender de uma IA externa.
         </p>

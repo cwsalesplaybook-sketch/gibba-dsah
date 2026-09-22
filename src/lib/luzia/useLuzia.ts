@@ -60,7 +60,7 @@ const uid = () =>
     ? crypto.randomUUID()
     : `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
 
-const GREETINGS = new Set(["oi", "ola", "opa", "bom", "boa", "dia", "tarde", "noite", "e", "ai", "tudo", "bem", "luzia", "eai", "salve"]);
+const GREETINGS = new Set(["oi", "ola", "opa", "bom", "boa", "dia", "tarde", "noite", "e", "ai", "tudo", "bem", "pedro", "eai", "salve"]);
 const THANKS = new Set(["obrigado", "obrigada", "valeu", "brigado", "brigada", "thanks", "show", "top", "perfeito", "ok", "certo", "otimo"]);
 // Perguntas que aparecem quando ela não entende e não há nada parecido no script.
 const STARTER_IDS = ["sc:023", "sc:022", "sc:032", "sc:034"];
@@ -184,7 +184,7 @@ export function useLuzia() {
     const words = normalize(query).split(/[^a-z0-9]+/).filter(Boolean);
 
     if (words.length && words.every((w) => GREETINGS.has(w))) {
-      deliver(query, luzia("Oi! Eu sou a Luzia. Pergunte sobre o programa, os scripts, as comissões ou os templates, ou escolha uma das perguntas abaixo.", { options: suggestionsFor("") }), "smalltalk");
+      deliver(query, luzia("Oi! Eu sou o Pedro. Pergunte sobre o programa, os scripts, as comissões ou os templates, ou escolha uma das perguntas abaixo.", { options: suggestionsFor("") }), "smalltalk");
       return;
     }
     if (words.length && words.every((w) => THANKS.has(w))) {

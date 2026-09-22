@@ -150,7 +150,7 @@ function Thinking() {
         <Bot className="h-4 w-4" />
       </span>
       <div className="flex items-center gap-2 pt-1.5 text-sm text-muted-foreground">
-        <span>Luzia está pensando</span>
+        <span>Pedro está pensando</span>
         <span className="flex gap-1">
           {[0, 1, 2].map((i) => (
             <span key={i} className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" style={{ animationDelay: `${i * 0.25}s` }} />
@@ -264,7 +264,7 @@ function LuziaBubble({
                     : "border-border text-muted-foreground hover:bg-secondary"
                 )}
               >
-                <GraduationCap className="h-3.5 w-3.5" /> Ensinar a Luzia
+                <GraduationCap className="h-3.5 w-3.5" /> Ensinar o Pedro
               </button>
             )}
           </div>
@@ -304,7 +304,7 @@ export function LuziaChat({ luzia, onNavigate }: { luzia: LuziaApi; onNavigate: 
               <Bot className="h-6 w-6" />
             </span>
             <div>
-              <p className="text-lg font-semibold text-foreground">Oi, eu sou a Luzia</p>
+              <p className="text-lg font-semibold text-foreground">Oi, eu sou o Pedro</p>
               <p className="mt-1 text-sm text-muted-foreground">
                 Sigo o script do time e respondo com base no Playbook, nos Templates e em tudo que você me ensinar. Quando eu errar ou não souber, é só me ensinar que eu passo a acertar.
               </p>
@@ -361,7 +361,7 @@ export function LuziaChat({ luzia, onNavigate }: { luzia: LuziaApi; onNavigate: 
           <input
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
-            placeholder={luzia.thinking ? "A Luzia está pensando..." : "Pergunte algo à Luzia..."}
+            placeholder={luzia.thinking ? "O Pedro está pensando..." : "Pergunte algo ao Pedro..."}
             maxLength={300}
             disabled={luzia.thinking}
             className="min-w-0 flex-1 rounded-lg border border-input bg-background px-3 py-2.5 text-sm text-foreground outline-none focus:border-primary disabled:opacity-60"

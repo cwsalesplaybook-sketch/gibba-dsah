@@ -4,13 +4,8 @@ import { MetasPage } from "@/components/metas/MetasPage";
 import { ContratosPage } from "@/components/contratos/ContratosPage";
 import { TemplatesPage } from "@/components/TemplatesPage";
 import { PlaybookPage } from "@/components/PlaybookPage";
+import { LinksPage } from "@/components/LinksPage";
 import { LuziaPage } from "@/components/luzia/LuziaPage";
-import { EmConstrucaoPage } from "@/components/EmConstrucaoPage";
-
-const emConstrucao: Partial<Record<PageId, { title: string; description?: string }>> = {
-  links: { title: "Links Importantes" },
-  dados: { title: "Dados" },
-};
 
 export default function App() {
   const [page, setPage] = useState<PageId>("metas");
@@ -23,8 +18,8 @@ export default function App() {
         {page === "contratos" && <ContratosPage />}
         {page === "templates" && <TemplatesPage />}
         {page === "playbook" && <PlaybookPage />}
+        {page === "links" && <LinksPage />}
         {page === "luzia" && <LuziaPage onNavigate={setPage} />}
-        {emConstrucao[page] && <EmConstrucaoPage {...emConstrucao[page]!} />}
       </main>
     </div>
   );

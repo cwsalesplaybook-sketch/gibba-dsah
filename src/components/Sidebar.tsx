@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  BarChart3,
   Bot,
   BookOpen,
   FileSignature,
@@ -12,7 +11,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export type PageId = "metas" | "contratos" | "templates" | "playbook" | "links" | "dados" | "luzia";
+export type PageId = "metas" | "contratos" | "templates" | "playbook" | "links" | "luzia";
 
 const navItems: { id: PageId; label: string; icon: typeof Target }[] = [
   { id: "metas", label: "Metas", icon: Target },
@@ -20,8 +19,7 @@ const navItems: { id: PageId; label: string; icon: typeof Target }[] = [
   { id: "templates", label: "Templates", icon: FileText },
   { id: "playbook", label: "Playbook", icon: BookOpen },
   { id: "links", label: "Links Importantes", icon: Link2 },
-  { id: "dados", label: "Dados", icon: BarChart3 },
-  { id: "luzia", label: "Luzia", icon: Bot },
+  { id: "luzia", label: "Pedro", icon: Bot },
 ];
 
 function Logo() {
