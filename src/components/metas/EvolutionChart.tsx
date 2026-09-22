@@ -5,7 +5,6 @@ import {
   Cell,
   ComposedChart,
   LabelList,
-  Line,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -24,13 +23,12 @@ type LabelProps = {
 };
 
 const PAST_BAR = "oklch(86% 0.045 356)";
-const GOAL_LINE = "oklch(48% 0.03 330)";
 
 export function EvolutionChart({ data }: { data: MetasData }) {
   const { dailyChartData: chartData } = data;
   const { loading, error } = data.pipedrive;
 
-  const highest = Math.max(0, ...chartData.flatMap((item) => [item.value, item.goal]));
+  const highest = Math.max(0, ...chartData.map((item) => item.value));
   // Escala pequena (a maioria dos dias tem 0 a poucos cadastros), diferente da versão
   // mensal antiga: degraus de 1 quando o pico é baixo, maiores só se necessário.
   const step = highest <= 5 ? 1 : highest <= 10 ? 2 : highest <= 20 ? 5 : 10;
@@ -79,9 +77,6 @@ export function EvolutionChart({ data }: { data: MetasData }) {
             Cadastros
           </span>
           <span className="flex items-center gap-2">
-            <span className="w-4 border-t border-dashed" style={{ borderColor: GOAL_LINE }} /> Ritmo necessário
-          </span>
-          <span className="flex items-center gap-2">
             <span className="h-2.5 w-2.5 rounded-sm bg-primary" /> Hoje
           </span>
         </div>
@@ -126,10 +121,7 @@ export function EvolutionChart({ data }: { data: MetasData }) {
                   boxShadow: "var(--shadow-card)",
                 }}
                 labelStyle={{ color: "var(--muted-foreground)" }}
-                formatter={(value, name) => [
-                  typeof value === "number" && name === "goal" ? value.toFixed(1).replace(".", ",") : value,
-                  name === "goal" ? "Ritmo necessário" : "Cadastros",
-                ]}
+                formatter={(value) => [value, "Cadastros"]}
                 labelFormatter={(label) => `Dia ${label}`}
               />
               <Bar dataKey="value" radius={[4, 4, 0, 0]} maxBarSize={18} isAnimationActive={false}>
@@ -138,16 +130,6 @@ export function EvolutionChart({ data }: { data: MetasData }) {
                 ))}
                 <LabelList dataKey="value" content={renderLabel} />
               </Bar>
-              <Line
-                type="monotone"
-                dataKey="goal"
-                stroke={GOAL_LINE}
-                strokeWidth={1.25}
-                strokeDasharray="4 3"
-                isAnimationActive={false}
-                dot={{ r: 2.5, fill: GOAL_LINE, stroke: "none" }}
-                activeDot={{ r: 4, fill: GOAL_LINE, stroke: "white", strokeWidth: 2 }}
-              />
             </ComposedChart>
           </ResponsiveContainer>
           </div>
