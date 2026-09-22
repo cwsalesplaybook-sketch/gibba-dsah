@@ -93,6 +93,7 @@ export default async function handler(req, res) {
       owner: OWNER_NAME,
       hidden: allRows.length - rows.length,
       rows,
+      debug: allRows.map((r) => ({ id: r.id, name: r.name, owner: r.owner, stageId: r.stageId })), // TEMP
       updatedAt: new Date().toISOString(),
     });
   } catch (error) {
