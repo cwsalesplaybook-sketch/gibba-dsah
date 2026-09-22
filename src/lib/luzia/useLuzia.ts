@@ -65,6 +65,35 @@ const THANKS = new Set(["obrigado", "obrigada", "valeu", "brigado", "brigada", "
 // Perguntas que aparecem quando ela não entende e não há nada parecido no script.
 const STARTER_IDS = ["sc:023", "sc:022", "sc:032", "sc:034"];
 
+// O "Escolher outra pergunta" agrupa as ~20 categorias da planilha em só 3 baldes,
+// nessa ordem (pedido dela). Categoria da planilha que não estiver aqui mapeada
+// aparece com o próprio nome, depois desses 3.
+const CATEGORY_GROUP: Record<string, string> = {
+  "Programa de Representantes": "Representante",
+  "Comissão": "Representante",
+  "Ferramentas": "Representante",
+  "Onboarding": "Representante",
+  "Capacitação": "Representante",
+  "Script de Prospecção": "Representante",
+  "Situações Especiais": "Representante",
+  Processo: "Representante",
+  Encerramento: "Representante",
+  Objeção: "Objeções",
+  "Objeção - Valor": "Objeções",
+  "Objeção - Timing": "Objeções",
+  "Objeção - Processo": "Objeções",
+  "Objeção - Confiança": "Objeções",
+  "Objeção - Concorrente": "Objeções",
+  "Argumento de Venda": "Objeções",
+  "Planos e Preços": "Produto",
+  Contrato: "Produto",
+  "CW Store": "Produto",
+  Produto: "Produto",
+  Garantia: "Produto",
+  "CW Club": "Produto",
+};
+const CATEGORY_ORDER = ["Representante", "Objeções", "Produto"];
+
 function toHitView(hit: Hit): HitView {
   return {
     itemId: hit.item.id,
@@ -134,10 +163,21 @@ export function useLuzia() {
     const groups = new Map<string, Choice[]>();
     for (const item of items) {
       if (item.source !== "script" && item.source !== "ensinado") continue;
-      const category = item.group ?? "Outros";
+      const raw = item.group ?? "Outros";
+      // As ~20 categorias da planilha viram só 3 baldes no seletor, do jeito que ela
+      // pediu; categoria nova que a planilha trouxer e não esteja aqui mapeada cai no
+      // próprio nome dela (nada some, só não fica num dos 3 baldes).
+      const category = item.source === "script" ? CATEGORY_GROUP[raw] ?? raw : raw;
       groups.set(category, [...(groups.get(category) ?? []), { label: item.title, itemId: item.id }]);
     }
-    return [...groups].map(([category, choices]) => ({ category, choices }));
+    const rank = (category: string) => {
+      const i = CATEGORY_ORDER.indexOf(category);
+      if (i !== -1) return i;
+      return category === "Ensinado por você" ? CATEGORY_ORDER.length + 1 : CATEGORY_ORDER.length;
+    };
+    return [...groups]
+      .map(([category, choices]) => ({ category, choices }))
+      .sort((a, b) => rank(a.category) - rank(b.category) || a.category.localeCompare(b.category, "pt-BR"));
   }, [items]);
 
   const push = (...added: Message[]) =>

@@ -156,30 +156,30 @@ body {
    partir de um print). Redefine as mesmas variáveis do :root só dentro desse
    contêiner; o resto do dashboard continua no tema claro rosa de sempre. */
 .theme-pedro-dark {
-  --background: oklch(20% 0.02 280);
-  --foreground: oklch(96% 0.004 280);
+  --background: oklch(25% 0.035 290);
+  --foreground: oklch(96% 0.006 290);
 
-  --card: oklch(24% 0.02 280);
-  --card-foreground: oklch(96% 0.004 280);
+  --card: oklch(31% 0.04 290);
+  --card-foreground: oklch(96% 0.006 290);
 
-  --popover: oklch(26% 0.02 280);
-  --popover-foreground: oklch(96% 0.004 280);
+  --popover: oklch(33% 0.04 290);
+  --popover-foreground: oklch(96% 0.006 290);
 
-  --primary: oklch(64% 0.19 356);
+  --primary: oklch(66% 0.19 356);
   --primary-foreground: oklch(99% 0.004 350);
-  --primary-glow: oklch(72% 0.14 356);
-  --primary-deep: oklch(80% 0.12 356); /* texto de destaque sobre fundo escuro */
+  --primary-glow: oklch(73% 0.14 356);
+  --primary-deep: oklch(81% 0.12 356); /* texto de destaque sobre fundo escuro */
 
-  --secondary: oklch(29% 0.02 280);
-  --secondary-foreground: oklch(92% 0.01 280);
+  --secondary: oklch(36% 0.035 290);
+  --secondary-foreground: oklch(93% 0.01 290);
 
-  --muted: oklch(27% 0.02 280);
-  --muted-foreground: oklch(68% 0.015 280);
+  --muted: oklch(34% 0.035 290);
+  --muted-foreground: oklch(74% 0.02 290);
 
-  --accent: oklch(31% 0.07 356);
-  --accent-foreground: oklch(86% 0.09 356);
+  --accent: oklch(36% 0.08 356);
+  --accent-foreground: oklch(87% 0.09 356);
 
-  --destructive: oklch(62% 0.19 25);
+  --destructive: oklch(64% 0.19 25);
   --destructive-foreground: oklch(99% 0.01 25);
 
   --success: oklch(70% 0.13 155);
@@ -188,16 +188,16 @@ body {
   --warning: oklch(75% 0.14 75);
   --warning-foreground: oklch(20% 0.05 75);
 
-  --border: oklch(35% 0.02 280);
-  --input: oklch(35% 0.02 280);
-  --ring: oklch(64% 0.19 356);
+  --border: oklch(42% 0.04 290);
+  --input: oklch(42% 0.04 290);
+  --ring: oklch(66% 0.19 356);
 
-  --gradient-primary: linear-gradient(135deg, oklch(52% 0.18 356), oklch(60% 0.19 356));
-  --gradient-surface: linear-gradient(135deg, oklch(50% 0.17 356), oklch(58% 0.19 356));
-  --shadow-glow: 0 6px 18px -8px oklch(64% 0.19 356 / 0.55);
-  --shadow-card: 0 1px 2px oklch(0% 0 0 / 0.3), 0 8px 22px -14px oklch(0% 0 0 / 0.5);
+  --gradient-primary: linear-gradient(135deg, oklch(54% 0.18 356), oklch(62% 0.19 356));
+  --gradient-surface: linear-gradient(135deg, oklch(52% 0.17 356), oklch(60% 0.19 356));
+  --shadow-glow: 0 6px 18px -8px oklch(66% 0.19 356 / 0.55);
+  --shadow-card: 0 1px 2px oklch(15% 0.03 290 / 0.35), 0 8px 22px -14px oklch(15% 0.03 290 / 0.55);
 
-  --track: oklch(35% 0.02 280);
+  --track: oklch(42% 0.04 290);
 
   background-color: var(--background);
   color: var(--foreground);
