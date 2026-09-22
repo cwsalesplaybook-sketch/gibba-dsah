@@ -113,7 +113,7 @@ function QuestionPicker({ luzia, onPick, onClose }: { luzia: LuziaApi; onPick: (
                     onPick(choice.itemId);
                     onClose();
                   }}
-                  className="rounded-lg border border-border bg-card px-3 py-2 text-left text-sm text-foreground transition-colors hover:bg-accent"
+                  className="select-none rounded-lg border border-border bg-card px-3 py-2 text-left text-sm text-foreground transition-colors hover:bg-accent"
                 >
                   {choice.label}
                 </button>
@@ -134,7 +134,7 @@ function ChoiceChips({ choices, disabled, onPick }: { choices: Choice[]; disable
           key={choice.itemId + choice.label}
           onClick={() => onPick(choice.itemId)}
           disabled={disabled}
-          className="rounded-full border border-primary/30 bg-card px-3 py-1.5 text-left text-xs font-medium text-primary-deep transition-colors hover:bg-accent disabled:opacity-50"
+          className="select-none rounded-full border border-primary/30 bg-card px-3 py-1.5 text-left text-xs font-medium text-primary-deep transition-colors hover:bg-accent disabled:opacity-50"
         >
           {choice.label}
         </button>
@@ -201,7 +201,7 @@ function LuziaBubble({
           <button
             onClick={onOpenPicker}
             disabled={luzia.thinking}
-            className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs font-medium text-secondary-foreground transition-colors hover:bg-secondary disabled:opacity-50"
+            className="select-none inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs font-medium text-secondary-foreground transition-colors hover:bg-secondary disabled:opacity-50"
           >
             <ListChecks className="h-3.5 w-3.5" /> Escolher outra pergunta
           </button>
@@ -314,7 +314,7 @@ export function LuziaChat({ luzia, onNavigate }: { luzia: LuziaApi; onNavigate: 
                 <button
                   key={suggestion}
                   onClick={() => submit(suggestion)}
-                  className="rounded-full border border-border bg-card px-3.5 py-1.5 text-xs font-medium text-secondary-foreground transition-colors hover:bg-accent"
+                  className="select-none rounded-full border border-border bg-card px-3.5 py-1.5 text-xs font-medium text-secondary-foreground transition-colors hover:bg-accent"
                 >
                   {suggestion}
                 </button>
@@ -322,7 +322,7 @@ export function LuziaChat({ luzia, onNavigate }: { luzia: LuziaApi; onNavigate: 
             </div>
             <button
               onClick={() => setPicking(true)}
-              className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90"
+              className="select-none inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90"
             >
               <ListChecks className="h-3.5 w-3.5" /> Ver todas as perguntas
             </button>

@@ -10,6 +10,7 @@ import {
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { resetSite } from "@/lib/resetSite";
 
 export type PageId = "metas" | "contratos" | "templates" | "playbook" | "links" | "luzia";
 
@@ -78,6 +79,17 @@ export function Sidebar({
 
       <div className="mt-auto border-t border-sidebar-border px-5 py-4">
         <p className="text-[11px] text-muted-foreground">PUMA · v1.0.0</p>
+        <button
+          onClick={() => {
+            const ok = window.confirm(
+              "Resetar o site? Isso apaga tudo que foi editado só neste navegador: metas e ajustes manuais, favoritos de Templates, tags/comentários/leads manuais da Assinatura de Contrato e tudo que o Pedro aprendeu. Os dados do Pipedrive não são afetados. Essa ação não pode ser desfeita."
+            );
+            if (ok) resetSite();
+          }}
+          className="mt-1.5 text-[11px] text-sidebar-foreground/50 underline decoration-dotted underline-offset-2 hover:text-destructive"
+        >
+          Resetar site
+        </button>
       </div>
     </div>
   );
