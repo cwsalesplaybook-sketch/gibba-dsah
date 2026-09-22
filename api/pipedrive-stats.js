@@ -6,6 +6,8 @@
 //   - pipeline 75, "[REP] Funil de Reunião Agendada"
 //   - pipeline 72, "[REP] Processo de Remarcação" (apelidado por ela de "funil de no-show":
 //     quem falta à reunião agendada volta pra esse funil pra ser remarcado)
+// Só entram negócios cuja responsável é a usuária configurada em OWNER_NAME (dashboard é
+// pessoal dela, "Olá, Gabrielly!") — mesmo filtro usado em api/contracts.js.
 //
 // As etapas de cada funil são buscadas ao vivo (GET /v1/stages?pipeline_id=X) em vez de
 // fixas no código: o time já adicionou etapa nova no meio do caminho (ex.: "Contrato
@@ -15,7 +17,17 @@
 // (não é um parâmetro suportado por ele). stage_id, por outro lado, é suportado de
 // verdade — por isso consultamos por estágio.
 const PIPELINE_IDS = [75, 72];
+const OWNER_NAME = "Gabrielly Oliveira";
 const MONTH_LABELS = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+
+const normalize = (value) =>
+  String(value ?? "")
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .toLowerCase()
+    .trim();
+
+const isMine = (deal) => normalize(deal.owner_name || deal.user_id?.name).includes(normalize(OWNER_NAME));
 
 async function fetchStageIds(pipelineId, token) {
   const url = `https://api.pipedrive.com/v1/stages?pipeline_id=${pipelineId}&api_token=${token}`;
@@ -89,7 +101,7 @@ export default async function handler(req, res) {
     const allWonDeals = results.flat().filter((deal) => {
       if (seen.has(deal.id)) return false;
       seen.add(deal.id);
-      return true;
+      return isMine(deal);
     });
 
     const yearPrefix = `${currentYear}-`;
@@ -113,6 +125,7 @@ export default async function handler(req, res) {
       count,
       month: monthPrefix,
       pipelineIds: PIPELINE_IDS,
+      owner: OWNER_NAME,
       byMonth,
       updatedAt: new Date().toISOString(),
     });
