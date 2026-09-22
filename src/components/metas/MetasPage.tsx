@@ -1,5 +1,4 @@
 import { useMetasData } from "@/lib/useMetasData";
-import { MetasHeader } from "@/components/metas/MetasHeader";
 import { MetasDoMes } from "@/components/metas/MetasDoMes";
 import { KpiCards } from "@/components/metas/KpiCards";
 import { EvolutionChart } from "@/components/metas/EvolutionChart";
@@ -10,7 +9,6 @@ export function MetasPage() {
 
   return (
     <div className="flex w-full flex-1 flex-col gap-[18px]">
-      <MetasHeader date={data.date} />
       <MetasDoMes data={data} />
       <KpiCards data={data} />
       {/* Ocupa todo o espaço que sobra até o fim da tela. */}
