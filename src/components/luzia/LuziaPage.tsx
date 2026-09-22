@@ -42,7 +42,10 @@ export function LuziaPage({ onNavigate }: { onNavigate: (page: PageId) => void }
         ))}
       </div>
 
-      {tab === "conversa" ? <LuziaChat luzia={luzia} onNavigate={onNavigate} /> : <LuziaKnowledge luzia={luzia} />}
+      {/* Tema escuro só aqui dentro (a pedido dela): título e abas acima continuam claros. */}
+      <div className="theme-pedro-dark flex flex-1 flex-col">
+        {tab === "conversa" ? <LuziaChat luzia={luzia} onNavigate={onNavigate} /> : <LuziaKnowledge luzia={luzia} />}
+      </div>
     </div>
   );
 }
