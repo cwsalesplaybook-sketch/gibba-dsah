@@ -211,10 +211,10 @@ function EditModal({ data, onClose }: { data: MetasData; onClose: () => void }) 
         onChange={(e) => setExtra({ ...extra, sistema: Number(e.target.value) })}
       />
       <Field
-        label="Meta 3 · ativações alcançadas"
+        label="Meta 3 · ajuste manual (soma com a contagem do Pipedrive)"
         type="number"
-        value={extra.ativacoes}
-        onChange={(e) => setExtra({ ...extra, ativacoes: Number(e.target.value) })}
+        value={extra.ativacoesAjuste ?? 0}
+        onChange={(e) => setExtra({ ...extra, ativacoesAjuste: Number(e.target.value) })}
       />
       <Field
         label='Card "Cadastros no mês" · valor'
@@ -275,12 +275,12 @@ export function MetasDoMes({ data }: { data: MetasData }) {
             onAdd={() => {
               if (i === 0) data.setManualAdjustment((prev) => prev + 1);
               else if (i === 1) data.setExtra((prev) => ({ ...prev, sistema: prev.sistema + 1 }));
-              else data.setExtra((prev) => ({ ...prev, ativacoes: prev.ativacoes + 1 }));
+              else data.setExtra((prev) => ({ ...prev, ativacoesAjuste: (prev.ativacoesAjuste ?? 0) + 1 }));
             }}
             onSubtract={() => {
               if (i === 0) data.setManualAdjustment((prev) => prev - 1);
               else if (i === 1) data.setExtra((prev) => ({ ...prev, sistema: Math.max(0, prev.sistema - 1) }));
-              else data.setExtra((prev) => ({ ...prev, ativacoes: Math.max(0, prev.ativacoes - 1) }));
+              else data.setExtra((prev) => ({ ...prev, ativacoesAjuste: (prev.ativacoesAjuste ?? 0) - 1 }));
             }}
             pipedriveBreakdown={
               i === 0
@@ -289,13 +289,19 @@ export function MetasDoMes({ data }: { data: MetasData }) {
                     manualAdjustment: data.manualAdjustment,
                     onReset: () => data.setManualAdjustment(0),
                   }
-                : undefined
+                : i === 2
+                  ? {
+                      pipedriveCount: data.pipedriveCount,
+                      manualAdjustment: data.ativacoesAjuste,
+                      onReset: () => data.setExtra((prev) => ({ ...prev, ativacoesAjuste: 0 })),
+                    }
+                  : undefined
             }
           />
         ))}
       </div>
       <p className="mt-3 text-xs text-muted-foreground">
-        Novos representantes atualiza sozinho a cada 5 minutos (e sempre que você volta pra essa aba). Se um cadastro não aparecer na hora, use o{" "}
+        Novos representantes e ativações vêm do Pipedrive (funis de Reunião Agendada e Remarcação/no-show) e atualizam sozinhos a cada 5 minutos (e sempre que você volta pra essa aba). Cadastros no sistema ainda é só manual. Se um cadastro não aparecer na hora, use o{" "}
         <RefreshCw className="inline h-3 w-3 align-[-1px]" /> pra forçar, ou o + no card pra somar na hora.
       </p>
 
