@@ -8,6 +8,7 @@ const RESETTABLE_KEYS = [
   "gibba:contratos", // tags, comentários e leads manuais da Assinatura de Contrato
   "puma:luzia", // o que o Pedro aprendeu e o feedback (Ajudou/Não era isso)
   "puma:luzia:chat", // histórico da conversa com o Pedro
+  "gibba:followups", // tags, comentários e leads manuais do Follow-up
 ];
 
 export function resetSite() {
