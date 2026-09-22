@@ -70,6 +70,19 @@ export function useMetasData() {
     current: index === monthIndex,
   }));
 
+  // Dia a dia do mês atual, pro card "Evolução de cadastros" (pedido dela: ver os
+  // próprios cadastros por dia, não um total do mês). A "meta" é o ritmo médio diário
+  // necessário pra bater a Meta 1 (target ÷ dias do mês), igual linha de referência em
+  // todos os dias.
+  const byDay = pipedrive.data?.byDay ?? [];
+  const dailyGoal = targets[0] / daysInMonth;
+  const dailyChartData = byDay.map((item) => ({
+    day: item.day,
+    value: item.value,
+    goal: dailyGoal,
+    current: item.current,
+  }));
+
   return {
     goal,
     setGoal,
@@ -88,6 +101,7 @@ export function useMetasData() {
     dailyAvg,
     dailyAvgDelta,
     chartData,
+    dailyChartData,
     date: {
       daysInMonth,
       daysElapsed,

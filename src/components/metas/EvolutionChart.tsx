@@ -27,14 +27,19 @@ const PAST_BAR = "oklch(86% 0.045 356)";
 const GOAL_LINE = "oklch(48% 0.03 330)";
 
 export function EvolutionChart({ data }: { data: MetasData }) {
-  const { chartData } = data;
+  const { dailyChartData: chartData } = data;
   const { loading, error } = data.pipedrive;
 
   const highest = Math.max(0, ...chartData.flatMap((item) => [item.value, item.goal]));
-  const top = Math.max(60, Math.ceil(highest / 15) * 15);
-  const ticks = Array.from({ length: top / 15 + 1 }, (_, i) => i * 15);
+  // Escala pequena (a maioria dos dias tem 0 a poucos cadastros), diferente da versão
+  // mensal antiga: degraus de 1 quando o pico é baixo, maiores só se necessário.
+  const step = highest <= 5 ? 1 : highest <= 10 ? 2 : highest <= 20 ? 5 : 10;
+  const top = Math.max(step, Math.ceil(highest / step) * step);
+  const ticks = Array.from({ length: top / step + 1 }, (_, i) => i * step);
+  // Muitos dias no mês: mostra só ~10 rótulos no eixo X pra não amontoar.
+  const tickInterval = Math.max(0, Math.ceil(chartData.length / 10) - 1);
 
-  // Meses sem cadastro não ganham rótulo (evita uma fileira de "0").
+  // Dias sem cadastro não ganham rótulo (evita uma fileira de "0").
   function renderLabel({ x, y, width, value }: LabelProps) {
     if (!value) return null;
     return (
@@ -64,7 +69,7 @@ export function EvolutionChart({ data }: { data: MetasData }) {
           <div className="leading-tight">
             <h2 className="text-base font-semibold">Evolução de cadastros</h2>
             <p className="mt-0.5 text-xs text-muted-foreground">
-              Representantes cadastrados por mês (Pipedrive)
+              Seus cadastros por dia, mês atual (Pipedrive)
             </p>
           </div>
         </div>
@@ -74,10 +79,10 @@ export function EvolutionChart({ data }: { data: MetasData }) {
             Cadastros
           </span>
           <span className="flex items-center gap-2">
-            <span className="w-4 border-t border-dashed" style={{ borderColor: GOAL_LINE }} /> Meta
+            <span className="w-4 border-t border-dashed" style={{ borderColor: GOAL_LINE }} /> Ritmo necessário
           </span>
           <span className="flex items-center gap-2">
-            <span className="h-2.5 w-2.5 rounded-sm bg-primary" /> Mês atual
+            <span className="h-2.5 w-2.5 rounded-sm bg-primary" /> Hoje
           </span>
         </div>
       </div>
@@ -97,7 +102,8 @@ export function EvolutionChart({ data }: { data: MetasData }) {
             <ComposedChart data={chartData} margin={{ top: 14, right: 8, left: -18, bottom: 0 }}>
               <CartesianGrid stroke="var(--border)" vertical={false} />
               <XAxis
-                dataKey="month"
+                dataKey="day"
+                interval={tickInterval}
                 tickLine={false}
                 axisLine={{ stroke: "var(--border)" }}
                 tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
@@ -120,11 +126,15 @@ export function EvolutionChart({ data }: { data: MetasData }) {
                   boxShadow: "var(--shadow-card)",
                 }}
                 labelStyle={{ color: "var(--muted-foreground)" }}
-                formatter={(value, name) => [value, name === "goal" ? "Meta" : "Cadastros"]}
+                formatter={(value, name) => [
+                  typeof value === "number" && name === "goal" ? value.toFixed(1).replace(".", ",") : value,
+                  name === "goal" ? "Ritmo necessário" : "Cadastros",
+                ]}
+                labelFormatter={(label) => `Dia ${label}`}
               />
-              <Bar dataKey="value" radius={[4, 4, 0, 0]} maxBarSize={32} isAnimationActive={false}>
+              <Bar dataKey="value" radius={[4, 4, 0, 0]} maxBarSize={18} isAnimationActive={false}>
                 {chartData.map((item) => (
-                  <Cell key={item.month} fill={item.current ? "var(--primary)" : PAST_BAR} />
+                  <Cell key={item.day} fill={item.current ? "var(--primary)" : PAST_BAR} />
                 ))}
                 <LabelList dataKey="value" content={renderLabel} />
               </Bar>

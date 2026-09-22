@@ -5,6 +5,7 @@ type PipedriveStats = {
   month: string;
   updatedAt: string;
   byMonth?: { month: string; value: number }[];
+  byDay?: { day: string; value: number; current: boolean }[];
 };
 
 export function usePipedriveCount() {

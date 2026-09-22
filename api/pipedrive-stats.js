@@ -29,6 +29,16 @@ const normalize = (value) =>
 
 const isMine = (deal) => normalize(deal.owner_name || deal.user_id?.name).includes(normalize(OWNER_NAME));
 
+// Dia a dia (card "Evolução de cadastros") é no fuso dela (Brasília), não em UTC: um
+// negócio ganho às 21h UTC já é outro dia lá fora, mas ainda é "hoje" pra ela.
+const TIME_ZONE = "America/Sao_Paulo";
+const dayFormatter = new Intl.DateTimeFormat("en-CA", { timeZone: TIME_ZONE, year: "numeric", month: "2-digit", day: "2-digit" });
+function brDateParts(value) {
+  const parts = dayFormatter.formatToParts(new Date(value));
+  const get = (type) => Number(parts.find((p) => p.type === type)?.value);
+  return { year: get("year"), month: get("month"), day: get("day") };
+}
+
 async function fetchStageIds(pipelineId, token) {
   const url = `https://api.pipedrive.com/v1/stages?pipeline_id=${pipelineId}&api_token=${token}`;
   const response = await fetch(url);
@@ -121,12 +131,30 @@ export default async function handler(req, res) {
 
     const count = monthlyCounts[currentMonthIndex] ?? 0;
 
+    // Dia a dia do mês atual (fuso de Brasília), pro card "Evolução de cadastros".
+    const todayBr = brDateParts(now);
+    const daysInMonth = new Date(todayBr.year, todayBr.month, 0).getDate();
+    const dailyCounts = new Array(daysInMonth).fill(0);
+    for (const deal of allWonDeals) {
+      if (!deal.won_time) continue;
+      const parts = brDateParts(deal.won_time);
+      if (parts.year === todayBr.year && parts.month === todayBr.month) {
+        dailyCounts[parts.day - 1] += 1;
+      }
+    }
+    const byDay = dailyCounts.map((value, index) => ({
+      day: String(index + 1).padStart(2, "0"),
+      value,
+      current: index + 1 === todayBr.day,
+    }));
+
     res.status(200).json({
       count,
       month: monthPrefix,
       pipelineIds: PIPELINE_IDS,
       owner: OWNER_NAME,
       byMonth,
+      byDay,
       updatedAt: new Date().toISOString(),
     });
   } catch (error) {

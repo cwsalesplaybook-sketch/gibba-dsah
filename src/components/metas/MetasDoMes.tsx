@@ -12,7 +12,7 @@ import {
 import { Card } from "@/components/ui/Card";
 import { Modal } from "@/components/ui/Modal";
 import { Field, Button } from "@/components/ui/Field";
-import { IconBox, DeltaBadge, StatusPill } from "@/components/metas/parts";
+import { IconBox, DeltaBadge, StatusPill, InfoPopover } from "@/components/metas/parts";
 import { inicioMetaInfo } from "@/data/mockData";
 import type { MetasData } from "@/lib/useMetasData";
 import { cn } from "@/lib/utils";
@@ -222,6 +222,12 @@ export function MetasDoMes({ data }: { data: MetasData }) {
         </IconBox>
         <h2 className="whitespace-nowrap text-lg font-semibold">Metas do mês</h2>
         <StatusPill variant="soft">{allReached ? "Concluídas" : "Em andamento"}</StatusPill>
+        <InfoPopover>
+          Novos representantes e ativações vêm do Pipedrive (funis de Reunião Agendada e Remarcação/no-show) e
+          atualizam sozinhos a cada 5 minutos (e sempre que você volta pra essa aba). Cadastros no sistema ainda é só
+          manual. Se um cadastro não aparecer na hora, use o <RefreshCw className="inline h-3 w-3 align-[-1px]" /> pra
+          forçar, ou o <Pencil className="inline h-3 w-3 align-[-1px]" /> aqui em cima pra ajustar na mão.
+        </InfoPopover>
         <button onClick={refresh} aria-label="Atualizar dados do Pipedrive" className={hoverBtn}>
           <RefreshCw className={cn("h-3.5 w-3.5", loading && "animate-spin")} />
         </button>
@@ -261,10 +267,6 @@ export function MetasDoMes({ data }: { data: MetasData }) {
           />
         ))}
       </div>
-      <p className="mt-3 text-xs text-muted-foreground">
-        Novos representantes e ativações vêm do Pipedrive (funis de Reunião Agendada e Remarcação/no-show) e atualizam sozinhos a cada 5 minutos (e sempre que você volta pra essa aba). Cadastros no sistema ainda é só manual. Se um cadastro não aparecer na hora, use o{" "}
-        <RefreshCw className="inline h-3 w-3 align-[-1px]" /> pra forçar, ou o <Pencil className="inline h-3 w-3 align-[-1px]" /> aqui em cima pra ajustar na mão.
-      </p>
 
       <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-xl border border-border bg-background px-5 py-3.5">
