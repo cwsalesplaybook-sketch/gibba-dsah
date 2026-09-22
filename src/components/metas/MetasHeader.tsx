@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Bell, CalendarDays, ChevronDown } from "lucide-react";
+import { CalendarDays, ChevronDown } from "lucide-react";
 import { currentUser } from "@/data/mockData";
 import type { MetasData } from "@/lib/useMetasData";
 
@@ -49,15 +49,6 @@ export function MetasHeader({ date }: { date: MetasData["date"] }) {
           {monthLabel}
           <ChevronDown className="h-4 w-4 text-muted-foreground" />
         </div>
-
-        <span
-          className="relative flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-card"
-          role="img"
-          aria-label="Notificações"
-        >
-          <Bell className="h-[18px] w-[18px] text-muted-foreground" />
-          <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-primary ring-2 ring-card" />
-        </span>
 
         <div className="flex items-center gap-3 border-l border-border pl-4">
           <Avatar />
