@@ -38,6 +38,22 @@ export function usePipedriveCount() {
 
   useEffect(() => {
     refresh();
+
+    // Atualiza sozinho: a cada 5 minutos, e sempre que ela volta pra essa aba
+    // (troca de aba/app e volta) — assim um cadastro novo no Pipedrive aparece
+    // sem precisar clicar no botão de atualizar.
+    const interval = setInterval(refresh, 5 * 60 * 1000);
+    const onVisible = () => {
+      if (document.visibilityState === "visible") refresh();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("focus", refresh);
+
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("focus", refresh);
+    };
   }, [refresh]);
 
   return { data, loading, error, refresh };

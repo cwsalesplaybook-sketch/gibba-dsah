@@ -2,8 +2,11 @@ import { useState } from "react";
 import {
   Calendar,
   CalendarDays,
+  Minus,
   Pencil,
+  Plus,
   RefreshCw,
+  RotateCcw,
   Target,
   TrendingUp,
   Users,
@@ -54,14 +57,42 @@ function Ring({ percent, size = 104 }: { percent: number; size?: number }) {
   );
 }
 
+// Botões +1/-1 pra somar um cadastro na hora, sem abrir o lápis e reescrever o total.
+function QuickAdjust({ onAdd, onSubtract }: { onAdd: () => void; onSubtract: () => void }) {
+  return (
+    <div className="inline-flex items-center overflow-hidden rounded-md border border-border">
+      <button
+        onClick={onSubtract}
+        aria-label="Tirar um"
+        className="flex h-6 w-6 items-center justify-center text-muted-foreground hover:bg-muted hover:text-foreground"
+      >
+        <Minus className="h-3 w-3" />
+      </button>
+      <button
+        onClick={onAdd}
+        aria-label="Somar um agora"
+        className="flex h-6 w-6 items-center justify-center border-l border-border text-muted-foreground hover:bg-muted hover:text-foreground"
+      >
+        <Plus className="h-3 w-3" />
+      </button>
+    </div>
+  );
+}
+
 function MetaCard({
   index,
   target,
   count,
+  onAdd,
+  onSubtract,
+  pipedriveBreakdown,
 }: {
   index: number;
   target: number;
   count: number;
+  onAdd: () => void;
+  onSubtract: () => void;
+  pipedriveBreakdown?: { pipedriveCount: number; manualAdjustment: number; onReset: () => void };
 }) {
   const info = inicioMetaInfo[index];
   const Icon = metaIcons[info.icon];
@@ -74,10 +105,11 @@ function MetaCard({
         <IconBox>
           <Icon className="h-5 w-5" />
         </IconBox>
-        <div className="leading-tight">
+        <div className="min-w-0 flex-1 leading-tight">
           <p className="text-[15px] font-semibold">{info.title}</p>
           <p className="mt-0.5 text-[13px] text-muted-foreground">{info.subtitle}</p>
         </div>
+        <QuickAdjust onAdd={onAdd} onSubtract={onSubtract} />
       </div>
 
       <div className="mt-4 flex items-center gap-6 xl:gap-8">
@@ -99,6 +131,30 @@ function MetaCard({
           </div>
         </div>
       </div>
+
+      {pipedriveBreakdown && (
+        <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-border pt-3 text-xs text-muted-foreground">
+          <span>
+            Pipedrive: <strong className="text-foreground">{pipedriveBreakdown.pipedriveCount}</strong>
+          </span>
+          <span>+</span>
+          <span>
+            ajuste manual:{" "}
+            <strong className={cn("text-foreground", pipedriveBreakdown.manualAdjustment !== 0 && "text-primary-deep")}>
+              {pipedriveBreakdown.manualAdjustment > 0 ? "+" : ""}
+              {pipedriveBreakdown.manualAdjustment}
+            </strong>
+          </span>
+          {pipedriveBreakdown.manualAdjustment !== 0 && (
+            <button
+              onClick={pipedriveBreakdown.onReset}
+              className="ml-auto inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-primary-deep hover:bg-accent"
+            >
+              <RotateCcw className="h-3 w-3" /> Zerar ajuste
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -211,9 +267,37 @@ export function MetasDoMes({ data }: { data: MetasData }) {
 
       <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
         {data.targets.map((target, i) => (
-          <MetaCard key={i} index={i} target={target} count={data.counts[i]} />
+          <MetaCard
+            key={i}
+            index={i}
+            target={target}
+            count={data.counts[i]}
+            onAdd={() => {
+              if (i === 0) data.setManualAdjustment((prev) => prev + 1);
+              else if (i === 1) data.setExtra((prev) => ({ ...prev, sistema: prev.sistema + 1 }));
+              else data.setExtra((prev) => ({ ...prev, ativacoes: prev.ativacoes + 1 }));
+            }}
+            onSubtract={() => {
+              if (i === 0) data.setManualAdjustment((prev) => prev - 1);
+              else if (i === 1) data.setExtra((prev) => ({ ...prev, sistema: Math.max(0, prev.sistema - 1) }));
+              else data.setExtra((prev) => ({ ...prev, ativacoes: Math.max(0, prev.ativacoes - 1) }));
+            }}
+            pipedriveBreakdown={
+              i === 0
+                ? {
+                    pipedriveCount: data.pipedriveCount,
+                    manualAdjustment: data.manualAdjustment,
+                    onReset: () => data.setManualAdjustment(0),
+                  }
+                : undefined
+            }
+          />
         ))}
       </div>
+      <p className="mt-3 text-xs text-muted-foreground">
+        Novos representantes atualiza sozinho a cada 5 minutos (e sempre que você volta pra essa aba). Se um cadastro não aparecer na hora, use o{" "}
+        <RefreshCw className="inline h-3 w-3 align-[-1px]" /> pra forçar, ou o + no card pra somar na hora.
+      </p>
 
       <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-xl border border-border bg-background px-5 py-3.5">

@@ -73,6 +73,7 @@ export function useMetasData() {
     extra,
     setExtra,
     pipedrive,
+    pipedriveCount,
     targets,
     counts,
     registered,
