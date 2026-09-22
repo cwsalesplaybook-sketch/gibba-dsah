@@ -32,7 +32,9 @@ export function EvolutionChart({ data }: { data: MetasData }) {
   // Escala pequena (a maioria dos dias tem 0 a poucos cadastros), diferente da versão
   // mensal antiga: degraus de 1 quando o pico é baixo, maiores só se necessário.
   const step = highest <= 5 ? 1 : highest <= 10 ? 2 : highest <= 20 ? 5 : 10;
-  const top = Math.max(step, Math.ceil(highest / step) * step);
+  // +1 degrau de folga: sem isso, a barra mais alta encosta no teto do gráfico e o
+  // número que fica acima dela é cortado.
+  const top = Math.max(step, Math.ceil(highest / step) * step) + step;
   const ticks = Array.from({ length: top / step + 1 }, (_, i) => i * step);
   // Muitos dias no mês: mostra só ~10 rótulos no eixo X pra não amontoar.
   const tickInterval = Math.max(0, Math.ceil(chartData.length / 10) - 1);
@@ -94,7 +96,7 @@ export function EvolutionChart({ data }: { data: MetasData }) {
         ) : (
           <div className="absolute inset-0">
           <ResponsiveContainer width="100%" height="100%">
-            <ComposedChart data={chartData} margin={{ top: 14, right: 8, left: -18, bottom: 0 }}>
+            <ComposedChart data={chartData} margin={{ top: 20, right: 8, left: -18, bottom: 0 }}>
               <CartesianGrid stroke="var(--border)" vertical={false} />
               <XAxis
                 dataKey="day"
