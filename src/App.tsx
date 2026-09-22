@@ -5,6 +5,7 @@ import { ContratosPage } from "@/components/contratos/ContratosPage";
 import { TemplatesPage } from "@/components/TemplatesPage";
 import { PlaybookPage } from "@/components/PlaybookPage";
 import { LinksPage } from "@/components/LinksPage";
+import { FollowUpPage } from "@/components/followups/FollowUpPage";
 import { LuziaPage } from "@/components/luzia/LuziaPage";
 
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
         {page === "contratos" && <ContratosPage />}
         {page === "templates" && <TemplatesPage />}
         {page === "playbook" && <PlaybookPage />}
+        {page === "followups" && <FollowUpPage />}
         {page === "links" && <LinksPage />}
         {page === "luzia" && <LuziaPage onNavigate={setPage} />}
       </main>

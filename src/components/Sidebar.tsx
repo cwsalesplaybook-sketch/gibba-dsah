@@ -6,13 +6,14 @@ import {
   FileText,
   Link2,
   Menu,
+  Repeat,
   Target,
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { resetSite } from "@/lib/resetSite";
 
-export type PageId = "metas" | "contratos" | "templates" | "playbook" | "links" | "luzia";
+export type PageId = "metas" | "contratos" | "templates" | "playbook" | "links" | "luzia" | "followups";
 
 // Ordem pedida por ela: por tamanho do nome, do menor pro maior.
 const navItems: { id: PageId; label: string; icon: typeof Target }[] = [
@@ -20,6 +21,7 @@ const navItems: { id: PageId; label: string; icon: typeof Target }[] = [
   { id: "metas", label: "Metas", icon: Target },
   { id: "playbook", label: "Playbook", icon: BookOpen },
   { id: "templates", label: "Templates", icon: FileText },
+  { id: "followups", label: "Follow-up", icon: Repeat },
   { id: "links", label: "Links Importantes", icon: Link2 },
   { id: "contratos", label: "Assinatura de Contrato", icon: FileSignature },
 ];
