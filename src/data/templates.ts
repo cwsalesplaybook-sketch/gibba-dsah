@@ -46,6 +46,12 @@ export const templates: Template[] = [
     text: "Consegui algumas condições especiais para você entrar no nosso programa:\n\n* *Taxa de ativação isenta:* você não precisa realizar nenhum pagamento para entrar no programa.\n* *Implementação e suporte por 90 dias:* durante esse período, você contará com o acompanhamento da Cardápio Web para se capacitar e entender todo o processo.\n* *Comissionamento inicial de 40%:* durante os primeiros 90 dias, você já começa com essa condição especial.\n\nApós os 90 dias, a implementação e o suporte passam a ser de sua responsabilidade, e o comissionamento retorna para *30%*.\n\nPara manter essa condição de comissionamento, será necessário ter *30 leads ativos na carteira*.\n\nConseguiu entender tudo certinho? Se ficou alguma dúvida, pode me falar que te explico.",
   },
   {
+    id: "pos-reuniao",
+    title: "Pós-Reunião",
+    category: "Boas-vindas",
+    text: "Oi, XX! Tudo bem?\nFoi um prazer enorme fazer a reunião com você! 💜\nConforme conversamos, consegui algumas condições especiais para você iniciar sua jornada como representante da Cardápio Web:\n\n* Taxa de ativação isenta: você não precisa realizar nenhum pagamento para entrar no programa.\n* Implementação e suporte por 90 dias: durante esse período, você contará com o acompanhamento da Cardápio Web para se capacitar e entender todo o processo.\n* Comissionamento de 40%: durante os primeiros 90 dias, você já inicia com essa condição especial.\n\nApós os 90 dias, a implementação e o suporte passam a ser de sua responsabilidade, e o comissionamento retorna para 30%.\nAlém disso, para manter a condição de 40% de comissionamento, será necessário ter 30 leads ativos na carteira.\nA ideia é você já começar a estruturar sua carteira nesses primeiros 90 dias. Se estiver de acordo, posso seguir com os próximos passos da sua entrada?",
+  },
+  {
     id: "confirmacao-reuniao",
     title: "Confirmação de Reunião",
     category: "Agendamento",
