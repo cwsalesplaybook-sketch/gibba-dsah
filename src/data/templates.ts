@@ -58,6 +58,12 @@ export const templates: Template[] = [
     text: "Perfeito! Ficou agendado.\n\nSó pra eu me organizar por aqui: posso contar com você?\n\nA reunião é bem objetiva e vai ser o momento de você conhecer o sistema, entender como funciona a operação e tirar todas as suas dúvidas sobre o programa.",
   },
   {
+    id: "confirmacao-reuniao-link",
+    title: "Confirmação de Reunião (link do dia)",
+    category: "Agendamento",
+    text: "Olá! Tudo bem? Me chamo Gabrielly e faço parte do time de Representantes da Cardápio Web. Estarei ministrando sua reunião hoje.😊\n\nVamos para a nossa reunião?\n\n🔗 xxxxxxxxxxxxxxxxxxxxxxxx",
+  },
+  {
     id: "perguntas-obrigatorias",
     title: "Perguntas Obrigatórias",
     category: "Agendamento",
