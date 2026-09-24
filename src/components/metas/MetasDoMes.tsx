@@ -176,10 +176,10 @@ function EditModal({ data, onClose }: { data: MetasData; onClose: () => void }) 
         onChange={(e) => setManual(Number(e.target.value))}
       />
       <Field
-        label="Meta 2 · cadastros no sistema alcançados"
+        label="Meta 2 · ajuste manual (soma com a contagem do Pipedrive)"
         type="number"
-        value={extra.sistema}
-        onChange={(e) => setExtra({ ...extra, sistema: Number(e.target.value) })}
+        value={extra.sistemaAjuste ?? 0}
+        onChange={(e) => setExtra({ ...extra, sistemaAjuste: Number(e.target.value) })}
       />
       <Field
         label="Meta 3 · ajuste manual (soma com a contagem do Pipedrive)"
@@ -223,10 +223,11 @@ export function MetasDoMes({ data }: { data: MetasData }) {
         <h2 className="whitespace-nowrap text-lg font-semibold">Metas do mês</h2>
         <StatusPill variant="soft">{allReached ? "Concluídas" : "Em andamento"}</StatusPill>
         <InfoPopover>
-          Novos representantes e ativações vêm do Pipedrive (funis de Reunião Agendada e Remarcação/no-show) e
-          atualizam sozinhos a cada 5 minutos (e sempre que você volta pra essa aba). Cadastros no sistema ainda é só
-          manual. Se um cadastro não aparecer na hora, use o <RefreshCw className="inline h-3 w-3 align-[-1px]" /> pra
-          forçar, ou o <Pencil className="inline h-3 w-3 align-[-1px]" /> aqui em cima pra ajustar na mão.
+          As três metas são a mesma contagem de cadastros do Pipedrive (funis de Reunião Agendada e
+          Remarcação/no-show), cada uma contra seu próprio objetivo, e atualizam sozinhas a cada 5 minutos (e sempre
+          que você volta pra essa aba). Se um cadastro não aparecer na hora, use o{" "}
+          <RefreshCw className="inline h-3 w-3 align-[-1px]" /> pra forçar, ou o{" "}
+          <Pencil className="inline h-3 w-3 align-[-1px]" /> aqui em cima pra ajustar na mão.
         </InfoPopover>
         <button onClick={refresh} aria-label="Atualizar dados do Pipedrive" className={hoverBtn}>
           <RefreshCw className={cn("h-3.5 w-3.5", loading && "animate-spin")} />
@@ -256,13 +257,17 @@ export function MetasDoMes({ data }: { data: MetasData }) {
                     manualAdjustment: data.manualAdjustment,
                     onReset: () => data.setManualAdjustment(0),
                   }
-                : i === 2
+                : i === 1
                   ? {
+                      pipedriveCount: data.pipedriveCount,
+                      manualAdjustment: data.sistemaAjuste,
+                      onReset: () => data.setExtra((prev) => ({ ...prev, sistemaAjuste: 0 })),
+                    }
+                  : {
                       pipedriveCount: data.pipedriveCount,
                       manualAdjustment: data.ativacoesAjuste,
                       onReset: () => data.setExtra((prev) => ({ ...prev, ativacoesAjuste: 0 })),
                     }
-                  : undefined
             }
           />
         ))}

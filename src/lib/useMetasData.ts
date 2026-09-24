@@ -44,12 +44,15 @@ export function useMetasData() {
 
   const pipedriveCount = pipedrive.data?.count ?? 0;
   const registered = pipedriveCount + manualAdjustment;
-  // Meta 3 (ativações) usa a mesma contagem do Pipedrive que a Meta 1, mais um ajuste
-  // manual próprio — igual a Meta 1, confirmado com a Gabi em 2026-09-22.
-  // `?? 0` cobre quem já tinha "gibba:inicio" salvo antes desse campo existir.
+  // Meta 2 e Meta 3 usam a mesma contagem do Pipedrive que a Meta 1, cada uma com seu
+  // próprio ajuste manual — confirmado com a Gabi em 2026-09-24 ("minha meta é só de
+  // cadastro"): as três metas são a mesma métrica, contra alvos diferentes.
+  // `?? 0` cobre quem já tinha "gibba:inicio" salvo antes desses campos existirem.
+  const sistemaAjuste = extra.sistemaAjuste ?? 0;
   const ativacoesAjuste = extra.ativacoesAjuste ?? 0;
+  const sistema = pipedriveCount + sistemaAjuste;
   const activated = pipedriveCount + ativacoesAjuste;
-  const counts = [registered, extra.sistema, activated];
+  const counts = [registered, sistema, activated];
 
   // Projeção linear simples: ritmo médio diário × dias restantes do mês.
   const dailyPace = registered / daysElapsed;
@@ -92,6 +95,7 @@ export function useMetasData() {
     setExtra,
     pipedrive,
     pipedriveCount,
+    sistemaAjuste,
     ativacoesAjuste,
     targets,
     counts,
