@@ -19,10 +19,12 @@ export const currentUser = {
 // qualquer etapa, nos funis de captação de representante, pipelines 75 e 72) contra
 // três metas-alvo diferentes (39/42/45), cada uma com seu próprio ajuste manual
 // (soma/subtrai, igual entre si) — nenhuma é só manual, todas atualizam sozinhas.
+// Subtítulo igual nas 3 (pedido dela em 2026-09-24: "É pra ser só 'Cadastro de Novos
+// representantes'") porque as 3 são a mesma métrica de cadastro, só o alvo muda.
 export const inicioMetaInfo = [
-  { title: "Meta 1", subtitle: "Novos representantes", icon: "users" },
-  { title: "Meta 2", subtitle: "Cadastros no sistema", icon: "calendar" },
-  { title: "Meta 3", subtitle: "Ativações", icon: "target" },
+  { title: "Meta 1", subtitle: "Cadastro de Novos representantes", icon: "users" },
+  { title: "Meta 2", subtitle: "Cadastro de Novos representantes", icon: "calendar" },
+  { title: "Meta 3", subtitle: "Cadastro de Novos representantes", icon: "target" },
 ] as const;
 
 export const inicioSeed = {
