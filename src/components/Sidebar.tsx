@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { resetSite } from "@/lib/resetSite";
+import { currentUser } from "@/data/mockData";
 
 export type PageId = "metas" | "contratos" | "templates" | "playbook" | "links" | "luzia" | "followups";
 
@@ -99,13 +100,14 @@ export function Sidebar({
           className="flex h-[30px] w-[30px] items-center justify-center font-black"
           style={{ background: "var(--accent)", color: "var(--pink-300)", fontFamily: "var(--font-display)", clipPath: "var(--clip-chamfer-sm)" }}
         >
-          P
+          {currentUser.firstName.slice(0, 1)}
         </div>
         <div className="flex min-w-0 flex-1 flex-col leading-tight">
-          <span className="text-sm font-semibold">Pedro</span>
-          <span className="text-[11px] text-muted-foreground">v1.0.0</span>
+          <span className="truncate text-sm font-semibold">{currentUser.firstName}</span>
+          <span className="truncate text-[11px] text-muted-foreground">{currentUser.role}</span>
         </div>
       </div>
+      <p className="mt-2 px-2 text-[11px] text-muted-foreground">PUMA · v1.0.0</p>
       <button
         onClick={() => {
           const ok = window.confirm(
