@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  Bot,
   BookOpen,
   FileSignature,
   FileText,
@@ -16,9 +15,10 @@ import { currentUser } from "@/data/mockData";
 
 export type PageId = "metas" | "contratos" | "templates" | "playbook" | "links" | "luzia" | "followups";
 
-// Ordem pedida por ela: por tamanho do nome, do menor pro maior.
+// Ordem pedida por ela: por tamanho do nome, do menor pro maior. A aba "Pedro"
+// (luzia) foi tirada do menu a pedido dela em 2026-09-25 — a rota e o código
+// continuam existindo, só não tem mais como chegar lá pela navegação.
 const navItems: { id: PageId; label: string; icon: typeof Target }[] = [
-  { id: "luzia", label: "Pedro", icon: Bot },
   { id: "metas", label: "Metas", icon: Target },
   { id: "playbook", label: "Playbook", icon: BookOpen },
   { id: "templates", label: "Templates", icon: FileText },

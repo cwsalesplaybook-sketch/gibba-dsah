@@ -93,19 +93,19 @@ function CountdownCard({ data }: { data: MetasData }) {
   const needPerDay = missing / data.date.daysLeft;
 
   return (
-    <div className="relative flex min-w-0 flex-col justify-between gap-4 p-5" style={{ background: "var(--card)", boxShadow: "var(--edge)", clipPath: "var(--clip-chamfer)" }}>
+    <div className="relative flex min-w-0 flex-1 flex-col justify-between gap-5 p-5" style={{ background: "var(--card)", boxShadow: "var(--edge)", clipPath: "var(--clip-chamfer)" }}>
       <span className="absolute left-0 right-0 top-0 h-2" style={{ background: "var(--hazard)" }} />
-      <div>
-        <p className="label-caps mb-2.5" style={{ color: "var(--pink-300)" }}>
+      <div className="flex flex-1 flex-col justify-center">
+        <p className="label-caps mb-3" style={{ color: "var(--pink-300)" }}>
           Até o fechamento
         </p>
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-x-4 gap-y-2">
           {countdown.map((c) => (
             <div key={c.unit} className="flex flex-col">
-              <span className="font-black leading-none" style={{ fontFamily: "var(--font-display)", fontSize: 44, fontVariantNumeric: "tabular-nums" }}>
+              <span className="font-black leading-none" style={{ fontFamily: "var(--font-display)", fontSize: "clamp(44px, 4.5vw, 56px)", fontVariantNumeric: "tabular-nums" }}>
                 {c.value}
               </span>
-              <span className="label-caps mt-1" style={{ color: "var(--ink-400)" }}>{c.unit}</span>
+              <span className="label-caps mt-1.5" style={{ color: "var(--ink-400)" }}>{c.unit}</span>
             </div>
           ))}
         </div>
