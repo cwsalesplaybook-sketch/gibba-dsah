@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check, ClipboardList, Copy, ExternalLink, FileSpreadsheet, Link2, LogIn, Workflow } from "lucide-react";
+import { Check, ClipboardList, Copy, ExternalLink, FileSpreadsheet, LogIn, Workflow } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { importantLinks, type ImportantLink } from "@/data/links";
 
@@ -11,7 +11,15 @@ const icons = {
   playbook: FileSpreadsheet,
 };
 
-function LinkCard({ link }: { link: ImportantLink }) {
+function hostOf(url: string) {
+  try {
+    return new URL(url).host;
+  } catch {
+    return "";
+  }
+}
+
+function LinkRow({ link }: { link: ImportantLink }) {
   const Icon = icons[link.icon];
   const [copied, setCopied] = useState(false);
 
@@ -26,37 +34,43 @@ function LinkCard({ link }: { link: ImportantLink }) {
   }
 
   return (
-    <Card className="flex flex-col gap-3 p-5">
-      <div className="flex items-start gap-3.5">
-        <span className="tile h-10 w-10 shrink-0 rounded-[10px]">
-          <Icon className="h-5 w-5" />
-        </span>
-        <div className="min-w-0 leading-tight">
-          <p className="font-semibold text-foreground">{link.title}</p>
-          <p className="mt-1 text-sm text-muted-foreground">{link.description}</p>
-        </div>
+    <div
+      className="grid grid-cols-[40px_minmax(0,1fr)_auto] items-center gap-3.5 px-4 py-3.5 sm:gap-4 sm:px-5"
+      style={{ boxShadow: "inset 0 -1px 0 var(--border)" }}
+    >
+      <div
+        className="flex h-10 w-10 items-center justify-center"
+        style={{ background: "var(--accent)", color: "var(--accent-foreground)", clipPath: "var(--clip-chamfer-sm)" }}
+      >
+        <Icon className="h-[19px] w-[19px]" />
       </div>
-      <p className="truncate rounded-lg bg-secondary px-3 py-2 text-xs text-secondary-foreground" title={link.url}>
-        {link.url}
-      </p>
-      <div className="mt-auto flex gap-2">
+      <div className="min-w-0">
+        <p className="text-[15px] font-semibold text-foreground">{link.title}</p>
+        <p className="truncate text-xs text-muted-foreground">
+          {link.description} · {hostOf(link.url)}
+        </p>
+      </div>
+      <div className="flex items-center gap-1.5">
+        <button
+          onClick={copyLink}
+          aria-label="Copiar link"
+          title="Copiar link"
+          className="flex h-[34px] w-[34px] items-center justify-center text-muted-foreground transition-colors hover:text-primary"
+          style={{ background: copied ? "var(--accent)" : "transparent" }}
+        >
+          {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+        </button>
         <a
           href={link.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+          className="label-caps inline-flex items-center gap-1.5 px-3.5 py-2 text-[--pink-300]"
+          style={{ color: "var(--pink-300)", boxShadow: "inset 0 0 0 1px var(--pink-600)", clipPath: "var(--clip-chamfer-sm)" }}
         >
-          <ExternalLink className="h-4 w-4" /> Abrir
+          <ExternalLink className="h-3.5 w-3.5" /> Abrir
         </a>
-        <button
-          onClick={copyLink}
-          aria-label="Copiar link"
-          className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-secondary px-3 py-2 text-sm font-medium text-secondary-foreground transition-colors hover:bg-muted"
-        >
-          {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-        </button>
       </div>
-    </Card>
+    </div>
   );
 }
 
@@ -64,28 +78,15 @@ export function LinksPage() {
   return (
     <div className="flex w-full flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-extrabold text-foreground">Links Importantes</h1>
-        <p className="text-sm text-muted-foreground">Atalhos pro que você mais usa no dia a dia.</p>
+        <h1 className="text-2xl font-extrabold text-foreground">Links</h1>
+        <p className="text-sm text-muted-foreground">Portal, Pipedrive, planilhas e formulários num lugar só.</p>
       </div>
 
-      <Card
-        className="overflow-hidden p-6"
-        style={{ backgroundImage: "var(--gradient-surface)" }}
-      >
-        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-primary-foreground/80">
-          <Link2 className="h-4 w-4" />
-          Acesso rápido
-        </div>
-        <p className="mt-2 text-sm text-primary-foreground/90">
-          Portal, Pipedrive, planilhas e formulários de cadastro num lugar só.
-        </p>
-      </Card>
-
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <Card className="max-w-[980px] overflow-hidden">
         {importantLinks.map((link) => (
-          <LinkCard key={link.id} link={link} />
+          <LinkRow key={link.id} link={link} />
         ))}
-      </div>
+      </Card>
     </div>
   );
 }
