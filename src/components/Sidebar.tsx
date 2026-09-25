@@ -29,10 +29,24 @@ const navItems: { id: PageId; label: string; icon: typeof Target }[] = [
 function Logo() {
   return (
     <div className="flex items-center gap-3">
-      <img src="/logo.png?v=3" alt="Pantera do PUMA" width={40} height={40} className="h-10 w-10 object-contain" />
-      <div className="leading-tight">
-        <p className="text-[17px] font-bold tracking-wide">PUMA</p>
-        <p className="text-[11px] text-muted-foreground">Insights &amp; Resultados</p>
+      <img
+        src="/logo.png?v=3"
+        alt="Pantera do PUMA"
+        width={44}
+        height={44}
+        className="h-11 w-11 object-contain"
+        style={{ filter: "drop-shadow(0 0 1px var(--pink-400)) drop-shadow(0 0 10px color-mix(in srgb, var(--pink-500) 60%, transparent))" }}
+      />
+      <div className="min-w-0 leading-none">
+        <p
+          className="text-[28px] font-black leading-[0.9] tracking-wide"
+          style={{ fontFamily: "var(--font-display)", textShadow: "var(--glow-text)" }}
+        >
+          PUMA
+        </p>
+        <p className="label-caps mt-1 text-[--pink-300]" style={{ color: "var(--pink-300)" }}>
+          Insights &amp; Resultados
+        </p>
       </div>
     </div>
   );
@@ -48,8 +62,8 @@ export function Sidebar({
   const [open, setOpen] = useState(false);
 
   const content = (
-    <div className="flex h-full flex-col overflow-y-auto bg-sidebar text-sidebar-foreground">
-      <div className="flex items-center border-b border-sidebar-border px-5 py-5">
+    <div className="sidebar-panel flex h-full flex-col overflow-y-auto p-3 text-sidebar-foreground">
+      <div className="flex items-center px-1 pb-6 pt-2">
         <Logo />
         <button
           className="ml-auto rounded-lg p-1 text-sidebar-foreground/60 hover:text-sidebar-foreground lg:hidden"
@@ -59,7 +73,7 @@ export function Sidebar({
           <X className="h-5 w-5" />
         </button>
       </div>
-      <nav className="space-y-1 px-3 pt-4">
+      <nav className="flex flex-col gap-1.5">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = active === item.id;
@@ -74,47 +88,54 @@ export function Sidebar({
               className={cn("nav-item", isActive && "nav-item-active")}
             >
               <Icon className="h-[18px] w-[18px]" strokeWidth={1.75} />
-              {item.label}
+              <span className="flex-1 text-left">{item.label}</span>
             </button>
           );
         })}
       </nav>
 
-      <div className="mt-auto border-t border-sidebar-border px-5 py-4">
-        <p className="text-[11px] text-muted-foreground">PUMA · v1.0.0</p>
-        <button
-          onClick={() => {
-            const ok = window.confirm(
-              "Resetar o site? Isso apaga tudo que foi editado só neste navegador: metas e ajustes manuais, favoritos de Templates, tags/comentários/leads manuais da Assinatura de Contrato e tudo que o Pedro aprendeu. Os dados do Pipedrive não são afetados. Essa ação não pode ser desfeita."
-            );
-            if (ok) resetSite();
-          }}
-          className="mt-1.5 text-[11px] text-sidebar-foreground/50 underline decoration-dotted underline-offset-2 hover:text-destructive"
+      <div className="mt-auto flex items-center gap-2.5 px-2 pt-4" style={{ boxShadow: "inset 0 1px 0 var(--border)" }}>
+        <div
+          className="flex h-[30px] w-[30px] items-center justify-center font-black"
+          style={{ background: "var(--accent)", color: "var(--pink-300)", fontFamily: "var(--font-display)", clipPath: "var(--clip-chamfer-sm)" }}
         >
-          Resetar site
-        </button>
+          P
+        </div>
+        <div className="flex min-w-0 flex-1 flex-col leading-tight">
+          <span className="text-sm font-semibold">Pedro</span>
+          <span className="text-[11px] text-muted-foreground">v1.0.0</span>
+        </div>
       </div>
+      <button
+        onClick={() => {
+          const ok = window.confirm(
+            "Resetar o site? Isso apaga tudo que foi editado só neste navegador: metas e ajustes manuais, favoritos de Templates, tags/comentários/leads manuais da Assinatura de Contrato, follow-ups manuais e tudo que o Pedro aprendeu. Os dados do Pipedrive não são afetados. Essa ação não pode ser desfeita."
+          );
+          if (ok) resetSite();
+        }}
+        className="mt-2 px-2 text-left text-[11px] text-sidebar-foreground/50 underline decoration-dotted underline-offset-2 hover:text-destructive"
+      >
+        Resetar site
+      </button>
     </div>
   );
 
   return (
     <>
       <button
-        className="fixed left-4 top-4 z-40 flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-card text-foreground shadow-card lg:hidden"
+        className="card-panel fixed left-4 top-4 z-40 flex h-10 w-10 items-center justify-center text-foreground lg:hidden"
         onClick={() => setOpen(true)}
         aria-label="Abrir menu"
       >
         <Menu className="h-5 w-5" />
       </button>
 
-      <aside className="sticky top-0 hidden h-screen w-60 shrink-0 border-r border-sidebar-border bg-sidebar lg:block">
-        {content}
-      </aside>
+      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 p-2.5 pl-3 lg:block">{content}</aside>
 
       {open && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setOpen(false)} />
-          <aside className="absolute left-0 top-0 h-full w-60">{content}</aside>
+          <div className="absolute inset-0 bg-black/60" onClick={() => setOpen(false)} />
+          <aside className="absolute left-0 top-0 h-full w-64 p-2.5">{content}</aside>
         </div>
       )}
     </>

@@ -38,8 +38,8 @@ const EMPTY: Entry = { tagIds: [], activities: [] };
 export const tagStyles: Record<TagColor, { label: string; chip: string; dot: string }> = {
   green: { label: "Verde", chip: "bg-success/10 text-success", dot: "bg-success" },
   red: { label: "Vermelho", chip: "bg-destructive/10 text-destructive", dot: "bg-destructive" },
-  amber: { label: "Amarelo", chip: "bg-warning/20 text-[oklch(42%_0.1_70)]", dot: "bg-warning" },
-  blue: { label: "Azul", chip: "bg-[oklch(95%_0.03_250)] text-[oklch(42%_0.14_255)]", dot: "bg-[oklch(60%_0.15_255)]" },
+  amber: { label: "Amarelo", chip: "bg-warning/15 text-warning", dot: "bg-warning" },
+  blue: { label: "Azul", chip: "bg-[oklch(35%_0.1_255/0.35)] text-[oklch(80%_0.1_255)]", dot: "bg-[oklch(70%_0.14_255)]" },
   gray: { label: "Cinza", chip: "bg-muted text-muted-foreground", dot: "bg-muted-foreground" },
   rose: { label: "Rosa", chip: "bg-accent text-accent-foreground", dot: "bg-primary" },
 };

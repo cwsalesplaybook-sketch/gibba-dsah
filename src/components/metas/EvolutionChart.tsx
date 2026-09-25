@@ -22,7 +22,7 @@ type LabelProps = {
   index?: number;
 };
 
-const PAST_BAR = "oklch(86% 0.045 356)";
+const PAST_BAR = "var(--pink-700)";
 
 export function EvolutionChart({ data }: { data: MetasData }) {
   const { dailyChartData: chartData } = data;
@@ -50,7 +50,7 @@ export function EvolutionChart({ data }: { data: MetasData }) {
         fontSize={11}
         fontWeight={600}
         fill="var(--foreground)"
-        stroke="white"
+        stroke="var(--card)"
         strokeWidth={3}
         paintOrder="stroke"
       >

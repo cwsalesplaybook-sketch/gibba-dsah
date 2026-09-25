@@ -2,67 +2,129 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Tema claro e sóbrio: branco, cinzas quentes e um rosa framboesa como acento. Cores em OKLCH. */
+/*
+  Tema "PUMA neon" (remodelação de 2026-09-25, a partir do design v5 que a Gabi
+  aprovou): quase-preto com rosa neon de acento, cantos chanfrados, tipografia
+  condensada em caixa alta. Ink nunca é preto puro (tem leve tom rosado).
+*/
 :root {
-  --radius: 0.75rem;
+  --radius: 4px;
 
-  --background: oklch(98.4% 0.004 350);
-  --foreground: oklch(23% 0.02 320);
+  /* Ink — quase-preto com fundo rosado, nunca preto puro. */
+  --ink-950: #0b0709;
+  --ink-900: #110b0e;
+  --ink-850: #181015;
+  --ink-800: #20161c;
+  --ink-700: #2e2029;
+  --ink-600: #46323e;
+  --ink-500: #6b5462;
+  --ink-400: #9a8391;
+  --ink-300: #c4b2bd;
+  --ink-200: #e6dbe1;
+  --ink-100: #f7f0f4;
 
-  --card: oklch(100% 0 0);
-  --card-foreground: oklch(23% 0.02 320);
+  /* Rosa neon — a cor de ataque. */
+  --pink-900: #3a0820;
+  --pink-800: #6e0b39;
+  --pink-700: #b00e57;
+  --pink-600: #e0156f;
+  --pink-500: #ff2e88;
+  --pink-400: #ff5fa5;
+  --pink-300: #ff93c3;
+  --pink-200: #ffc6df;
+  --pink-100: #ffe8f2;
 
-  --popover: oklch(100% 0 0);
-  --popover-foreground: oklch(23% 0.02 320);
+  --amber-500: #ffb020;
+  --amber-900: #3a2606;
+  --red-500: #ff4040;
+  --red-900: #3d0c0c;
+  --green-500: #2ee6a6;
+  --green-900: #0a3325;
 
-  --primary: oklch(55% 0.17 356);
-  --primary-foreground: oklch(99% 0.004 350);
-  --primary-glow: oklch(70% 0.12 356);
-  --primary-deep: oklch(45% 0.16 356); /* texto de destaque sobre fundo claro */
+  --background: var(--ink-950);
+  --foreground: var(--ink-100);
 
-  --secondary: oklch(96.5% 0.008 350);
-  --secondary-foreground: oklch(30% 0.03 330);
+  --card: var(--ink-850);
+  --card-foreground: var(--ink-100);
 
-  --muted: oklch(96.5% 0.006 350);
-  --muted-foreground: oklch(50% 0.02 330);
+  --popover: var(--ink-850);
+  --popover-foreground: var(--ink-100);
 
-  --accent: oklch(96% 0.016 356);
-  --accent-foreground: oklch(38% 0.12 356);
+  --primary: var(--pink-500);
+  --primary-foreground: var(--ink-950);
+  --primary-glow: var(--pink-400);
+  --primary-deep: var(--pink-300); /* texto de destaque sobre fundo escuro */
 
-  --destructive: oklch(52% 0.18 25);
-  --destructive-foreground: oklch(99% 0.01 25);
+  --secondary: var(--ink-800);
+  --secondary-foreground: var(--ink-100);
 
-  --success: oklch(50% 0.11 155);
-  --success-foreground: oklch(99% 0.01 155);
+  --muted: var(--ink-800);
+  --muted-foreground: var(--ink-400);
 
-  --warning: oklch(66% 0.14 75);
-  --warning-foreground: oklch(20% 0.05 75);
+  --accent: var(--pink-900);
+  --accent-foreground: var(--pink-300);
 
-  --border: oklch(92.5% 0.008 350);
-  --input: oklch(89% 0.01 350);
-  --ring: oklch(55% 0.17 356);
+  --destructive: var(--red-500);
+  --destructive-foreground: var(--ink-950);
 
-  --chart-1: oklch(55% 0.17 356);
-  --chart-2: oklch(72% 0.09 356);
-  --chart-3: oklch(55% 0.08 300);
-  --chart-4: oklch(55% 0.1 155);
-  --chart-5: oklch(70% 0.12 75);
+  --success: var(--green-500);
+  --success-foreground: var(--ink-950);
 
-  --sidebar: oklch(99.2% 0.003 350);
-  --sidebar-foreground: oklch(28% 0.02 320);
-  --sidebar-primary: oklch(96% 0.016 356);
-  --sidebar-primary-foreground: oklch(38% 0.12 356);
-  --sidebar-accent: oklch(96.5% 0.008 350);
-  --sidebar-accent-foreground: oklch(23% 0.02 320);
-  --sidebar-border: oklch(92.5% 0.008 350);
-  --sidebar-ring: oklch(55% 0.17 356);
+  --warning: var(--amber-500);
+  --warning-foreground: var(--ink-950);
 
-  --gradient-primary: linear-gradient(135deg, oklch(50% 0.16 356), oklch(57% 0.17 356));
-  --gradient-surface: linear-gradient(135deg, oklch(48% 0.15 356), oklch(56% 0.17 356));
-  --shadow-glow: 0 6px 16px -8px oklch(45% 0.16 356 / 0.5);
-  --shadow-card: 0 1px 2px oklch(25% 0.02 320 / 0.05), 0 8px 22px -14px oklch(25% 0.02 320 / 0.14);
+  --border: var(--ink-700);
+  --input: var(--ink-600);
+  --ring: var(--pink-500);
 
-  --track: oklch(94% 0.008 350);
+  --chart-1: var(--pink-500);
+  --chart-2: var(--pink-300);
+  --chart-3: var(--ink-400);
+  --chart-4: var(--green-500);
+  --chart-5: var(--amber-500);
+
+  --sidebar: var(--ink-900);
+  --sidebar-foreground: var(--ink-100);
+  --sidebar-primary: var(--pink-900);
+  --sidebar-primary-foreground: var(--pink-300);
+  --sidebar-accent: var(--ink-800);
+  --sidebar-accent-foreground: var(--ink-100);
+  --sidebar-border: var(--ink-700);
+  --sidebar-ring: var(--pink-500);
+
+  --gradient-primary: linear-gradient(135deg, var(--pink-700), var(--pink-500));
+  --gradient-surface: linear-gradient(135deg, var(--pink-800), var(--pink-600));
+  --shadow-glow: 0 0 24px color-mix(in srgb, var(--pink-500) 45%, transparent), 0 0 2px var(--pink-400);
+  --shadow-card: 0 18px 40px rgba(0, 0, 0, 0.55);
+
+  --track: var(--ink-700);
+
+  /* Tipografia do redesign. */
+  --font-display: "Big Shoulders Display", "Barlow Condensed", Impact, sans-serif;
+  --font-ui: "Barlow", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-label: "Barlow Condensed", "Barlow", sans-serif;
+  --tracking-label: 0.14em;
+
+  /* Chanfro, brilho e listra de perigo — a assinatura visual do redesign. */
+  --chamfer: 12px;
+  --chamfer-sm: 6px;
+  --clip-chamfer: polygon(0 0, calc(100% - var(--chamfer)) 0, 100% var(--chamfer), 100% 100%, 0 100%);
+  --clip-chamfer-sm: polygon(
+    0 0,
+    calc(100% - var(--chamfer-sm)) 0,
+    100% var(--chamfer-sm),
+    100% 100%,
+    var(--chamfer-sm) 100%,
+    0 calc(100% - var(--chamfer-sm))
+  );
+  --edge: inset 0 0 0 1px var(--border);
+  --edge-accent: inset 0 0 0 1px var(--pink-700);
+  --glow-sm: 0 0 10px color-mix(in srgb, var(--pink-500) 45%, transparent);
+  --glow-md: 0 0 24px color-mix(in srgb, var(--pink-500) 45%, transparent), 0 0 2px var(--pink-400);
+  --glow-text: 0 0 18px color-mix(in srgb, var(--pink-500) 70%, transparent);
+  --hazard: repeating-linear-gradient(-45deg, var(--pink-500) 0 6px, transparent 6px 12px);
+  --grid-bg: linear-gradient(color-mix(in srgb, var(--ink-100) 4%, transparent) 1px, transparent 1px) 0 0/32px 32px,
+    linear-gradient(90deg, color-mix(in srgb, var(--ink-100) 4%, transparent) 1px, transparent 1px) 0 0/32px 32px;
 }
 
 * {
@@ -74,9 +136,14 @@ html {
 }
 
 body {
-  background-color: var(--background);
+  background: radial-gradient(
+      900px 500px at 80% -10%,
+      color-mix(in srgb, var(--pink-800) 45%, transparent),
+      transparent 60%
+    ),
+    var(--grid-bg), var(--background);
   color: var(--foreground);
-  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-ui);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -104,50 +171,93 @@ body {
   background-color: var(--muted-foreground);
 }
 
-/* Quadradinho de ícone: fundo rosa bem claro, ícone na cor de acento (sem brilho). */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+/* Painel com canto chanfrado + borda fina "neon": a assinatura visual do redesign. */
+.card-panel {
+  position: relative;
+  clip-path: var(--clip-chamfer);
+  box-shadow: var(--edge);
+  background: var(--card);
+}
+
+/* Rótulo condensado em caixa alta, usado em títulos de seção/etiquetas. */
+.label-caps {
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Quadradinho de ícone: fundo rosa translúcido, ícone em rosa claro. */
 .tile {
   display: flex;
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  color: var(--primary);
+  color: var(--accent-foreground);
   background: var(--accent);
-  box-shadow: inset 0 0 0 1px oklch(55% 0.17 356 / 0.12);
+  box-shadow: inset 0 0 0 1px var(--pink-700);
 }
 
-/* Menu lateral: itens discretos; o ativo ganha fundo rosado, barra lateral e leve elevação. */
+/* Menu lateral: painel escuro com canto chanfrado; item ativo ganha brilho e barra rosa. */
+.sidebar-panel {
+  background: linear-gradient(170deg, var(--ink-800), var(--ink-900) 60%);
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+  box-shadow: inset 0 0 0 1px var(--pink-800), inset -3px 0 0 var(--pink-700);
+}
+
 .nav-item {
   position: relative;
   display: flex;
-  height: 40px;
+  height: 44px;
   width: 100%;
   align-items: center;
   gap: 12px;
-  border-radius: 10px;
   padding: 0 12px;
-  font-size: 13.5px;
-  color: var(--sidebar-foreground);
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-3, var(--ink-400));
   transition: background 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
 }
 
 .nav-item svg {
-  color: var(--muted-foreground);
+  color: currentColor;
   transition: color 0.15s ease;
 }
 
 .nav-item:hover {
   background: var(--sidebar-accent);
+  color: var(--ink-100);
 }
 
 .nav-item-active,
 .nav-item-active:hover {
-  font-weight: 600;
-  color: var(--primary-deep);
-  background: var(--accent);
-  box-shadow: inset 3px 0 0 var(--primary), 0 1px 2px oklch(25% 0.02 320 / 0.06),
-    0 6px 14px -10px oklch(45% 0.16 356 / 0.45);
+  color: var(--ink-100);
+  background: linear-gradient(90deg, var(--pink-800), var(--accent));
+  box-shadow: inset 3px 0 0 var(--primary), var(--glow-sm);
 }
 
 .nav-item-active svg {
-  color: var(--primary);
+  color: var(--pink-300);
+}
+
+.nav-badge {
+  min-width: 20px;
+  padding: 1px 6px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
 }
